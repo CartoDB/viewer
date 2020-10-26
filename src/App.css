@@ -37,12 +37,19 @@
   }
 }
 
-.app-container {
+.home{
   width: 100vw; 
   height: 100vh;
 }
 
 .editor {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  z-index: 2;
+}
+
+.home .share {
   position: absolute;
   left: 0;
   top: 0;

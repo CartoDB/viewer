@@ -32,29 +32,35 @@ function getDefaultData(type) {
     : 'cartobq.maps.osm_buildings';
 }
 
-
 function Home() {
   const [json, setJSON] = useState();
   const [jsonProps, setJSONPros] = useState(null);
+  const [shareURL, setShareURL] = useState();
   const location = useLocation();
 
-  
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    // valid types are query and tileset
-    const type = query.get('type') || 'sql'
-    // valid sources are postgres and bigquery
-    const source = query.get('source') || 'postgres'
-    const data = query.get('data') || getDefaultData(type);
-    const username = query.get('username') || 'public';
-    const apiKey =  query.get('apiKey') || 'default_public';
+    const config = query.get('config');
+    let json;
 
-    // fetch template and set parameters
-    const json = require(`../json/template.${type}.${source}.json`);
-    json.layers[0].data = data;
-    
-    if (type==='sql') {
-      json.layers[0].credentials = { username, apiKey}
+    if (!config) {
+      // valid types are query and tileset
+      const type = query.get('type') || 'sql'
+      // valid sources are postgres and bigquery
+      const source = query.get('source') || 'postgres'
+      const data = query.get('data') || getDefaultData(type);
+      const username = query.get('username') || 'public';
+      const apiKey =  query.get('apiKey') || 'default_public';
+
+      // fetch template and set parameters
+      json = require(`../json/template.${type}.${source}.json`);
+      json.layers[0].data = data;
+      
+      if (type==='sql') {
+        json.layers[0].credentials = { username, apiKey}
+      }
+    } else {
+      json = JSON.parse(atob(config));
     }
 
     setJSON(json);
@@ -68,15 +74,29 @@ function Home() {
   }, [json]);
 
   const onEditorChange = (jsonText) => {
-    console.log(jsonText);
     setJSON(JSON.parse(jsonText));
   }
 
+  const share = () => {
+    const {origin, pathname} = window.location;
+    const config = btoa(JSON.stringify(json, null, 2));
+    const url = `${origin + pathname}?config=${config}`;
+    setShareURL(url)
+  }
+
   return (
-      <div className='app-container'>
+      <div className='home'>
         <div className='editor'>
           {json &&
-          <JSONEditor onChange={onEditorChange} json={json}/>
+            <JSONEditor onChange={onEditorChange} json={json}/>
+          }
+        </div>
+        <div className='share'>
+          <button onClick={() => share()}>
+            Share
+          </button>
+          {shareURL &&
+            <input value={shareURL} />
           }
         </div>
         <div className='map'>
