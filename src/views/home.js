@@ -96,7 +96,7 @@ function Home() {
             Share
           </button>
           {shareURL &&
-            <input value={shareURL} />
+            <input value={shareURL} readOnly/>
           }
         </div>
         <div className='map'>
