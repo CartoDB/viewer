@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.app-container {
+  width: 100vw; 
+  height: 100vh;
+}
+
+.editor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}

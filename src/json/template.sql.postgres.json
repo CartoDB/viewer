@@ -1,0 +1,30 @@
+{
+  "description": "CartoSQLLayer declarative example",
+  "initialViewState": {
+    "latitude": 0,
+    "longitude": 0,
+    "zoom": 1,
+    "pitch": 0,
+    "bearing": 0
+  },
+  "views": [
+    {
+      "@@type": "MapView",
+      "controller": true,
+      "mapStyle": "@@#CARTO_BASEMAP.POSITRON"
+    }
+  ],
+  "layers": [
+    {
+      "@@type": "CartoSQLLayer",
+      "credentials": {
+        "username": "public",
+        "apiKey": "default_public"
+      },
+      "getLineColor": [255, 255, 255],
+      "getFillColor": [255, 221, 154],
+      "pointRadiusMinPixels": 5,
+      "lineWidthMinPixels": 1
+    }
+  ]
+}

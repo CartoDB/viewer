@@ -1,6 +1,13 @@
-# Getting Started with Create React App
+# Deck.gl playground
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## URLs
+
+http://localhost:3000/?type=query&data=SELECT the_geom_webmercator,1 FROM populated_places
+
+http://localhost:3000/?type=tileset&data=cartobq.maps.osm_buildings&source=bigquery
+
 
 ## Available Scripts
 
