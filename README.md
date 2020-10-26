@@ -20,7 +20,9 @@ https://cartodb.github.io/deck.gl-playground/
 
 **SQL**:
 
+```url
 https://cartodb.github.io/deck.gl-playground?type=sql&data=SELECT the_geom_webmercator,1 FROM populated_places
+```
 
 **BigQuery tiler**
 
