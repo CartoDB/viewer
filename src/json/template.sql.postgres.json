@@ -17,10 +17,6 @@
   "layers": [
     {
       "@@type": "CartoSQLLayer",
-      "credentials": {
-        "username": "public",
-        "apiKey": "default_public"
-      },
       "getLineColor": [255, 255, 255],
       "getFillColor": [255, 221, 154],
       "pointRadiusMinPixels": 5,

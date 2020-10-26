@@ -26,25 +26,37 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
+function getDefaultData(type) {
+  return (type === 'sql')
+    ? 'SELECT the_geom_webmercator FROM populated_places' 
+    : 'cartobq.maps.osm_buildings&source=bigquery';
+}
+
+
 function Home() {
   const [json, setJSON] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const location = useLocation();
 
+  
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const query = new URLSearchParams(location.search);
-
     // valid types are query and tileset
     const type = query.get('type') || 'sql'
     // valid sources are postgres and bigquery
     const source = query.get('source') || 'postgres'
-    // data
-    const data = query.get('data');
+    const data = query.get('data') || getDefaultData(type);
+    const username = query.get('username') || 'public';
+    const apiKey =  query.get('apiKey') || 'default_public';
 
-    // fetch template and apply data
+    // fetch template and set parameters
     const json = require(`../json/template.${type}.${source}.json`);
-    json.layers[0].data = data || 'SELECT the_geom_webmercator FROM populated_places';
+    json.layers[0].data = data;
+    
+    if (type==='sql') {
+      json.layers[0].credentials = { username, apiKey}
+    }
+
     setJSON(json);
     
   }, [location]);
