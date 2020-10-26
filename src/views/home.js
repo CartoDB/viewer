@@ -29,7 +29,7 @@ function addUpdateTriggersForAccesors(json) {
 function getDefaultData(type) {
   return (type === 'sql')
     ? 'SELECT the_geom_webmercator FROM populated_places' 
-    : 'cartobq.maps.osm_buildings&source=bigquery';
+    : 'cartobq.maps.osm_buildings';
 }
 
 
