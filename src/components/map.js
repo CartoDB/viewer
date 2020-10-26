@@ -3,7 +3,7 @@ import DeckWithGoogleMaps from './deck-with-google-maps';
 import {StaticMap} from 'react-map-gl';
 import {BASEMAP} from '@deck.gl/carto';
 
-const {GOOGLE_MAPS_TOKEN} = "AIzaSyCb2CTi3B6uarznVAs33W8VMER-1wz3ZrI"
+const GOOGLE_MAPS_TOKEN = "AIzaSyCb2CTi3B6uarznVAs33W8VMER-1wz3ZrI"
 
 export default function Map(props) {
   let deckMap;
