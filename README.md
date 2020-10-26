@@ -26,10 +26,15 @@ https://cartodb.github.io/deck.gl-playground?type=sql&data=SELECT the_geom_webme
 
 **BigQuery tiler**
 
+```url
 https://cartodb.github.io/deck.gl-playground/?type=tileset&data=cartobq.maps.osm_buildings&source=bigquery
+```
 
 **Credentials**
+
+```url
 https://cartodb.github.io/deck.gl-playground?type=sql&username=alasarr&apiKey=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT the_geom_webmercator FROM tesla_geocoded
+```
 
 ## Basemaps
 
