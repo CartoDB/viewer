@@ -26,10 +26,38 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
+function initJSON(query) {
+  const config = query.get('config');
+  let json;
+
+  if (!config) {
+    // valid types are query and tileset
+    const type = query.get('type') || 'sql'
+    // valid sources are postgres and bigquery
+    const source = query.get('source') || 'postgres'
+    const data = query.get('data') || getDefaultData(type);
+    const username = query.get('username') || 'TYPE YOUR CARTO USERNAME';
+    const apiKey =  query.get('api_key') || 'default_public';
+    const colorByValue = query.get('color_by_value');
+
+    // fetch template and set parameters
+    json = require(`../json/template.${type}.${source}.json`);
+    json.layers[0].data = data;
+    json.layers[0].credentials = {username, apiKey}
+    if (colorByValue) {
+      json.layers[0].getFillColor = `@@= properties.${colorByValue} > 1e06 ? [207, 89, 126] : properties.${colorByValue} > 1e05 ? [232, 133, 113] : properties.${colorByValue} > 1e04 ? [238, 180, 121] : properties.${colorByValue} > 1e03 ? [233, 226, 156] : properties.${colorByValue} > 100 ? [156, 203, 134] : properties.${colorByValue} > 10 ? [57, 177, 133] : [0, 147, 146]`;
+    }
+  } else {
+    json = JSON.parse(atob(config));
+  }
+
+  return json;
+}
+
 function getDefaultData(type) {
   return (type === 'sql')
-    ? 'SELECT the_geom_webmercator FROM populated_places' 
-    : 'cartobq.maps.osm_buildings';
+    ? 'TYPE A SQL QUERY OR A DATASET NAME' 
+    : 'TYPE A TILESET NAME';
 }
 
 function Home() {
@@ -40,31 +68,8 @@ function Home() {
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const config = query.get('config');
-    let json;
-
-    if (!config) {
-      // valid types are query and tileset
-      const type = query.get('type') || 'sql'
-      // valid sources are postgres and bigquery
-      const source = query.get('source') || 'postgres'
-      const data = query.get('data') || getDefaultData(type);
-      const username = query.get('username') || 'public';
-      const apiKey =  query.get('apiKey') || 'default_public';
-
-      // fetch template and set parameters
-      json = require(`../json/template.${type}.${source}.json`);
-      json.layers[0].data = data;
-      
-      if (type==='sql') {
-        json.layers[0].credentials = { username, apiKey}
-      }
-    } else {
-      json = JSON.parse(atob(config));
-    }
-
+    const json = initJSON(query);
     setJSON(json);
-    
   }, [location]);
 
   useEffect(() => {

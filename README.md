@@ -6,34 +6,31 @@ https://cartodb.github.io/deck.gl-playground/
 
 ## URL parameters
 
-* **type**: (optional) type of the map to visualize. Posible values are `tileset` and `sql`. Default to `sql`
+* **type**: (mandatory) type of the map to visualize. Posible values are `tileset` and `sql`.
 
-* **source**: (optional) source for the type. Posible values are `bigquery` or `postgres`. Default to `postgres`
+* **source**: (mandatory) source for the type. Posible values are `bigquery` or `postgres`.
 
-* **data**: (optional) data we want to apply. Default to `SELECT the_geom_webmercator FROM populated_places` if *type = sql*.  Or `cartobq.maps.osm_buildings` if if *type = tileset*.
+* **data**: (mandatory) data we want to apply.
 
-* **username**: (optional) CARTO username. Default to `public`
+* **username**: (mandatory) CARTO username.
 
-* **apiKey**: (optional) CARTO API KEY. Default to `default_public`
+* **api_key**: (optional) CARTO API KEY. Default to `default_public`
+
+* **color_by_value**: (optional) create a default ramp on the selected attribute. Example: `color_by_value=aggregated_total`
+
 
 ### URL examples
 
 **SQL**:
 
 ```url
-https://cartodb.github.io/deck.gl-playground?type=sql&data=SELECT the_geom_webmercator,1 FROM populated_places
+https://cartodb.github.io/deck.gl-playground?type=sql&username=alasarr&apiKey=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
 ```
 
 **BigQuery tiler**
 
 ```url
-https://cartodb.github.io/deck.gl-playground/?type=tileset&data=cartobq.maps.osm_buildings&source=bigquery
-```
-
-**Credentials**
-
-```url
-https://cartodb.github.io/deck.gl-playground?type=sql&username=alasarr&apiKey=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT the_geom_webmercator FROM tesla_geocoded
+https://cartodb.github.io/deck.gl-playground?type=tileset&source=bigquery&username=alasarr&data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
 ```
 
 ## Basemaps
