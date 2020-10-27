@@ -24,7 +24,7 @@ https://cartodb.github.io/deck.gl-playground/
 **SQL**:
 
 ```url
-https://cartodb.github.io/deck.gl-playground?type=sql&username=alasarr&apiKey=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
+https://cartodb.github.io/deck.gl-playground?type=sql&username=alasarr&api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
 ```
 
 **BigQuery tiler**

@@ -45,11 +45,11 @@
 .editor {
   position: absolute;
   left: 0;
-  top: 30px;
+  top: 60px;
   z-index: 2;
 }
 
-.home .share {
+.home .ctrl-buttons {
   position: absolute;
   left: 0;
   top: 0;

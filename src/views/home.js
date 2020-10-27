@@ -5,6 +5,11 @@ import JSON_CONVERTER_CONFIGURATION from '../json/configuration';
 import Map from '../components/map';
 import JSONEditor from '../components/json-editor';
 
+const DEFAULT_USERNAME_TEXT = 'TYPE YOUR CARTO USERNAME';
+const DEFAULT_DATA = {
+  'sql': 'TYPE A SQL QUERY OR A DATASET NAME',
+  'tileset': 'TYPE A TILESET NAME',
+};
 const configuration = new JSONConfiguration(JSON_CONVERTER_CONFIGURATION);
 const jsonConverter = new JSONConverter({configuration});
 
@@ -26,17 +31,18 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
-function initJSON(query) {
+function parseConfig(query) {
   const config = query.get('config');
   let json;
+  let ready;
 
   if (!config) {
     // valid types are query and tileset
     let type = query.get('type') || 'sql'
     // valid sources are postgres and bigquery
     let source = query.get('source') || 'postgres'
-    let data = query.get('data') || getDefaultData(type);
-    const username = query.get('username') || 'TYPE YOUR CARTO USERNAME';
+    let data = query.get('data') || DEFAULT_DATA[type];
+    const username = query.get('username') || DEFAULT_USERNAME_TEXT;
     const apiKey =  query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
     const bqtiler = query.get('bqtiler');
@@ -47,6 +53,11 @@ function initJSON(query) {
       data = bqtiler;
     }
 
+    ready = 
+      username !== DEFAULT_USERNAME_TEXT &&
+      data !== DEFAULT_DATA['sql'] &&
+      data !== DEFAULT_DATA['tileset'];
+      
     // fetch template and set parameters
     json = require(`../json/template.${type}.${source}.json`);
     json.layers[0].data = data;
@@ -57,27 +68,26 @@ function initJSON(query) {
     }
   } else {
     json = JSON.parse(config);
+    ready = true;
   }
 
-  return json;
+  return {json, ready};
 }
 
-function getDefaultData(type) {
-  return (type === 'sql')
-    ? 'TYPE A SQL QUERY OR A DATASET NAME' 
-    : 'TYPE A TILESET NAME';
-}
 
 function Home() {
   const [json, setJSON] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const [shareURL, setShareURL] = useState();
+  const [visibleEditor, setVisibleEditor] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const json = initJSON(query);
+    const {json, ready} = parseConfig(query);
     setJSON(json);
+    // Display config if something is missing and the map is not ready
+    setVisibleEditor(!ready);
   }, [location]);
 
   useEffect(() => {
@@ -97,21 +107,35 @@ function Home() {
     setShareURL(url)
   }
 
+  const toggleConfig = () => {
+    setVisibleEditor(!visibleEditor);
+  }
+
   return (
       <div className='home'>
+        
+        <div className="ctrl-buttons">
+          <div className='share-button'>
+            <button onClick={() => share()}>
+              Share
+            </button>
+            {shareURL &&
+              <input value={shareURL} readOnly/>
+            }
+          </div>
+          <div className='config-button'>
+            <button onClick={() => toggleConfig()}>
+              Config
+            </button>
+          </div>
+        </div>
+
         <div className='editor'>
-          {json &&
+          {visibleEditor && 
             <JSONEditor onChange={onEditorChange} json={json}/>
           }
         </div>
-        <div className='share'>
-          <button onClick={() => share()}>
-            Share
-          </button>
-          {shareURL &&
-            <input value={shareURL} readOnly/>
-          }
-        </div>
+         
         <div className='map'>
           {jsonProps && 
             <Map {...jsonProps} />
