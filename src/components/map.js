@@ -7,11 +7,11 @@ const GOOGLE_MAPS_TOKEN = "AIzaSyCb2CTi3B6uarznVAs33W8VMER-1wz3ZrI"
 
 export default function Map(props) {
   let deckMap;
-  if (props && props.jsonProps && props.jsonProps.google) {
+  if (props && props && props.google) {
     deckMap = (
       <DeckWithGoogleMaps
         id="json-deck"
-        {...props.jsonProps}
+        {...props}
         googleMapsToken={GOOGLE_MAPS_TOKEN}
       />
     );
@@ -19,7 +19,7 @@ export default function Map(props) {
     deckMap = (
       <DeckWithMapboxMaps
         id="json-deck"
-        {...props.jsonProps}
+        {...props}
         Map={StaticMap}
         mapStyle={BASEMAP.POSITRON}
       />

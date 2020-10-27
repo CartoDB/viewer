@@ -76,7 +76,7 @@ function Home() {
   useEffect(() => {
     addUpdateTriggersForAccesors(json);
     const jsonProps = jsonConverter.convert(json);
-    setJSONPros({jsonProps});
+    setJSONPros(jsonProps);
   }, [json]);
 
   const onEditorChange = (jsonText) => {
@@ -87,7 +87,6 @@ function Home() {
     const {origin, pathname} = window.location;
     const config = encodeURIComponent(JSON.stringify(json, null, 2));
     const url = `${origin + pathname}?config=${config}`;
-    debugger;
     setShareURL(url)
   }
 
@@ -107,7 +106,9 @@ function Home() {
           }
         </div>
         <div className='map'>
-          <Map {...jsonProps} />
+          {jsonProps && 
+            <Map {...jsonProps} />
+          }
         </div>
       </div>
   );
