@@ -32,13 +32,20 @@ function initJSON(query) {
 
   if (!config) {
     // valid types are query and tileset
-    const type = query.get('type') || 'sql'
+    let type = query.get('type') || 'sql'
     // valid sources are postgres and bigquery
-    const source = query.get('source') || 'postgres'
-    const data = query.get('data') || getDefaultData(type);
+    let source = query.get('source') || 'postgres'
+    let data = query.get('data') || getDefaultData(type);
     const username = query.get('username') || 'TYPE YOUR CARTO USERNAME';
     const apiKey =  query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
+    const bqtiler = query.get('bqtiler');
+
+    if (bqtiler) {
+      type = 'tileset';
+      source = 'bigquery';
+      data = bqtiler;
+    }
 
     // fetch template and set parameters
     json = require(`../json/template.${type}.${source}.json`);
