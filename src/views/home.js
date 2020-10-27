@@ -45,10 +45,11 @@ function initJSON(query) {
     json.layers[0].data = data;
     json.layers[0].credentials = {username, apiKey}
     if (colorByValue) {
-      json.layers[0].getFillColor = `@@= properties.${colorByValue} > 1e06 ? [207, 89, 126] : properties.${colorByValue} > 1e05 ? [232, 133, 113] : properties.${colorByValue} > 1e04 ? [238, 180, 121] : properties.${colorByValue} > 1e03 ? [233, 226, 156] : properties.${colorByValue} > 100 ? [156, 203, 134] : properties.${colorByValue} > 10 ? [57, 177, 133] : [0, 147, 146]`;
+      json.layers[0].getFillColor = 
+        `@@= properties.${colorByValue} > 1000000 ? [207, 89, 126] : properties.${colorByValue} > 100000 ? [232, 133, 113] : properties.${colorByValue} > 10000 ? [238, 180, 121] : properties.${colorByValue} > 1000 ? [233, 226, 156] : properties.${colorByValue} > 100 ? [156, 203, 134] : properties.${colorByValue} > 10 ? [57, 177, 133] : [0, 147, 146]`;
     }
   } else {
-    json = JSON.parse(atob(config));
+    json = JSON.parse(config);
   }
 
   return json;
@@ -84,8 +85,9 @@ function Home() {
 
   const share = () => {
     const {origin, pathname} = window.location;
-    const config = btoa(JSON.stringify(json, null, 2));
+    const config = encodeURIComponent(JSON.stringify(json, null, 2));
     const url = `${origin + pathname}?config=${config}`;
+    debugger;
     setShareURL(url)
   }
 
