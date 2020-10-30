@@ -1,67 +1,54 @@
-import React from 'react'
+import {useState} from 'react';
 import ConfigurationSidebar from '../components/configurationSidebar';
 import ShareSidebar from '../components/shareSidebar';
 
-class Sidebar extends React.Component {
-  state = {
-    configurationSidebarOpen: true,
-    shareSidebarOpen: false,
+function Sidebar(props) {
+  const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
+  const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
+
+  const closeConfigurationSidebar = () => {
+    setConfigurationSidebarOpen(false);
   }
 
-  closeConfigurationSidebar = () => {
-    this.setState({
-      configurationSidebarOpen: false,
-    })
+  const openConfigurationSidebar = () => {
+    closeShareSidebar();
+    setConfigurationSidebarOpen(true);
   }
 
-  openConfigurationSidebar = () => {
-    this.closeShareSidebar();
-    this.setState({
-      configurationSidebarOpen: true,
-    })
+  const closeShareSidebar = () => {
+    setShareSidebarOpen(false);
   }
 
-  closeShareSidebar = () => {
-    this.setState({
-      shareSidebarOpen: false,
-    })
+  const openShareSidebar = () => {
+    closeConfigurationSidebar();
+    setShareSidebarOpen(true);
   }
 
-  openShareSidebar = () => {
-    this.closeConfigurationSidebar();
-    this.setState({
-      shareSidebarOpen: true,
-    })
-  }
-
-  render() {
-    return  <div className="flex">
-              <div className="sidebar">
-                <div className="sidebar__element sidebar__element--logo">
-                  <img src="/deck.gl-playground/icons/carto-logo.svg" alt="CARTO"/>
-                </div>
-                <div className={`sidebar__element ${this.state.configurationSidebarOpen? 'is-selected':''}`} onClick={this.openConfigurationSidebar}>
-                  <img src="/deck.gl-playground/icons/settings.svg" alt="Settings"/>
-                </div>
-                <div className={`sidebar__element ${this.state.shareSidebarOpen? 'is-selected':''}`} onClick={this.openShareSidebar}>
-                  <img src="/deck.gl-playground/icons/share.svg" alt="Share map"/>
-                </div>
+  return  <div className="sidebar-container">
+            <div className="sidebar">
+              <div className="sidebar__element sidebar__element--logo">
+                <img src="/deck.gl-playground/icons/carto-logo.svg" alt="CARTO"/>
               </div>
-              <ConfigurationSidebar
-                  isOpen={this.state.configurationSidebarOpen}
-                  onBasemapChange={this.props.onBasemapChange}
-                  onStyleChange={this.props.onStyleChange}
-                  json={this.props.json}
-                  onJsonUpdated={this.props.onJsonUpdated}
-                  onClose={this.closeConfigurationSidebar}/>
-
-              <ShareSidebar
-                isOpen={this.state.shareSidebarOpen}
-                json={this.props.json}
-                onClose={this.closeShareSidebar}
-                />
+              <div className={`sidebar__element ${configurationSidebarOpen? 'is-selected':''}`} onClick={openConfigurationSidebar}>
+                <img src="/deck.gl-playground/icons/settings.svg" alt="Settings"/>
+              </div>
+              <div className={`sidebar__element ${shareSidebarOpen? 'is-selected':''}`} onClick={openShareSidebar}>
+                <img src="/deck.gl-playground/icons/share.svg" alt="Share map"/>
+              </div>
             </div>
-  }
+            {configurationSidebarOpen &&
+              <ConfigurationSidebar
+                  onBasemapChange={props.onBasemapChange}
+                  onStyleChange={props.onStyleChange}
+                  json={props.json}
+                  onJsonUpdated={props.onJsonUpdated}
+                  onClose={closeConfigurationSidebar}/>}
+            {shareSidebarOpen &&
+            <ShareSidebar
+              json={props.json}
+              onClose={closeShareSidebar}
+              />}
+          </div>
 }
 
 export default Sidebar;

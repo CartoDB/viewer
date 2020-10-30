@@ -1,79 +1,70 @@
-import React from 'react'
+import {useState, useRef} from 'react';
 
 
-class ShareSidebar extends React.Component {
-  urlShareRef = React.createRef();
-  embedCodeRef = React.createRef();
+function ShareSidebar(props) {
+  const [showEmbed, setShowEmbed] = useState(true);
+  const [showUrl, setShowUrl] = useState(true);
+  const urlShareRef = useRef();
+  const embedCodeRef = useRef();
 
-  state = {
-    showEmbed: true,
-    showUrl: true
+  const toggleEmbed = () => {
+    setShowEmbed(!showEmbed);
   }
 
-  toggleEmbed = () => {
-    this.setState({
-      showEmbed: !this.state.showEmbed
-    })
+  const toggleUrl = () => {
+    setShowUrl(!showUrl);
   }
 
-  toggleUrl = () => {
-    this.setState({
-      showUrl: !this.state.showUrl
-    })
-  }
-
-  shareUrl = (json) => {
+  const shareUrl = (json) => {
     const {origin, pathname} = window.location;
     const config = encodeURIComponent(JSON.stringify(json, null, 2));
     const url = `${origin + pathname}?config=${config}`;
     return url;
   }
 
-  iframeCode = (json) => {
-    var url = this.shareUrl(json);
+  const iframeCode = (json) => {
+    var url = shareUrl(json);
     var iframeUrl = `<iframe src="${url}&embed=true" title="Deck.gl Playground"/>`;
     return iframeUrl;
   }
 
-  copyTextarea = (e, reference) => {
+  const copyTextarea = (e, reference) => {
     reference.current.select();
     document.execCommand('copy');
     e.target.focus();
   };
 
-  render() {
-    return  <div className={`configuration-sidebar ${this.props.isOpen? 'is-open':''}`}>
-              <div className="configuration-sidebar__title">
-                <h2>Share</h2>
-                <div className="close-button" onClick={this.props.onClose}>
-                  <img src="/deck.gl-playground/icons/close.svg" alt="Close"/>
-                </div>
+  return  <div className="configuration-sidebar">
+            <div className="configuration-sidebar__title">
+              <h2>Share</h2>
+              <div className="close-button" onClick={props.onClose}>
+                <img src="/deck.gl-playground/icons/close.svg" alt="Close"/>
               </div>
-              <div className={`configuration-sidebar__section ${this.state.showUrl? 'open':''}`}>
-                <div className="section-title" onClick={this.toggleUrl}>
-                  <h3>URL</h3>
-                </div>
-                <div className="section-content">
-                  <textarea ref={this.urlShareRef} readOnly value={this.shareUrl(this.props.json)}></textarea>
-                  <div className="button-container">
-                    <button className="button" onClick={(e) => this.copyTextarea(e, this.urlShareRef)}>Copy URL</button>
-                  </div>
-                </div>
+            </div>
+            <div className={`configuration-sidebar__section ${showUrl? 'open':''}`}>
+              <div className="section-title" onClick={toggleUrl}>
+                <h3>URL</h3>
               </div>
-
-              <div className={`configuration-sidebar__section ${this.state.showEmbed? 'open':''}`}>
-                <div className="section-title" onClick={this.toggleEmbed}>
-                  <h3>Embed map</h3>
-                </div>
-                <div className="section-content">
-                  <textarea ref={this.embedCodeRef} readOnly value={this.iframeCode(this.props.json)}></textarea>
-                  <div className="button-container">
-                    <button className="button" onClick={(e) => this.copyTextarea(e, this.embedCodeRef)}>Copy Code</button>
-                  </div>
+              <div className="section-content">
+                <textarea ref={urlShareRef} readOnly value={shareUrl(props.json)}></textarea>
+                <div className="button-container">
+                  <button className="button" onClick={(e) => copyTextarea(e, urlShareRef)}>Copy URL</button>
                 </div>
               </div>
             </div>
-  }
+
+            <div className={`configuration-sidebar__section ${showEmbed? 'open':''}`}>
+              <div className="section-title" onClick={toggleEmbed}>
+                <h3>Embed map</h3>
+              </div>
+              <div className="section-content">
+                <textarea ref={embedCodeRef} readOnly value={iframeCode(props.json)}></textarea>
+                <div className="button-container">
+                  <button className="button" onClick={(e) => copyTextarea(e, embedCodeRef)}>Copy Code</button>
+                </div>
+              </div>
+            </div>
+          </div>
 }
 
 export default ShareSidebar;
