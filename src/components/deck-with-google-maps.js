@@ -6,8 +6,8 @@ const HOST = 'https://maps.googleapis.com/maps/api/js';
 const LOADING_GIF = 'https://upload.wikimedia.org/wikipedia/commons/d/de/Ajax-loader.gif';
 
 const style = {
-  height: 1000,
-  width: 1000
+  height: "100%",
+  width: "100%"
 };
 
 function injectScript(src) {

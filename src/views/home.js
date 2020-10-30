@@ -3,7 +3,7 @@ import {useLocation} from "react-router-dom";
 import {JSONConverter, JSONConfiguration} from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../json/configuration';
 import Map from '../components/map';
-import JSONEditor from '../components/json-editor';
+import Sidebar from '../components/sidebar';
 
 const DEFAULT_USERNAME_TEXT = 'TYPE YOUR CARTO USERNAME';
 const DEFAULT_DATA = {
@@ -78,16 +78,15 @@ function parseConfig(query) {
 function Home() {
   const [json, setJSON] = useState();
   const [jsonProps, setJSONPros] = useState(null);
-  const [shareURL, setShareURL] = useState();
-  const [visibleEditor, setVisibleEditor] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
+    setSidebarVisible(!query.get('embed'));
     const {json, ready} = parseConfig(query);
     setJSON(json);
     // Display config if something is missing and the map is not ready
-    setVisibleEditor(!ready);
   }, [location]);
 
   useEffect(() => {
@@ -100,45 +99,62 @@ function Home() {
     setJSON(JSON.parse(jsonText));
   }
 
-  const share = () => {
-    const {origin, pathname} = window.location;
-    const config = encodeURIComponent(JSON.stringify(json, null, 2));
-    const url = `${origin + pathname}?config=${config}`;
-    setShareURL(url)
+  const onBasemapChange = (newBasemap) => {
+    var currentJson = {...json};
+    if (newBasemap === 'carto')
+      delete currentJson["google"];
+    else if (newBasemap === 'gmaps')
+      currentJson["google"] = true;
+    setJSON(currentJson);
   }
 
-  const toggleConfig = () => {
-    setVisibleEditor(!visibleEditor);
+  const onStyleChange = (e) => {
+    var newStyle = e.target.value;
+    var newJson = {...json};
+    var index = -1;
+    for(var i in newJson["views"]) {
+      if(newJson["views"][i]["@@type"] === "MapView") {
+        index = i;
+        break;
+      }
+    }
+    if(index >= 0)
+      newJson["views"][index]["mapStyle"] = newStyle;
+    else {  
+      if(!newJson["views"])
+        newJson["views"] = [];
+      const newObject = {
+        "@@type": "MapView",
+        "controller": true,
+        "mapStyle": newStyle
+      }
+      newJson["views"].push(newObject);
+    }
+    setJSON(newJson);
+  }
+
+  const onZoom = (e) => {
+    var zoomType = e.target.dataset.type;
+    var newJson = {...json};
+    if (zoomType === "zoom-in" && newJson["initialViewState"]["zoom"] < 20){
+      newJson["initialViewState"]["zoom"]++
+      setJSON(newJson);
+    }
+    else if (zoomType === "zoom-out" && newJson["initialViewState"]["zoom"] > 0) {
+      newJson["initialViewState"]["zoom"]--
+      setJSON(newJson);
+      console.log("ENTER")
+    }
   }
 
   return (
       <div className='home'>
-        
-        <div className="ctrl-buttons">
-          <div className='share-button'>
-            <button onClick={() => share()}>
-              Share
-            </button>
-            {shareURL &&
-              <input value={shareURL} readOnly/>
-            }
-          </div>
-          <div className='config-button'>
-            <button onClick={() => toggleConfig()}>
-              Config
-            </button>
-          </div>
-        </div>
-
-        <div className='editor'>
-          {visibleEditor && 
-            <JSONEditor onChange={onEditorChange} json={json}/>
-          }
-        </div>
-         
+        {sidebarVisible && 
+          <Sidebar onBasemapChange={onBasemapChange} onStyleChange={onStyleChange} json={json} onJsonUpdated={onEditorChange}></Sidebar>
+        }         
         <div className='map'>
           {jsonProps && 
-            <Map {...jsonProps} />
+            <Map {...jsonProps} json={json} onZoom={onZoom}/>
           }
         </div>
       </div>
