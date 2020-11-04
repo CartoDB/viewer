@@ -25,13 +25,13 @@ Query parameters:
 **SQL**:
 
 ```url
-https://cartodb.github.io/deck.gl-playground/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
+https://cartodb.github.io/deck.gl-playground/#/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
 ```
 
 **BigQuery tiler**
 
 ```url
-https://cartodb.github.io/deck.gl-playground/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
+https://cartodb.github.io/deck.gl-playground/#/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
 ```
 
 ## Basemaps

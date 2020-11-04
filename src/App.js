@@ -1,6 +1,6 @@
 import {
   BrowserRouter as Router,
-  Switch,
+  HashRouter,
   Route
 } from "react-router-dom";
 
@@ -14,11 +14,11 @@ function App() {
   return (
     <Router>
       <div>
-        <Switch>
+        <HashRouter>
           <Route path="/user/:username/:type">
             <Home />
           </Route>
-        </Switch>
+        </HashRouter>
       </div>
     </Router>
   );
