@@ -22,6 +22,7 @@ export default function Map(props) {
         {...props}
         Map={StaticMap}
         mapStyle={BASEMAP.POSITRON}
+        onZoom={props.onZoom}
       />
     );
   }

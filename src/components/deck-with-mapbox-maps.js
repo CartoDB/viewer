@@ -20,9 +20,19 @@ export default class DeckWithMapboxMaps extends Component {
       }
     }
     return (
-      <DeckGL id="json-deck" {...this.props}>
-        {maps}
-      </DeckGL>
+      <div className="deck-gl-map-container">
+        <DeckGL id="json-deck" {...this.props}>
+          {maps}
+        </DeckGL>
+        <div className="zoom-control">
+          <div className="zoom-option" data-type="zoom-in" onClick={this.props.onZoom}>
+            <img src="/deck.gl-playground/icons/zoom-in.svg" alt="Zoom In"/>
+          </div>
+          <div className="zoom-option" data-type="zoom-out" onClick={this.props.onZoom}>
+            <img src="/deck.gl-playground/icons/zoom-out.svg" alt="Zoom Out"/>
+          </div>
+        </div>
+      </div>
     );
   }
 }
