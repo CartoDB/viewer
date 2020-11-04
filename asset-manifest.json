@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/deck.gl-playground/static/css/main.c2513743.chunk.css",
-    "main.js": "/deck.gl-playground/static/js/main.59e5102c.chunk.js",
-    "main.js.map": "/deck.gl-playground/static/js/main.59e5102c.chunk.js.map",
+    "main.js": "/deck.gl-playground/static/js/main.8419a769.chunk.js",
+    "main.js.map": "/deck.gl-playground/static/js/main.8419a769.chunk.js.map",
     "runtime-main.js": "/deck.gl-playground/static/js/runtime-main.8de611af.js",
     "runtime-main.js.map": "/deck.gl-playground/static/js/runtime-main.8de611af.js.map",
-    "static/js/2.49c8dfa5.chunk.js": "/deck.gl-playground/static/js/2.49c8dfa5.chunk.js",
-    "static/js/2.49c8dfa5.chunk.js.map": "/deck.gl-playground/static/js/2.49c8dfa5.chunk.js.map",
+    "static/js/2.88f78c72.chunk.js": "/deck.gl-playground/static/js/2.88f78c72.chunk.js",
+    "static/js/2.88f78c72.chunk.js.map": "/deck.gl-playground/static/js/2.88f78c72.chunk.js.map",
     "static/js/3.f1034da9.chunk.js": "/deck.gl-playground/static/js/3.f1034da9.chunk.js",
     "static/js/3.f1034da9.chunk.js.map": "/deck.gl-playground/static/js/3.f1034da9.chunk.js.map",
     "index.html": "/deck.gl-playground/index.html",
     "static/css/main.c2513743.chunk.css.map": "/deck.gl-playground/static/css/main.c2513743.chunk.css.map",
-    "static/js/2.49c8dfa5.chunk.js.LICENSE.txt": "/deck.gl-playground/static/js/2.49c8dfa5.chunk.js.LICENSE.txt",
+    "static/js/2.88f78c72.chunk.js.LICENSE.txt": "/deck.gl-playground/static/js/2.88f78c72.chunk.js.LICENSE.txt",
     "static/media/App.css": "/deck.gl-playground/static/media/select-arrow.c18ac319.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.8de611af.js",
-    "static/js/2.49c8dfa5.chunk.js",
+    "static/js/2.88f78c72.chunk.js",
     "static/css/main.c2513743.chunk.css",
-    "static/js/main.59e5102c.chunk.js"
+    "static/js/main.8419a769.chunk.js"
   ]
 }
