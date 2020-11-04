@@ -143,7 +143,6 @@ function Home() {
     else if (zoomType === "zoom-out" && newJson["initialViewState"]["zoom"] > 0) {
       newJson["initialViewState"]["zoom"]--
       setJSON(newJson);
-      console.log("ENTER")
     }
   }
 
