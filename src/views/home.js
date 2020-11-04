@@ -65,6 +65,7 @@ function parseConfig(query, username, type ) {
 
 function Home() {
   const [json, setJSON] = useState();
+  const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const location = useLocation();
@@ -84,31 +85,33 @@ function Home() {
     setSidebarVisible(!query.get('embed'));
     const {json, ready} = parseConfig(query, username, type);
     setJSON(json);
+    setJSONMap(json);
     // Display config if something is missing and the map is not ready
   }, [location, username, type]);
 
   useEffect(() => {
-    addUpdateTriggersForAccesors(json);
-    const jsonProps = jsonConverter.convert(json);
+    addUpdateTriggersForAccesors(jsonMap);
+    const jsonProps = jsonConverter.convert(jsonMap);
     setJSONPros(jsonProps);
-  }, [json]);
+  }, [jsonMap]);
 
   const onEditorChange = (jsonText) => {
-    setJSON(JSON.parse(jsonText));
+    setJSONMap(JSON.parse(jsonText));
   }
 
   const onBasemapChange = (newBasemap) => {
-    var currentJson = {...json};
+    var currentJson = {...jsonMap};
     if (newBasemap === 'carto')
       delete currentJson["google"];
     else if (newBasemap === 'gmaps')
       currentJson["google"] = true;
     setJSON(currentJson);
+    setJSONMap(currentJson);
   }
 
   const onStyleChange = (e) => {
     var newStyle = e.target.value;
-    var newJson = {...json};
+    var newJson = {...jsonMap};
     var index = -1;
     for(var i in newJson["views"]) {
       if(newJson["views"][i]["@@type"] === "MapView") {
@@ -129,6 +132,7 @@ function Home() {
       newJson["views"].push(newObject);
     }
     setJSON(newJson);
+    setJSONMap(newJson);
   }
 
   const onZoom = (e) => {
@@ -137,10 +141,12 @@ function Home() {
     if (zoomType === "zoom-in" && newJson["initialViewState"]["zoom"] < 20){
       newJson["initialViewState"]["zoom"]++
       setJSON(newJson);
+      setJSONMap(newJson);
     }
     else if (zoomType === "zoom-out" && newJson["initialViewState"]["zoom"] > 0) {
       newJson["initialViewState"]["zoom"]--
       setJSON(newJson);
+      setJSONMap(newJson);
     }
   }
 
@@ -151,7 +157,7 @@ function Home() {
         }         
         <div className='map'>
           {jsonProps && 
-            <Map {...jsonProps} json={json} onZoom={onZoom}/>
+            <Map {...jsonProps} json={jsonMap} onZoom={onZoom}/>
           }
         </div>
       </div>
