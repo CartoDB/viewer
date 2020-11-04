@@ -15,7 +15,7 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route path="/">
+          <Route path="/user/:username/:type">
             <Home />
           </Route>
         </Switch>

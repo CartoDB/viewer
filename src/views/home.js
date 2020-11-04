@@ -1,11 +1,10 @@
 import {useState, useEffect} from 'react';
-import {useLocation} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {JSONConverter, JSONConfiguration} from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../json/configuration';
 import Map from '../components/map';
 import Sidebar from '../components/sidebar';
 
-const DEFAULT_USERNAME_TEXT = 'TYPE YOUR CARTO USERNAME';
 const DEFAULT_DATA = {
   'sql': 'TYPE A SQL QUERY OR A DATASET NAME',
   'tileset': 'TYPE A TILESET NAME',
@@ -31,35 +30,24 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
-function parseConfig(query) {
+function parseConfig(query, username, type ) {
+  
   const config = query.get('config');
   let json;
   let ready;
 
   if (!config) {
-    // valid types are query and tileset
-    let type = query.get('type') || 'sql'
     // valid sources are postgres and bigquery
-    let source = query.get('source') || 'postgres'
     let data = query.get('data') || DEFAULT_DATA[type];
-    const username = query.get('username') || DEFAULT_USERNAME_TEXT;
     const apiKey =  query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
-    const bqtiler = query.get('bqtiler');
-
-    if (bqtiler) {
-      type = 'tileset';
-      source = 'bigquery';
-      data = bqtiler;
-    }
 
     ready = 
-      username !== DEFAULT_USERNAME_TEXT &&
       data !== DEFAULT_DATA['sql'] &&
       data !== DEFAULT_DATA['tileset'];
       
     // fetch template and set parameters
-    json = require(`../json/template.${type}.${source}.json`);
+    json = require(`../json/template.${type}.json`);
     json.layers[0].data = data;
     json.layers[0].credentials = {username, apiKey}
     if (colorByValue) {
@@ -80,14 +68,24 @@ function Home() {
   const [jsonProps, setJSONPros] = useState(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const location = useLocation();
+  const {username, type} = useParams();
 
   useEffect(() => {
+
+    if (!username) {
+      throw Error(`Unknowm type ${type}`)
+    }
+  
+    if (type!== 'sql' && type!=='bigquery'){
+      throw Error(`Unknowm type ${type}`)
+    }
+  
     const query = new URLSearchParams(location.search);
     setSidebarVisible(!query.get('embed'));
-    const {json, ready} = parseConfig(query);
+    const {json, ready} = parseConfig(query, username, type);
     setJSON(json);
     // Display config if something is missing and the map is not ready
-  }, [location]);
+  }, [location, username, type]);
 
   useEffect(() => {
     addUpdateTriggersForAccesors(json);

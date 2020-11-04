@@ -1,9 +1,9 @@
 {
   "description": "CartoBQTilerLayer declarative example",
   "initialViewState": {
-    "latitude": 40.7368521,
-    "longitude": -73.8536065,
-    "zoom": 9,
+    "latitude": 0,
+    "longitude": 0,
+    "zoom": 2,
     "pitch": 0,
     "bearing": 0
   },
