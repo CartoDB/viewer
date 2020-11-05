@@ -93,6 +93,22 @@ h1, h2, h3, h4, h5, h6, button {
   padding: 0 8px 8px;
 }
 
+.footer__text {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.footer__text a {
+  color: #1785fb;
+}
+
+.footer__text img {
+  height: 16px;
+  width: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
 .footer__logo {
   margin-left: auto;
 }

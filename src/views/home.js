@@ -179,6 +179,10 @@ function Home() {
         </div>
         {embedMode && 
           <div className="footer">
+            <p class="footer__text">
+              <img src="/icons/carto-heart.png" alt=""/>
+              Created with <a href="https://carto.com" target="_blank">CARTO</a>
+            </p>
             <a class="footer__logo" href="https://carto.com" target="_blank">
               <img src="/icons/carto-full-logo.svg" alt="CARTO"/>
             </a>
