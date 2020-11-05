@@ -111,6 +111,7 @@ function Home() {
       delete currentJson["google"];
     else if (newBasemap === 'gmaps')
       currentJson["google"] = true;
+    currentJson.initialViewState = viewState;
     setJSON(currentJson);
     setJSONMap(currentJson);
   }
