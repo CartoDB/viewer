@@ -17,15 +17,18 @@ function ShareSidebar(props) {
     setShowUrl(!showUrl);
   }
 
-  const shareUrl = (json) => {
+  const shareUrl = (json, viewState) => {
     const {origin, pathname} = window.location;
+
+    if(viewState)
+      json.initialViewState = {...viewState};
+    
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 2)));
-    const url = `${origin + pathname}?config=${config}`;
-    return url;
+    return `${origin + pathname}?config=${config}`;
   }
 
-  const iframeCode = (json) => {
-    var url = shareUrl(json);
+  const iframeCode = (json, viewState) => {
+    var url = shareUrl(json, viewState);
     var iframeUrl = `<iframe src="${url}&embed=true" title="Deck.gl Playground"/>`;
     return iframeUrl;
   }
@@ -48,7 +51,7 @@ function ShareSidebar(props) {
                 <h3>URL</h3>
               </div>
               <div className="section-content">
-                <textarea ref={urlShareRef} readOnly value={shareUrl(props.json)}></textarea>
+                <textarea ref={urlShareRef} readOnly value={shareUrl(props.json, props.viewState)}></textarea>
                 <div className="button-container">
                   <button className="button" onClick={(e) => copyTextarea(e, urlShareRef)}>Copy URL</button>
                 </div>
@@ -60,7 +63,7 @@ function ShareSidebar(props) {
                 <h3>Embed map</h3>
               </div>
               <div className="section-content">
-                <textarea ref={embedCodeRef} readOnly value={iframeCode(props.json)}></textarea>
+                <textarea ref={embedCodeRef} readOnly value={iframeCode(props.json, props.viewState)}></textarea>
                 <div className="button-container">
                   <button className="button" onClick={(e) => copyTextarea(e, embedCodeRef)}>Copy Code</button>
                 </div>

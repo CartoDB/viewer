@@ -46,6 +46,7 @@ function Sidebar(props) {
             {shareSidebarOpen &&
             <ShareSidebar
               json={props.json}
+              viewState={props.viewState}
               onClose={closeShareSidebar}
               />}
           </div>
