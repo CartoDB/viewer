@@ -84,6 +84,9 @@ function Home() {
     const query = new URLSearchParams(location.search);
     setSidebarVisible(!query.get('embed'));
     const {json, ready} = parseConfig(query, username, type);
+    if (!ready) {
+      setSidebarVisible(true);
+    }
     setJSON(json);
     setJSONMap(json);
     // Display config if something is missing and the map is not ready

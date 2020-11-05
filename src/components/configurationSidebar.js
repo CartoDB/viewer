@@ -42,7 +42,7 @@ function ConfigurationSidebar(props) {
             <div className="configuration-sidebar__title">
               <h2>Configuration</h2>
               <div className="close-button" onClick={props.onClose}>
-                <img src="/deck.gl-playground/icons/close.svg" alt="Close"/>
+                <img src="/icons/close.svg" alt="Close"/>
               </div>
             </div>
             <div className={`configuration-sidebar__section ${showBasemapOptions? 'open':''}`}>

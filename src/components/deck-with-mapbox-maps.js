@@ -26,10 +26,10 @@ export default class DeckWithMapboxMaps extends Component {
         </DeckGL>
         <div className="zoom-control">
           <div className="zoom-option" data-type="zoom-in" onClick={this.props.onZoom}>
-            <img src="/deck.gl-playground/icons/zoom-in.svg" alt="Zoom In"/>
+            <img src="/icons/zoom-in.svg" alt="Zoom In"/>
           </div>
           <div className="zoom-option" data-type="zoom-out" onClick={this.props.onZoom}>
-            <img src="/deck.gl-playground/icons/zoom-out.svg" alt="Zoom Out"/>
+            <img src="/icons/zoom-out.svg" alt="Zoom Out"/>
           </div>
         </div>
       </div>

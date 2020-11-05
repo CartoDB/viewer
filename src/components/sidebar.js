@@ -27,13 +27,13 @@ function Sidebar(props) {
   return  <div className="sidebar-container">
             <div className="sidebar">
               <div className="sidebar__element sidebar__element--logo">
-                <img src="/deck.gl-playground/icons/carto-logo.svg" alt="CARTO"/>
+                <img src="/icons/carto-logo.svg" alt="CARTO"/>
               </div>
               <div className={`sidebar__element ${configurationSidebarOpen? 'is-selected':''}`} onClick={openConfigurationSidebar}>
-                <img src="/deck.gl-playground/icons/settings.svg" alt="Settings"/>
+                <img src="/icons/settings.svg" alt="Settings"/>
               </div>
               <div className={`sidebar__element ${shareSidebarOpen? 'is-selected':''}`} onClick={openShareSidebar}>
-                <img src="/deck.gl-playground/icons/share.svg" alt="Share map"/>
+                <img src="/icons/share.svg" alt="Share map"/>
               </div>
             </div>
             {configurationSidebarOpen &&

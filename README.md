@@ -2,7 +2,7 @@
 
 Deck.gl playground viewer.
 
-https://cartodb.github.io/deck.gl-playground/user/:username/:type?data=...
+https://viewer.carto.com/user/:username/:type?data=...
 
 ## Pparameters
 
@@ -25,13 +25,13 @@ Query parameters:
 **SQL**:
 
 ```url
-https://cartodb.github.io/deck.gl-playground/#/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
+https://viewer.carto.com/#/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
 ```
 
 **BigQuery tiler**
 
 ```url
-https://cartodb.github.io/deck.gl-playground/#/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
+https://viewer.carto.com/#/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
 ```
 
 ## Basemaps
@@ -78,5 +78,5 @@ You will also see any lint errors in the console.
 
 ### `yarn deploy`
 
-Deploy the code in GitHub pages at the URL: https://cartodb.github.io/deck.gl-playground/
+Deploy the code in GitHub pages at the URL: https://viewer.carto.com/
 

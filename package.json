@@ -1,8 +1,8 @@
 {
-  "name": "deck-playground",
+  "name": "@carto/viewer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://alasarr.github.io/deck.gl-playground",
+  "homepage": "https://viewer.carto.com",
   "dependencies": {
     "@deck.gl/carto": "^8.3.3",
     "@deck.gl/core": "^8.3.3",
