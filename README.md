@@ -25,13 +25,13 @@ Query parameters:
 **SQL**:
 
 ```url
-https://viewer.carto.com/#/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
+https://viewer.carto.com/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
 ```
 
 **BigQuery tiler**
 
 ```url
-https://viewer.carto.com/#/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
+https://viewer.carto.com/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
 ```
 
 ## Basemaps

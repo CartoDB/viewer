@@ -55,7 +55,7 @@ function parseConfig(query, username, type ) {
         `@@= properties.${colorByValue} > 1000000 ? [207, 89, 126] : properties.${colorByValue} > 100000 ? [232, 133, 113] : properties.${colorByValue} > 10000 ? [238, 180, 121] : properties.${colorByValue} > 1000 ? [233, 226, 156] : properties.${colorByValue} > 100 ? [156, 203, 134] : properties.${colorByValue} > 10 ? [57, 177, 133] : [0, 147, 146]`;
     }
   } else {
-    json = JSON.parse(config);
+    json = JSON.parse(atob(config));
     ready = true;
   }
 

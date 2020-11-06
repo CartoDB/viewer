@@ -5,7 +5,6 @@ import {useParams} from "react-router-dom";
 function ShareSidebar(props) {
   const [showEmbed, setShowEmbed] = useState(true);
   const [showUrl, setShowUrl] = useState(true);
-  const {username, type} = useParams();
 
   const urlShareRef = useRef();
   const embedCodeRef = useRef();
@@ -20,8 +19,8 @@ function ShareSidebar(props) {
 
   const shareUrl = (json) => {
     const {origin, pathname} = window.location;
-    const config = encodeURIComponent(JSON.stringify(json, null, 2));
-    const url = `${origin + pathname}#/user/${username}/${type}?config=${config}`;
+    const config = encodeURIComponent(btoa(JSON.stringify(json, null, 2)));
+    const url = `${origin + pathname}?config=${config}`;
     return url;
   }
 
