@@ -7,6 +7,7 @@ function Sidebar(props) {
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
 
   const closeConfigurationSidebar = () => {
+    props.onMenuCloses();
     setConfigurationSidebarOpen(false);
   }
 
@@ -16,6 +17,7 @@ function Sidebar(props) {
   }
 
   const closeShareSidebar = () => {
+    props.onMenuCloses();
     setShareSidebarOpen(false);
   }
 
@@ -44,11 +46,11 @@ function Sidebar(props) {
                   onJsonUpdated={props.onJsonUpdated}
                   onClose={closeConfigurationSidebar}/>}
             {shareSidebarOpen &&
-            <ShareSidebar
-              json={props.json}
-              viewState={props.viewState}
-              onClose={closeShareSidebar}
-              />}
+              <ShareSidebar
+                json={props.jsonMap}
+                viewState={props.viewState}
+                onClose={closeShareSidebar}
+                />}
           </div>
 }
 

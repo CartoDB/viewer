@@ -55,7 +55,7 @@ function parseConfig(query, username, type ) {
         `@@= properties.${colorByValue} > 1000000 ? [207, 89, 126] : properties.${colorByValue} > 100000 ? [232, 133, 113] : properties.${colorByValue} > 10000 ? [238, 180, 121] : properties.${colorByValue} > 1000 ? [233, 226, 156] : properties.${colorByValue} > 100 ? [156, 203, 134] : properties.${colorByValue} > 10 ? [57, 177, 133] : [0, 147, 146]`;
     }
   } else {
-    json = JSON.parse(atob(config));
+    json = JSON.parse(atob(decodeURIComponent(config)));
     ready = true;
   }
 
@@ -116,6 +116,10 @@ function Home() {
     setJSONMap(currentJson);
   }
 
+  const onMenuCloses = (e) => {
+    setJSON(jsonMap);
+  }
+
   const onViewStateChange = (e) => {
     delete e.viewState["height"];
     delete e.viewState["width"];
@@ -170,7 +174,14 @@ function Home() {
   return (
       <div className={`home ${embedMode ? 'home--embed':''}`}>
         {!embedMode && 
-          <Sidebar onBasemapChange={onBasemapChange} onStyleChange={onStyleChange} json={json} viewState={viewState} onJsonUpdated={onEditorChange}></Sidebar>
+          <Sidebar
+            onBasemapChange={onBasemapChange}
+            onStyleChange={onStyleChange}
+            onMenuCloses={onMenuCloses}
+            onJsonUpdated={onEditorChange}
+            json={json}
+            jsonMap={jsonMap}
+            viewState={viewState}/>
         }         
         <div className='map'>
           {jsonProps && 

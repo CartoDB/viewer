@@ -21,7 +21,7 @@ function ShareSidebar(props) {
     if(viewState)
       json.initialViewState = {...viewState};
     
-    const config = encodeURIComponent(btoa(JSON.stringify(json, null, 2)));
+    const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
     return `${origin + pathname}?config=${config}`;
   }
 
