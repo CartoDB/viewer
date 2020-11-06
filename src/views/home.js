@@ -181,9 +181,9 @@ function Home() {
           <div className="footer">
             <p class="footer__text">
               <img src="/icons/carto-heart.png" alt=""/>
-              Created with <a href="https://carto.com" target="_blank">CARTO</a>
+              Created with <a href="https://carto.com" target="_blank" rel="noreferrer">CARTO</a>
             </p>
-            <a class="footer__logo" href="https://carto.com" target="_blank">
+            <a class="footer__logo" href="https://carto.com" target="_blank" rel="noreferrer">
               <img src="/icons/carto-full-logo.svg" alt="CARTO"/>
             </a>
           </div>

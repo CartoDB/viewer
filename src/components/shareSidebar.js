@@ -1,6 +1,4 @@
 import {useState, useRef} from 'react';
-import {useParams} from "react-router-dom";
-
 
 function ShareSidebar(props) {
   const [showEmbed, setShowEmbed] = useState(true);
