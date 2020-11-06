@@ -59,11 +59,63 @@ h1, h2, h3, h4, h5, h6, button {
   height: 100vh;
 }
 
+.home--embed {
+  flex-direction: column;
+}
+
 .map {
   position: relative;
   overflow: hidden;
   flex-grow: 1;
   border: 8px solid rgba(44, 48, 50, 0.05);
+}
+
+.map::after {
+  content: '';
+  position: absolute;
+  background-image: url("icons/carto-full-logo.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  bottom: 4px;
+  left: 50%;
+  height: 30px;
+  width: 100px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  background-color: rgba(44, 48, 50, 0.05);
+  height: 22px;
+  padding: 0 8px 8px;
+}
+
+.footer__text {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.footer__text a {
+  color: #1785fb;
+}
+
+.footer__text img {
+  height: 16px;
+  width: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.footer__logo {
+  margin-left: auto;
+}
+
+.footer__logo img {
+  display: block;
+  height: 18px;
 }
 
 #deckgl-wrapper {
@@ -296,11 +348,11 @@ h1, h2, h3, h4, h5, h6, button {
 
 .zoom-control {
   position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 16px;
+  bottom: 16px;
   background-color: white;
   border-radius: 4px;
+  box-shadow: 0 1px 4px 0 rgba(44,48,50,0.20);
 }
 
 .zoom-option {
@@ -312,6 +364,7 @@ h1, h2, h3, h4, h5, h6, button {
   width: 24px;
   border-bottom: 1px solid rgba(44, 48, 50, 0.12);
   cursor: pointer;
+  user-select: none;
 }
 
 .zoom-option > * {

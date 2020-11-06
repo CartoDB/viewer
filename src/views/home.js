@@ -67,7 +67,8 @@ function Home() {
   const [json, setJSON] = useState();
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
-  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [viewState, setViewState] = useState(null);
+  const [embedMode, setEmbedMode] = useState(false);
   const location = useLocation();
   const {username, type} = useParams();
 
@@ -82,10 +83,10 @@ function Home() {
     }
   
     const query = new URLSearchParams(location.search);
-    setSidebarVisible(!query.get('embed'));
+    setEmbedMode(query.get('embed'));
     const {json, ready} = parseConfig(query, username, type);
     if (!ready) {
-      setSidebarVisible(true);
+      setEmbedMode(false);
     }
     setJSON(json);
     setJSONMap(json);
@@ -99,7 +100,9 @@ function Home() {
   }, [jsonMap]);
 
   const onEditorChange = (jsonText) => {
-    setJSONMap(JSON.parse(jsonText));
+    const tempJson = JSON.parse(jsonText)
+    setJSONMap(tempJson);
+    setViewState(tempJson.initialViewState);
   }
 
   const onBasemapChange = (newBasemap) => {
@@ -108,8 +111,15 @@ function Home() {
       delete currentJson["google"];
     else if (newBasemap === 'gmaps')
       currentJson["google"] = true;
+    currentJson.initialViewState = viewState;
     setJSON(currentJson);
     setJSONMap(currentJson);
+  }
+
+  const onViewStateChange = (e) => {
+    delete e.viewState["height"];
+    delete e.viewState["width"];
+    setViewState(e.viewState);
   }
 
   const onStyleChange = (e) => {
@@ -140,29 +150,44 @@ function Home() {
 
   const onZoom = (e) => {
     var zoomType = e.target.dataset.type;
-    var newJson = {...json};
-    if (zoomType === "zoom-in" && newJson["initialViewState"]["zoom"] < 20){
-      newJson["initialViewState"]["zoom"]++
-      setJSON(newJson);
+    var newJson = {...jsonMap};
+    if (viewState)
+      newJson["initialViewState"] = {...viewState}
+    if (zoomType === "zoom-in"){
+      const currentZoom = newJson["initialViewState"]["zoom"];
+      newJson["initialViewState"]["zoom"] = currentZoom > 19 ? 20 : currentZoom + 1
+      setViewState(newJson["initialViewState"]);
       setJSONMap(newJson);
     }
-    else if (zoomType === "zoom-out" && newJson["initialViewState"]["zoom"] > 0) {
-      newJson["initialViewState"]["zoom"]--
-      setJSON(newJson);
+    else if (zoomType === "zoom-out") {
+      const currentZoom = newJson["initialViewState"]["zoom"];
+      newJson["initialViewState"]["zoom"] = currentZoom < 2 ? 1 : currentZoom - 1
+      setViewState(newJson["initialViewState"]);
       setJSONMap(newJson);
     }
   }
 
   return (
-      <div className='home'>
-        {sidebarVisible && 
-          <Sidebar onBasemapChange={onBasemapChange} onStyleChange={onStyleChange} json={json} onJsonUpdated={onEditorChange}></Sidebar>
+      <div className={`home ${embedMode ? 'home--embed':''}`}>
+        {!embedMode && 
+          <Sidebar onBasemapChange={onBasemapChange} onStyleChange={onStyleChange} json={json} viewState={viewState} onJsonUpdated={onEditorChange}></Sidebar>
         }         
         <div className='map'>
           {jsonProps && 
-            <Map {...jsonProps} json={jsonMap} onZoom={onZoom}/>
+            <Map {...jsonProps} onViewStateChange={onViewStateChange} onZoom={onZoom}/>
           }
         </div>
+        {embedMode && 
+          <div className="footer">
+            <p class="footer__text">
+              <img src="/icons/carto-heart.png" alt=""/>
+              Created with <a href="https://carto.com" target="_blank" rel="noreferrer">CARTO</a>
+            </p>
+            <a class="footer__logo" href="https://carto.com" target="_blank" rel="noreferrer">
+              <img src="/icons/carto-full-logo.svg" alt="CARTO"/>
+            </a>
+          </div>
+          }
       </div>
   );
 }

@@ -1,4 +1,3 @@
-/* global console, document, window */
 import React, {Component} from 'react';
 import {GoogleMapsOverlay} from '@deck.gl/google-maps';
 
