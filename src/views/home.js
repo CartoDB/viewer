@@ -111,9 +111,18 @@ function Home() {
       delete currentJson["google"];
     else if (newBasemap === 'gmaps')
       currentJson["google"] = true;
-    currentJson.initialViewState = viewState;
+    if(viewState)
+      currentJson.initialViewState = viewState;
     setJSON(currentJson);
     setJSONMap(currentJson);
+  }
+
+  const onGmapUpdate = (map) => {
+    const newViewState = {...viewState};
+    newViewState.latitude = map.getCenter().lat();
+    newViewState.longitude = map.getCenter().lng();
+    newViewState.zoom = map.getZoom();
+    setViewState(newViewState);
   }
 
   const onMenuCloses = (e) => {
@@ -185,7 +194,7 @@ function Home() {
         }         
         <div className='map'>
           {jsonProps && 
-            <Map {...jsonProps} onViewStateChange={onViewStateChange} onZoom={onZoom}/>
+            <Map {...jsonProps} onViewStateChange={onViewStateChange} onZoom={onZoom} onGmapUpdate={onGmapUpdate}/>
           }
         </div>
         {embedMode && 

@@ -73,6 +73,9 @@ class DeckOverlayWrapper extends Component {
     };
 
     const map = new window.google.maps.Map(this.containerRef.current, view);
+    map.addListener("bounds_changed", (e) => {
+      this.props.onGmapUpdate(map);
+    })
     this.DeckOverlay.setMap(map);
     this.DeckOverlay.setProps({layers: this.props.layers});
     // eslint-disable-next-line react/no-did-mount-set-state
