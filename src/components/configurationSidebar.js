@@ -6,7 +6,7 @@ function ConfigurationSidebar(props) {
   const [basemap, setBasemap] = useState("carto");
   const [showBasemapOptions, setBasemapOptions] = useState(true);
   const [showEditor, setEditorOptions] = useState(true);
-  const [basemapStyle, setBasemapStyle] = useState(null);
+  const [basemapStyle, setBasemapStyle] = useState(undefined);
 
   useEffect(() => {
     setBasemap(props.json["google"] ? 'gmaps' : 'carto')
