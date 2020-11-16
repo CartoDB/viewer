@@ -83,7 +83,7 @@ class DeckOverlayWrapper extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    this.DeckOverlay.setProps({layers: this.props.layers});
+    this.DeckOverlay.setProps({layers: this.props.layers, getTooltip: this.props.getTooltip});
   }
 
   componentWillUnmount() {

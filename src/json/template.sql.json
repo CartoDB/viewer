@@ -20,7 +20,8 @@
       "getLineColor": [255, 255, 255],
       "getFillColor": [255, 221, 154],
       "pointRadiusMinPixels": 5,
-      "lineWidthMinPixels": 1
+      "lineWidthMinPixels": 1,
+      "pickable": true
     }
   ]
 }

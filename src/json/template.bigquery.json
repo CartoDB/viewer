@@ -19,7 +19,8 @@
       "@@type": "CartoBQTilerLayer",
       "getFillColor": [232, 133, 113],
       "pointRadiusMinPixels": 2,
-      "stroked": false
+      "stroked": false,
+      "pickable": true
     }
   ]
 }
