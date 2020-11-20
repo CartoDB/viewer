@@ -94,10 +94,13 @@ function Home() {
   }, [location, username, type]);
 
   useEffect(() => {
-    addUpdateTriggersForAccesors(jsonMap);
-    let jsonProps = jsonConverter.convert(jsonMap);
-    jsonProps = checkJsonProps(jsonProps)
-    setJSONPros(jsonProps);
+    if(jsonMap) {
+      const tempJson = JSON.parse(JSON.stringify(jsonMap))
+      addUpdateTriggersForAccesors(tempJson);
+      let jsonProps = jsonConverter.convert(tempJson);
+      jsonProps = checkJsonProps(jsonProps)
+      setJSONPros(jsonProps);
+    }
   }, [jsonMap]);
 
   const checkJsonProps = (json) => {
