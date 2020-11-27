@@ -4,11 +4,7 @@
   "private": true,
   "homepage": "https://viewer.carto.com",
   "dependencies": {
-    "@deck.gl/carto": "^8.3.3",
-    "@deck.gl/core": "^8.3.3",
-    "@deck.gl/google-maps": "^8.3.3",
-    "@deck.gl/json": "^8.3.3",
-    "@deck.gl/react": "^8.3.3",
+    "deck.gl": "8.4.0-alpha.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",

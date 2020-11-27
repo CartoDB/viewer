@@ -1,6 +1,6 @@
-# CARTO Deck.gl playground
+# CARTO viewer
 
-Deck.gl playground viewer.
+CARTO viewer
 
 https://viewer.carto.com/user/:username/:type?data=...
 
