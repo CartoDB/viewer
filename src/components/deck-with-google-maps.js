@@ -73,7 +73,7 @@ class DeckOverlayWrapper extends Component {
     };
 
     const map = new window.google.maps.Map(this.containerRef.current, view);
-    map.addListener("bounds_changed", (e) => {
+    map.addListener("idle", (e) => {
       this.props.onGmapUpdate(map);
     })
     this.DeckOverlay.setMap(map);

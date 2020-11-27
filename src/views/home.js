@@ -94,10 +94,23 @@ function Home() {
   }, [location, username, type]);
 
   useEffect(() => {
-    addUpdateTriggersForAccesors(jsonMap);
-    const jsonProps = jsonConverter.convert(jsonMap);
-    setJSONPros(jsonProps);
+    if(jsonMap) {
+      const tempJson = JSON.parse(JSON.stringify(jsonMap))
+      addUpdateTriggersForAccesors(tempJson);
+      let jsonProps = jsonConverter.convert(tempJson);
+      jsonProps = checkJsonProps(jsonProps)
+      setJSONPros(jsonProps);
+    }
   }, [jsonMap]);
+
+  const checkJsonProps = (json) => {
+    if (json && json.initialViewState) {
+      json.initialViewState["zoom"] = json.initialViewState.zoom ? json.initialViewState.zoom : 0;
+      json.initialViewState["latitude"] = json.initialViewState.latitude ? json.initialViewState.latitude : 0;
+      json.initialViewState["longitude"] = json.initialViewState.longitude ? json.initialViewState.longitude : 0;
+    }
+    return json;
+  }
 
   const onEditorChange = (jsonText) => {
     const tempJson = JSON.parse(jsonText)
@@ -130,9 +143,11 @@ function Home() {
   }
 
   const onViewStateChange = (e) => {
-    delete e.viewState["height"];
-    delete e.viewState["width"];
-    setViewState(e.viewState);
+    if (!e.interactionState.isDragging){
+      delete e.viewState["height"];
+      delete e.viewState["width"];
+      setViewState(e.viewState);
+    }
   }
 
   const onStyleChange = (e) => {
