@@ -1,9 +1,10 @@
 import DeckWithMapboxMaps from './deck-with-mapbox-maps';
 import DeckWithGoogleMaps from './deck-with-google-maps';
-import {StaticMap} from 'react-map-gl';
-import {BASEMAP} from '@deck.gl/carto';
+import { StaticMap } from 'react-map-gl';
+import { BASEMAP } from '@deck.gl/carto';
+import React from 'react';
 
-const GOOGLE_MAPS_TOKEN = "AIzaSyCb2CTi3B6uarznVAs33W8VMER-1wz3ZrI"
+const GOOGLE_MAPS_TOKEN = 'AIzaSyCb2CTi3B6uarznVAs33W8VMER-1wz3ZrI';
 const EXCLUDE_PROPS = ['layerName', 'the_geom', 'the_geom_webmercator'];
 
 export default function Map(props) {
@@ -13,9 +14,8 @@ export default function Map(props) {
     if (info && info.object && info.object.properties) {
       let html = '';
       for (const [key, value] of Object.entries(info.object.properties)) {
-
         if (!EXCLUDE_PROPS.includes(key)) {
-          const isNumber = Number.isFinite(value)
+          const isNumber = Number.isFinite(value);
           let o = value;
           if (isNumber) {
             const nDigits = isNumber && Number.isInteger(value) ? 0 : 2;
@@ -24,8 +24,8 @@ export default function Map(props) {
               minimumFractionDigits: nDigits,
               notation: 'compact',
               compactDisplay: 'short',
-            }).format(value)
-          } 
+            }).format(value);
+          }
 
           html += `${key.toUpperCase()}: ${o}<br/>`;
         }
@@ -39,7 +39,7 @@ export default function Map(props) {
         html: `<div>${html}</div>`,
         style: {
           padding: '10px',
-          fontSize: '11px'
+          fontSize: '11px',
         },
       };
     }
@@ -53,7 +53,7 @@ export default function Map(props) {
   if (props && props && props.google) {
     deckMap = (
       <DeckWithGoogleMaps
-        id="json-deck"
+        id='json-deck'
         {...props}
         googleMapsToken={GOOGLE_MAPS_TOKEN}
         getTooltip={getTooltip}
@@ -64,7 +64,7 @@ export default function Map(props) {
   } else {
     deckMap = (
       <DeckWithMapboxMaps
-        id="json-deck"
+        id='json-deck'
         {...props}
         Map={StaticMap}
         mapStyle={BASEMAP.POSITRON}
@@ -75,7 +75,6 @@ export default function Map(props) {
       />
     );
   }
-  
-  return deckMap;
-};
 
+  return deckMap;
+}

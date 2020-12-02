@@ -1,57 +1,126 @@
-import {useState} from 'react';
+import React, { useState } from 'react';
+import { makeStyles, IconButton } from '@material-ui/core';
 import ConfigurationSidebar from '../components/configurationSidebar';
 import ShareSidebar from '../components/shareSidebar';
+
+import { ReactComponent as CartoMarker } from '../icons/carto-marker.svg';
+import { ReactComponent as CloseIcon } from '../icons/close-icon.svg';
+import { ReactComponent as SettingsIcon } from '../icons/settings-icon.svg';
+import { ReactComponent as ShareIcon } from '../icons/share-icon.svg';
+
+const useStyles = makeStyles((theme) => ({
+  sidebarContainer: {
+    maxWidth: '100vw',
+    display: 'flex',
+  },
+  sidebar: {
+    height: '100%',
+    width: '56px',
+    backgroundColor: '#036FE2',
+  },
+  sidebarElement: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '36px',
+    height: '36px',
+    margin: '16px auto',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: 'rgba(44, 48, 50, 0.40)',
+    },
+    '&.is-selected': {
+      backgroundColor: 'rgba(44, 48, 50, 0.40)',
+    },
+  },
+  sidebarElementLogo: {
+    width: '100%',
+    height: 'auto',
+    margin: '0',
+    padding: '16px 0',
+    cursor: 'default',
+    '&:hover': {
+      backgroundColor: 'unset',
+    },
+  },
+}));
 
 function Sidebar(props) {
   const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
+  const classes = useStyles();
 
   const closeConfigurationSidebar = () => {
     props.onMenuCloses();
     setConfigurationSidebarOpen(false);
-  }
+  };
 
   const openConfigurationSidebar = () => {
     closeShareSidebar();
     setConfigurationSidebarOpen(true);
-  }
+  };
 
   const closeShareSidebar = () => {
     props.onMenuCloses();
     setShareSidebarOpen(false);
-  }
+  };
 
   const openShareSidebar = () => {
     closeConfigurationSidebar();
     setShareSidebarOpen(true);
-  }
+  };
 
-  return  <div className="sidebar-container">
-            <div className="sidebar">
-              <div className="sidebar__element sidebar__element--logo">
-                <img src="/icons/carto-logo.svg" alt="CARTO"/>
-              </div>
-              <div className={`sidebar__element ${configurationSidebarOpen? 'is-selected':''}`} onClick={openConfigurationSidebar}>
-                <img src="/icons/settings.svg" alt="Settings"/>
-              </div>
-              <div className={`sidebar__element ${shareSidebarOpen? 'is-selected':''}`} onClick={openShareSidebar}>
-                <img src="/icons/share.svg" alt="Share map"/>
-              </div>
-            </div>
-            {configurationSidebarOpen &&
-              <ConfigurationSidebar
-                  onBasemapChange={props.onBasemapChange}
-                  onStyleChange={props.onStyleChange}
-                  json={props.json}
-                  onJsonUpdated={props.onJsonUpdated}
-                  onClose={closeConfigurationSidebar}/>}
-            {shareSidebarOpen &&
-              <ShareSidebar
-                json={props.jsonMap}
-                viewState={props.viewState}
-                onClose={closeShareSidebar}
-                />}
-          </div>
+  const closeAllMenus = () => {
+    closeConfigurationSidebar();
+    closeShareSidebar();
+  };
+
+  return (
+    <div className={classes.sidebarContainer}>
+      <div className={classes.sidebar}>
+        <div className={`${classes.sidebarElement} ${classes.sidebarElementLogo}`}>
+          {configurationSidebarOpen || shareSidebarOpen ? (
+            <IconButton onClick={closeAllMenus}>
+              <CloseIcon />
+            </IconButton>
+          ) : (
+            <CartoMarker />
+          )}
+        </div>
+        <div
+          className={`${classes.sidebarElement} ${
+            configurationSidebarOpen ? 'is-selected' : ''
+          }`}
+          onClick={openConfigurationSidebar}
+        >
+          <SettingsIcon />
+        </div>
+        <div
+          className={`${classes.sidebarElement} ${shareSidebarOpen ? 'is-selected' : ''}`}
+          onClick={openShareSidebar}
+        >
+          <ShareIcon />
+        </div>
+      </div>
+      {configurationSidebarOpen && (
+        <ConfigurationSidebar
+          onBasemapChange={props.onBasemapChange}
+          onStyleChange={props.onStyleChange}
+          json={props.json}
+          onJsonUpdated={props.onJsonUpdated}
+          onClose={closeConfigurationSidebar}
+        />
+      )}
+      {shareSidebarOpen && (
+        <ShareSidebar
+          json={props.jsonMap}
+          viewState={props.viewState}
+          onClose={closeShareSidebar}
+        />
+      )}
+    </div>
+  );
 }
 
 export default Sidebar;
