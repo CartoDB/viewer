@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import {
   makeStyles,
   Divider,
@@ -11,12 +12,12 @@ import {
   Box,
 } from '@material-ui/core';
 
-import { ReactComponent as CopyIcon } from '../icons/copyIcon.svg';
-import { ReactComponent as QuestionIcon } from '../icons/questionIcon.svg';
-import { ReactComponent as LinkIcon } from '../icons/linkIcon.svg';
-import { ReactComponent as TwitterIcon } from '../icons/twitterIcon.svg';
-import { ReactComponent as LinkedinIcon } from '../icons/linkedinIcon.svg';
-import { ReactComponent as FbIcon } from '../icons/fbIcon.svg';
+import { ReactComponent as CopyIcon } from '../../../icons/copyIcon.svg';
+import { ReactComponent as QuestionIcon } from '../../../icons/questionIcon.svg';
+import { ReactComponent as LinkIcon } from '../../../icons/linkIcon.svg';
+import { ReactComponent as TwitterIcon } from '../../../icons/twitterIcon.svg';
+import { ReactComponent as LinkedinIcon } from '../../../icons/linkedinIcon.svg';
+import { ReactComponent as FbIcon } from '../../../icons/fbIcon.svg';
 
 const useStyles = makeStyles((theme) => ({
   cartoLogo: {
@@ -40,8 +41,9 @@ function ShareSidebar(props) {
 
   const urlShareRef = useRef();
   const embedCodeRef = useRef();
+  const viewState = useSelector((state) => state.carto.viewState);
 
-  const baseUrl = (json, viewState) => {
+  const baseUrl = (json) => {
     const { origin, pathname } = window.location;
 
     if (viewState) json.initialViewState = { ...viewState };
@@ -49,17 +51,16 @@ function ShareSidebar(props) {
     return `${origin + pathname}?config=${config}`;
   };
 
-  const shareUrl = (json, viewState, showMenu) => {
-    let url = baseUrl(json, viewState);
-    console.log('showMenu', showMenu);
+  const shareUrl = (json, showMenu) => {
+    let url = baseUrl(json);
     if (!showMenu) {
       url = url + '&embed=true';
     }
     return url;
   };
 
-  const iframeCode = (json, viewState) => {
-    var url = baseUrl(json, viewState);
+  const iframeCode = (json) => {
+    var url = baseUrl(json);
     var iframeUrl = `<iframe src="${url}&embed=true" title="Deck.gl Playground"/>`;
     return iframeUrl;
   };
@@ -68,6 +69,33 @@ function ShareSidebar(props) {
     reference.current.select();
     document.execCommand('copy');
     e.target.focus();
+  };
+
+  const twitterUrl = () => {
+    const url = 'https://twitter.com/intent/tweet';
+    const mapUrl = shareUrl(props.json, sharingMenu).replace(
+      'localhost:3001',
+      'viewer.carto.com'
+    );
+    const tweetUrl = `${url}?url=${encodeURIComponent(mapUrl)}`;
+    return tweetUrl;
+  };
+
+  const facebookUrl = () => {
+    const url = 'https://www.facebook.com/sharer/sharer.php';
+    const mapUrl = shareUrl(props.json, sharingMenu);
+    const fbUrl = `${url}?u=${encodeURIComponent(mapUrl)}`;
+    return fbUrl;
+  };
+
+  const linkedinUrl = () => {
+    const url = 'http://www.linkedin.com/shareArticle?mini=true';
+    const mapUrl = shareUrl(props.json, sharingMenu).replace(
+      'localhost:3001',
+      'viewer.carto.com'
+    );
+    const linkedinUrl = `${url}&url=${encodeURIComponent(mapUrl)}`;
+    return linkedinUrl;
   };
 
   const toggleShowMenu = (e) => {
@@ -104,7 +132,7 @@ function ShareSidebar(props) {
             </Box>
             <Box ml={1}>
               <Tooltip placement='top' title='Share on Twitter' arrow>
-                <a href='https://google.com' target='_blank'>
+                <a href={twitterUrl()} target='_blank' rel='noopener noreferrer'>
                   <IconButton>
                     <TwitterIcon />
                   </IconButton>
@@ -113,16 +141,20 @@ function ShareSidebar(props) {
             </Box>
             <Box ml={1}>
               <Tooltip placement='top' title='Share on Facebook' arrow>
-                <IconButton>
-                  <FbIcon />
-                </IconButton>
+                <a href={facebookUrl()} target='_blank' rel='noopener noreferrer'>
+                  <IconButton>
+                    <FbIcon />
+                  </IconButton>
+                </a>
               </Tooltip>
             </Box>
             <Box ml={1}>
               <Tooltip placement='top' title='Share on Linkedin' arrow>
-                <IconButton>
-                  <LinkedinIcon />
-                </IconButton>
+                <a href={linkedinUrl()} target='_blank' rel='noopener noreferrer'>
+                  <IconButton>
+                    <LinkedinIcon />
+                  </IconButton>
+                </a>
               </Tooltip>
             </Box>
           </Box>
@@ -138,7 +170,7 @@ function ShareSidebar(props) {
             variant='outlined'
             size='small'
             inputRef={urlShareRef}
-            value={shareUrl(props.json, props.viewState, sharingMenu)}
+            value={shareUrl(props.json, sharingMenu)}
           />
         </Box>
         <Divider />
@@ -163,7 +195,7 @@ function ShareSidebar(props) {
             size='small'
             inputRef={embedCodeRef}
             InputProps={{ readOnly: true }}
-            value={iframeCode(props.json, props.viewState)}
+            value={iframeCode(props.json)}
           />
           <Box ml={1}>
             <IconButton onClick={(e) => copyTextarea(e, embedCodeRef)}>

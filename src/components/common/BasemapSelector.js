@@ -1,9 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, Tooltip } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { setBaseMap } from '@carto/react/redux';
+import {
+  POSITRON,
+  VOYAGER,
+  DARK_MATTER,
+  GOOGLE_ROADMAP,
+  GOOGLE_SATELLITE,
+} from '@carto/react/basemaps';
 
 const useStyles = makeStyles((theme) => ({
   basemapSelectorContainer: {
     position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     top: '18px',
     right: '18px',
 
@@ -75,54 +87,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function BasemapSelector(props) {
-  const [selectedBasemap, setSelectedBasemap] = useState();
   const [selectorsOpen, setSelectorsOpen] = useState(false);
+  const basemap = useSelector((state) => state.carto.baseMap);
   const classes = useStyles();
-  const basemaps = {
-    POSITRON: 'positron',
-    VOYAGER: 'voyager',
-    DARK_MATTER: 'dark-matter',
-    GOOGLE_MAP: 'google-map',
-    GOOGLE_SATELLITE: 'google-satellite',
-  };
-
-  useEffect(() => {
-    for (var i in props.json['views']) {
-      if (props.json['views'][i]['@@type'] === 'MapView') {
-        const style = props.json['views'][i]['mapStyle'].toUpperCase();
-        if (style.includes('positron'.toUpperCase()))
-          setSelectedBasemap(basemaps.POSITRON);
-        else if (style.includes('dark_matter'.toUpperCase()))
-          setSelectedBasemap(basemaps.DARK_MATTER);
-        else if (style.includes('voyager'.toUpperCase()))
-          setSelectedBasemap(basemaps.VOYAGER);
-        break;
-      }
-    }
-  }, [basemaps.DARK_MATTER, basemaps.POSITRON, basemaps.VOYAGER, props.json]);
+  const dispatch = useDispatch();
 
   const changeBasemap = (newBasemap) => {
-    setSelectedBasemap(newBasemap);
-    console.log(props);
-    switch (newBasemap) {
-      case basemaps.GOOGLE_MAP:
-        props.onBasemapChange('gmaps');
-        break;
-      case basemaps.GOOGLE_SATELLITE:
-        props.onBasemapChange('gmaps');
-        break;
-      case basemaps.POSITRON:
-        props.onStyleChange('@@#CARTO_BASEMAP.POSITRON');
-        break;
-      case basemaps.DARK_MATTER:
-        props.onStyleChange('@@#CARTO_BASEMAP.DARK_MATTER');
-        break;
-      case basemaps.VOYAGER:
-        props.onStyleChange('@@#CARTO_BASEMAP.VOYAGER');
-        break;
-      default:
-        break;
-    }
+    dispatch(setBaseMap(newBasemap));
+    props.onBasemapChange(newBasemap);
   };
 
   const toggleBasemapSelector = () => {
@@ -138,9 +110,9 @@ function BasemapSelector(props) {
       </div>
       <div
         className={`${classes.basemapSelector} ${
-          selectedBasemap === basemaps.POSITRON ? 'is-selected' : ''
+          basemap === POSITRON ? 'is-selected' : ''
         }`}
-        onClick={() => changeBasemap(basemaps.POSITRON)}
+        onClick={() => changeBasemap(POSITRON)}
       >
         <Tooltip placement='left' title='CARTO Positron' arrow>
           <img src='/basemaps/positron.jpg' alt='Positron basemap' />
@@ -148,9 +120,9 @@ function BasemapSelector(props) {
       </div>
       <div
         className={`${classes.basemapSelector} ${
-          selectedBasemap === basemaps.VOYAGER ? 'is-selected' : ''
+          basemap === VOYAGER ? 'is-selected' : ''
         }`}
-        onClick={() => changeBasemap(basemaps.VOYAGER)}
+        onClick={() => changeBasemap(VOYAGER)}
       >
         <Tooltip placement='left' title='CARTO Voyager' arrow>
           <img src='/basemaps/voyager.jpg' alt='Voyager basemap' />
@@ -158,9 +130,9 @@ function BasemapSelector(props) {
       </div>
       <div
         className={`${classes.basemapSelector} ${
-          selectedBasemap === basemaps.DARK_MATTER ? 'is-selected' : ''
+          basemap === DARK_MATTER ? 'is-selected' : ''
         }`}
-        onClick={() => changeBasemap(basemaps.DARK_MATTER)}
+        onClick={() => changeBasemap(DARK_MATTER)}
       >
         <Tooltip placement='left' title='CARTO Dark Matter' arrow>
           <img src='/basemaps/dark-matter.jpg' alt='Dark Matter basemap' />
@@ -168,9 +140,9 @@ function BasemapSelector(props) {
       </div>
       <div
         className={`${classes.basemapSelector} ${
-          selectedBasemap === basemaps.GOOGLE_MAP ? 'is-selected' : ''
+          basemap === GOOGLE_ROADMAP ? 'is-selected' : ''
         }`}
-        onClick={() => changeBasemap(basemaps.GOOGLE_MAP)}
+        onClick={() => changeBasemap(GOOGLE_ROADMAP)}
       >
         <Tooltip placement='left' title='Google Map' arrow>
           <img src='/basemaps/google-map.jpg' alt='Google basemap' />
@@ -178,9 +150,9 @@ function BasemapSelector(props) {
       </div>
       <div
         className={`${classes.basemapSelector} ${
-          selectedBasemap === basemaps.GOOGLE_SATELLITE ? 'is-selected' : ''
+          basemap === GOOGLE_SATELLITE ? 'is-selected' : ''
         }`}
-        onClick={() => changeBasemap(basemaps.GOOGLE_SATELLITE)}
+        onClick={() => changeBasemap(GOOGLE_SATELLITE)}
       >
         <Tooltip placement='left' title='Google Satellite' arrow>
           <img src='/basemaps/google-satellite.jpg' alt='Google satellite basemap' />

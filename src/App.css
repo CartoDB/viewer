@@ -241,8 +241,10 @@ button {
 }
 
 .configuration-sidebar__section.open .section-content {
+  display: flex;
+  flex-direction: column;
   height: auto;
-  padding: 8px 40px 24px 24px;
+  padding: 8px 0 0;
 }
 
 .configuration-sidebar__section.open .section-content.no-side-padding {

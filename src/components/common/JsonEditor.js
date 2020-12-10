@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AceEditor from 'react-ace';
-// import 'brace/mode/json';
-// import 'brace/theme/github';
+
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-idle_fingers';
 

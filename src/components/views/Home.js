@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setBaseMap } from '@carto/react/redux';
 import { JSONConverter, JSONConfiguration } from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../../json/configuration';
 import { makeStyles } from '@material-ui/core';
-import Map from '../map';
-import Sidebar from '../sidebar';
+
+import { Map } from '../common/Map';
+import Sidebar from '../common/Sidebar/Sidebar';
+import BasemapSelector from '../common/BasemapSelector';
+import { setViewState } from '@carto/react/redux';
+import {
+  POSITRON,
+  VOYAGER,
+  DARK_MATTER,
+  GOOGLE_ROADMAP,
+  GOOGLE_SATELLITE,
+} from '@carto/react/basemaps';
 
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
@@ -61,14 +73,12 @@ function parseConfig(query, username, type) {
   let ready;
 
   if (!config) {
-    // valid sources are postgres and bigquery
     let data = query.get('data') || DEFAULT_DATA[type];
     const apiKey = query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
 
     ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
 
-    // fetch template and set parameters
     json = require(`../../json/template.${type}.json`);
     json.layers[0].data = data;
     json.layers[0].credentials = { username, apiKey };
@@ -79,7 +89,6 @@ function parseConfig(query, username, type) {
     json = JSON.parse(atob(decodeURIComponent(config)));
     ready = true;
   }
-
   return { json, ready };
 }
 
@@ -87,11 +96,27 @@ function Home() {
   const [json, setJSON] = useState();
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
-  const [viewState, setViewState] = useState(null);
   const [embedMode, setEmbedMode] = useState(false);
   const location = useLocation();
   const { username, type } = useParams();
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const initBasemap = (mapJson) => {
+    if (mapJson['google']) dispatch(setBaseMap(GOOGLE_ROADMAP));
+    else {
+      for (var i in mapJson['views']) {
+        if (mapJson['views'][i]['@@type'] === 'MapView') {
+          const style = mapJson['views'][i]['mapStyle'].toUpperCase();
+          if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
+          else if (style.includes('dark_matter'.toUpperCase()))
+            dispatch(setBaseMap(DARK_MATTER));
+          else if (style.includes('voyager'.toUpperCase())) dispatch(setBaseMap(VOYAGER));
+          break;
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (!username) {
@@ -108,19 +133,30 @@ function Home() {
     if (!ready) {
       setEmbedMode(false);
     }
+    initBasemap(json);
     setJSON(json);
     setJSONMap(json);
-  }, [location, username, type]);
+  }, [location, username, type, initBasemap]);
 
   useEffect(() => {
     if (jsonMap) {
-      const tempJson = JSON.parse(JSON.stringify(jsonMap));
-      addUpdateTriggersForAccesors(tempJson);
-      let jsonProps = jsonConverter.convert(tempJson);
-      jsonProps = checkJsonProps(jsonProps);
-      setJSONPros(jsonProps);
+      try {
+        const tempJson = JSON.parse(JSON.stringify(jsonMap));
+        addUpdateTriggersForAccesors(tempJson);
+        let jsonProps = jsonConverter.convert(tempJson);
+        jsonProps = checkJsonProps(jsonProps);
+        setJSONPros(jsonProps);
+      } catch (e) {
+        console.log('ERROR: ', e);
+      }
     }
   }, [jsonMap]);
+
+  useEffect(() => {
+    if (jsonProps) {
+      dispatch(setViewState(jsonProps.initialViewState));
+    }
+  }, [dispatch, jsonProps]);
 
   const checkJsonProps = (json) => {
     if (json && json.initialViewState) {
@@ -140,41 +176,38 @@ function Home() {
   const onEditorChange = (jsonText) => {
     const tempJson = JSON.parse(jsonText);
     setJSONMap(tempJson);
-    setViewState(tempJson.initialViewState);
   };
 
   const onBasemapChange = (newBasemap) => {
     var currentJson = { ...jsonMap };
-    if (newBasemap === 'carto') delete currentJson['google'];
-    else if (newBasemap === 'gmaps') currentJson['google'] = true;
-    if (viewState) currentJson.initialViewState = viewState;
+    if (newBasemap === GOOGLE_ROADMAP || newBasemap === GOOGLE_SATELLITE)
+      currentJson['google'] = true;
+    else {
+      delete currentJson['google'];
+      onStyleChange(newBasemap);
+    }
     setJSON(currentJson);
     setJSONMap(currentJson);
-  };
-
-  const onGmapUpdate = (map) => {
-    const newViewState = { ...viewState };
-    newViewState.latitude = map.getCenter().lat();
-    newViewState.longitude = map.getCenter().lng();
-    newViewState.zoom = map.getZoom();
-    setViewState(newViewState);
   };
 
   const onMenuCloses = (e) => {
     setJSON(jsonMap);
   };
 
-  const onViewStateChange = (e) => {
-    if (!e.interactionState.isDragging) {
-      delete e.viewState['height'];
-      delete e.viewState['width'];
-      setViewState(e.viewState);
+  const onStyleChange = (newBasemap) => {
+    let newStyle;
+    switch (newBasemap) {
+      case VOYAGER:
+        newStyle = '@@#CARTO_BASEMAP.VOYAGER';
+        break;
+      case DARK_MATTER:
+        newStyle = '@@#CARTO_BASEMAP.DARK_MATTER';
+        break;
+      default:
+        newStyle = '@@#CARTO_BASEMAP.POSITRON';
     }
-  };
-
-  const onStyleChange = (newStyle) => {
-    var newJson = { ...jsonMap };
-    var index = -1;
+    let newJson = { ...jsonMap };
+    let index = -1;
     for (var i in newJson['views']) {
       if (newJson['views'][i]['@@type'] === 'MapView') {
         index = i;
@@ -195,43 +228,21 @@ function Home() {
     setJSONMap(newJson);
   };
 
-  const onZoom = (e) => {
-    var zoomType = e.target.dataset.type;
-    var newJson = { ...jsonMap };
-    if (viewState) newJson['initialViewState'] = { ...viewState };
-    if (zoomType === 'zoom-in') {
-      const currentZoom = newJson['initialViewState']['zoom'];
-      newJson['initialViewState']['zoom'] = currentZoom > 19 ? 20 : currentZoom + 1;
-      setViewState(newJson['initialViewState']);
-      setJSONMap(newJson);
-    } else if (zoomType === 'zoom-out') {
-      const currentZoom = newJson['initialViewState']['zoom'];
-      newJson['initialViewState']['zoom'] = currentZoom < 2 ? 1 : currentZoom - 1;
-      setViewState(newJson['initialViewState']);
-      setJSONMap(newJson);
-    }
-  };
-
   return (
     <div className={`home ${embedMode ? 'home--embed' : ''}`}>
       {!embedMode && (
         <Sidebar
-          onBasemapChange={onBasemapChange}
           onStyleChange={onStyleChange}
           onMenuCloses={onMenuCloses}
           onJsonUpdated={onEditorChange}
           json={json}
           jsonMap={jsonMap}
-          viewState={viewState}
         />
       )}
       <div className={classes.map}>
-        {jsonProps && (
-          <Map
-            {...jsonProps}
-            onViewStateChange={onViewStateChange}
-            onZoom={onZoom}
-            onGmapUpdate={onGmapUpdate}
+        {jsonProps && <Map {...jsonProps} />}
+        {json && (
+          <BasemapSelector
             onBasemapChange={onBasemapChange}
             onStyleChange={onStyleChange}
             json={json}
@@ -243,7 +254,7 @@ function Home() {
           <p class='footer__text'>
             <img src='/icons/carto-heart.png' alt='' />
             Created with{' '}
-            <a href='https://carto.com' target='_blank' rel='noreferrer'>
+            <a href='https://carto.com' target='_blank' rel='noopener noreferrer'>
               CARTO
             </a>
           </p>
@@ -251,7 +262,7 @@ function Home() {
             class='footer__logo'
             href='https://carto.com'
             target='_blank'
-            rel='noreferrer'
+            rel='noopener noreferrer'
           >
             <img src='/icons/carto-full-logo.svg' alt='CARTO' />
           </a>

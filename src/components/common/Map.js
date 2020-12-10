@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Map(props) {
   const viewState = useSelector((state) => state.carto.viewState);
-  const basemap = useSelector((state) => BASEMAPS[state.carto.basemap]);
+  const basemap = useSelector((state) => BASEMAPS[state.carto.baseMap]);
   const googleApiKey = useSelector((state) => state.carto.googleApiKey);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -57,9 +57,25 @@ export function Map(props) {
     isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab';
 
   const handleTooltip = (info) => {
-    if (info && info.object) {
+    if (info && info.object && info.object.properties) {
+      let internalHtml = '';
+      for (const [key, value] of Object.entries(info.object.properties)) {
+        const isNumber = Number.isFinite(value);
+        let o = value;
+        if (isNumber) {
+          const nDigits = isNumber && Number.isInteger(value) ? 0 : 2;
+          o = Intl.NumberFormat('en-US', {
+            maximumFractionDigits: nDigits,
+            minimumFractionDigits: nDigits,
+            notation: 'compact',
+            compactDisplay: 'short',
+          }).format(value);
+        }
+
+        internalHtml += `${key.toUpperCase()}: ${o}<br/>`;
+      }
       return {
-        html: `<div class='content'>${info.object.html}<div class='arrow'></div></div>`,
+        html: `<div class='content'>${internalHtml}<div class='arrow'></div></div>`,
         className: classes.tooltip,
         style: {
           padding: 0,

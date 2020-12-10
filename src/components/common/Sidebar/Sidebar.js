@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, IconButton } from '@material-ui/core';
-import ConfigurationSidebar from '../components/configurationSidebar';
-import ShareSidebar from '../components/shareSidebar';
+import ConfigurationSidebar from './ConfigurationSidebar';
+import ShareSidebar from './ShareSidebar';
 
-import { ReactComponent as CartoMarker } from '../icons/carto-marker.svg';
-import { ReactComponent as CloseIcon } from '../icons/close-icon.svg';
-import { ReactComponent as SettingsIcon } from '../icons/settings-icon.svg';
-import { ReactComponent as ShareIcon } from '../icons/share-icon.svg';
+import { ReactComponent as CartoMarker } from '../../../icons/carto-marker.svg';
+import { ReactComponent as CloseIcon } from '../../../icons/close-icon.svg';
+import { ReactComponent as SettingsIcon } from '../../../icons/settings-icon.svg';
+import { ReactComponent as ShareIcon } from '../../../icons/share-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
   sidebarContainer: {
@@ -110,14 +110,11 @@ function Sidebar(props) {
           json={props.json}
           onJsonUpdated={props.onJsonUpdated}
           onClose={closeConfigurationSidebar}
+          currentJson={props.jsonMap}
         />
       )}
       {shareSidebarOpen && (
-        <ShareSidebar
-          json={props.jsonMap}
-          viewState={props.viewState}
-          onClose={closeShareSidebar}
-        />
+        <ShareSidebar json={props.jsonMap} onClose={closeShareSidebar} />
       )}
     </div>
   );
