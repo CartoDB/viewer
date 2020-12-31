@@ -88,4 +88,4 @@ You will also see any lint errors in the console.
 
 ### `yarn deploy`
 
-Deploy the code in GitHub pages at the URL: https://viewer.carto.com/
+Deploy the code in firebase at the URL: https://viewer.carto.com/
