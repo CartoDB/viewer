@@ -1,12 +1,11 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Snackbar } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Map } from 'components/common/Map';
 import { GeocoderWidget } from '@carto/react/widgets';
 import { getLayers } from 'components/layers';
 import { useDispatch, useSelector } from 'react-redux';
-import { Alert } from '@material-ui/lab';
 import { setError } from 'config/appSlice';
 
 const useStyles = makeStyles((theme) => ({

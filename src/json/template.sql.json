@@ -17,8 +17,9 @@
   "layers": [
     {
       "@@type": "CartoSQLLayer",
-      "getLineColor": [255, 255, 255],
-      "getFillColor": [255, 221, 154],
+      "data": "TYPE A SQL QUERY OR A DATASET NAME",
+      "getLineColor": [255, 255, 255, 100],
+      "getFillColor": [232, 133, 113],
       "pointRadiusMinPixels": 5,
       "lineWidthMinPixels": 1,
       "pickable": true

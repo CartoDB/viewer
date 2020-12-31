@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setBaseMap } from '@carto/react/redux';
@@ -20,7 +20,7 @@ import {
 
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
-  tileset: 'TYPE A TILESET NAME',
+  bigquery: 'TYPE A TILESET NAME',
 };
 const configuration = new JSONConfiguration(JSON_CONVERTER_CONFIGURATION);
 const jsonConverter = new JSONConverter({ configuration });
@@ -83,7 +83,12 @@ function parseConfig(query, username, type) {
     json.layers[0].data = data;
     json.layers[0].credentials = { username, apiKey };
     if (colorByValue) {
-      json.layers[0].getFillColor = `@@= properties.${colorByValue} > 1000000 ? [207, 89, 126] : properties.${colorByValue} > 100000 ? [232, 133, 113] : properties.${colorByValue} > 10000 ? [238, 180, 121] : properties.${colorByValue} > 1000 ? [233, 226, 156] : properties.${colorByValue} > 100 ? [156, 203, 134] : properties.${colorByValue} > 10 ? [57, 177, 133] : [0, 147, 146]`;
+      json.layers[0].getFillColor = {
+        '@@function': 'colorBins',
+        attr: colorByValue,
+        domain: [10, 100, 1000, 10000, 100000, 1000000],
+        colors: 'Temps',
+      };
     }
   } else {
     json = JSON.parse(atob(decodeURIComponent(config)));
@@ -102,21 +107,25 @@ function Home() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const initBasemap = (mapJson) => {
-    if (mapJson['google']) dispatch(setBaseMap(GOOGLE_ROADMAP));
-    else {
-      for (var i in mapJson['views']) {
-        if (mapJson['views'][i]['@@type'] === 'MapView') {
-          const style = mapJson['views'][i]['mapStyle'].toUpperCase();
-          if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
-          else if (style.includes('dark_matter'.toUpperCase()))
-            dispatch(setBaseMap(DARK_MATTER));
-          else if (style.includes('voyager'.toUpperCase())) dispatch(setBaseMap(VOYAGER));
-          break;
+  const initBasemap = useCallback(
+    (mapJson) => {
+      if (mapJson['google']) dispatch(setBaseMap(GOOGLE_ROADMAP));
+      else {
+        for (var i in mapJson['views']) {
+          if (mapJson['views'][i]['@@type'] === 'MapView') {
+            const style = mapJson['views'][i]['mapStyle'].toUpperCase();
+            if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
+            else if (style.includes('dark_matter'.toUpperCase()))
+              dispatch(setBaseMap(DARK_MATTER));
+            else if (style.includes('voyager'.toUpperCase()))
+              dispatch(setBaseMap(VOYAGER));
+            break;
+          }
         }
       }
-    }
-  };
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (!username) {
@@ -179,6 +188,8 @@ function Home() {
   };
 
   const onBasemapChange = (newBasemap) => {
+    debugger;
+    console.log('onBasemapChange');
     var currentJson = { ...jsonMap };
     if (newBasemap === GOOGLE_ROADMAP || newBasemap === GOOGLE_SATELLITE)
       currentJson['google'] = true;

@@ -15,7 +15,7 @@ export const initialState = {
     apiKey: 'default_public',
     serverUrlTemplate: 'https://{user}.carto.com',
   },
-  googleApiKey: '', // only required when using a Google Basemap
+  googleApiKey: 'AIzaSyCb2CTi3B6uarznVAs33W8VMER-1wz3ZrI', // only required when using a Google Basemap
 };
 
 export const oauthInitialState = {

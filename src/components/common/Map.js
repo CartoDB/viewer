@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core';
 import { setViewState } from '@carto/react/redux';
 import { BASEMAPS, GoogleMap } from '@carto/react/basemaps';
 
+import htmlForFeature from '../../utils/htmlForFeature';
+
 const useStyles = makeStyles((theme) => ({
   tooltip: {
     '& .content': {
@@ -57,25 +59,11 @@ export function Map(props) {
     isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab';
 
   const handleTooltip = (info) => {
-    if (info && info.object && info.object.properties) {
-      let internalHtml = '';
-      for (const [key, value] of Object.entries(info.object.properties)) {
-        const isNumber = Number.isFinite(value);
-        let o = value;
-        if (isNumber) {
-          const nDigits = isNumber && Number.isInteger(value) ? 0 : 2;
-          o = Intl.NumberFormat('en-US', {
-            maximumFractionDigits: nDigits,
-            minimumFractionDigits: nDigits,
-            notation: 'compact',
-            compactDisplay: 'short',
-          }).format(value);
-        }
-
-        internalHtml += `${key.toUpperCase()}: ${o}<br/>`;
-      }
+    if (info && info.object) {
       return {
-        html: `<div class='content'>${internalHtml}<div class='arrow'></div></div>`,
+        html: `<div class='content'>${htmlForFeature(
+          info.object
+        )}<div class='arrow'></div></div>`,
         className: classes.tooltip,
         style: {
           padding: 0,

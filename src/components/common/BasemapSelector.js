@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBaseMap } from '@carto/react/redux';
+
 import {
   POSITRON,
   VOYAGER,
