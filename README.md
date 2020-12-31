@@ -8,17 +8,17 @@ https://viewer.carto.com/user/:username/:type?data=...
 
 Path parameters:
 
-* **type**: (mandatory) type of the map to visualize. Posible values are `bigquery` and `sql`.
+- **type**: (mandatory) type of the map to visualize. Posible values are `bigquery` and `sql`.
 
-* **username**: (mandatory) CARTO username.
+- **username**: (mandatory) CARTO username.
 
 Query parameters:
 
-* **data**: (mandatory) data we want to apply.
+- **data**: (mandatory) data we want to apply.
 
-* **api_key**: (optional) CARTO API KEY. Default to `default_public`
+- **api_key**: (optional) CARTO API KEY. Default to `default_public`
 
-* **color_by_value**: (optional) create a default ramp on the selected attribute. Example: `color_by_value=aggregated_total`
+- **color_by_value**: (optional) create a default ramp on the selected attribute. Example: `color_by_value=aggregated_total`
 
 ### URL examples
 
@@ -56,13 +56,23 @@ To set VOYAGER, POSITRON or DARK_MATTER, set at the editor:
 
 ## Styling
 
-To style using a color ramp you can use inline declarations:
+To style using a color ramp you can use [CARTO helper functions](https://github.com/visgl/deck.gl/blob/master/docs/api-reference/carto/styles.md):
 
 ```js
-"getFillColor": "@@= properties.cartodb_id % 2  ? [255,0,0] : [0, 255, 0]",
+"getFillColor":  {
+  "@@function": "colorBins",
+  "attr": colorByValue,
+  "domain": [
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+    1000000
+  ],
+  "colors": "Temps"
+}
 ```
-
-
 
 ## Available Scripts
 
@@ -79,4 +89,3 @@ You will also see any lint errors in the console.
 ### `yarn deploy`
 
 Deploy the code in GitHub pages at the URL: https://viewer.carto.com/
-

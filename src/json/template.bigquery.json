@@ -17,6 +17,11 @@
   "layers": [
     {
       "@@type": "CartoBQTilerLayer",
+      "data": "TYPE A TILESET NAME",
+      "credentials": {
+        "username": "public",
+        "apiKey": "default_public"
+      },
       "getFillColor": [232, 133, 113],
       "pointRadiusMinPixels": 2,
       "stroked": false,
