@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
-import { initialState, oauthInitialState } from 'config/initialStateSlice';
+import { initialState, oauthInitialState } from './config/initialStateSlice';
 import configureAppStore from './config/store';
 import * as serviceWorker from './serviceWorker';
 
