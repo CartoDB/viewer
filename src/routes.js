@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import Home from 'components/views/Home';
-import NotFound from 'components/views/NotFound';
+import Home from './components/views/Home';
+import NotFound from './components/views/NotFound';
 
 // Auto import
 const routes = [

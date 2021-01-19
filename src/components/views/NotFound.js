@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Container, Grid, Link, Typography } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
-import background404 from 'assets/img/404.svg';
+import background404 from '../../assets/img/404.svg';
 
 const useStyles = makeStyles((theme) => ({
   containerWrapper: {
