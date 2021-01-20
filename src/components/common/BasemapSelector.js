@@ -3,6 +3,13 @@ import { makeStyles, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBaseMap } from '@carto/react/redux';
 
+import positron from '../../icons/basemaps/positron.jpg';
+import voyager from '../../icons/basemaps/voyager.jpg';
+import darkMatter from '../../icons/basemaps/dark-matter.jpg';
+import googleMap from '../../icons/basemaps/google-map.jpg';
+import googleSatellite from '../../icons/basemaps/google-satellite.jpg';
+import closeCross from '../../icons/close-cross.svg';
+
 import {
   POSITRON,
   VOYAGER,
@@ -107,7 +114,7 @@ function BasemapSelector(props) {
       className={`${classes.basemapSelectorContainer} ${selectorsOpen ? 'is-open' : ''}`}
     >
       <div className={classes.basemapMain} onClick={toggleBasemapSelector}>
-        <img src='/icons/close-cross.svg' alt='close' />
+        <img src={closeCross} alt='close' />
       </div>
       <div
         className={`${classes.basemapSelector} ${
@@ -116,7 +123,7 @@ function BasemapSelector(props) {
         onClick={() => changeBasemap(POSITRON)}
       >
         <Tooltip placement='left' title='CARTO Positron' arrow>
-          <img src='/basemaps/positron.jpg' alt='Positron basemap' />
+          <img src={positron} alt='Positron basemap' />
         </Tooltip>
       </div>
       <div
@@ -126,7 +133,7 @@ function BasemapSelector(props) {
         onClick={() => changeBasemap(VOYAGER)}
       >
         <Tooltip placement='left' title='CARTO Voyager' arrow>
-          <img src='/basemaps/voyager.jpg' alt='Voyager basemap' />
+          <img src={voyager} alt='Voyager basemap' />
         </Tooltip>
       </div>
       <div
@@ -136,7 +143,7 @@ function BasemapSelector(props) {
         onClick={() => changeBasemap(DARK_MATTER)}
       >
         <Tooltip placement='left' title='CARTO Dark Matter' arrow>
-          <img src='/basemaps/dark-matter.jpg' alt='Dark Matter basemap' />
+          <img src={darkMatter} alt='Dark Matter basemap' />
         </Tooltip>
       </div>
       <div
@@ -146,7 +153,7 @@ function BasemapSelector(props) {
         onClick={() => changeBasemap(GOOGLE_ROADMAP)}
       >
         <Tooltip placement='left' title='Google Map' arrow>
-          <img src='/basemaps/google-map.jpg' alt='Google basemap' />
+          <img src={googleMap} alt='Google basemap' />
         </Tooltip>
       </div>
       <div
@@ -156,7 +163,7 @@ function BasemapSelector(props) {
         onClick={() => changeBasemap(GOOGLE_SATELLITE)}
       >
         <Tooltip placement='left' title='Google Satellite' arrow>
-          <img src='/basemaps/google-satellite.jpg' alt='Google satellite basemap' />
+          <img src={googleSatellite} alt='Google satellite basemap' />
         </Tooltip>
       </div>
     </div>

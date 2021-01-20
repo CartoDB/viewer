@@ -18,6 +18,7 @@ import { ReactComponent as LinkIcon } from '../../../icons/linkIcon.svg';
 import { ReactComponent as TwitterIcon } from '../../../icons/twitterIcon.svg';
 import { ReactComponent as LinkedinIcon } from '../../../icons/linkedinIcon.svg';
 import { ReactComponent as FbIcon } from '../../../icons/fbIcon.svg';
+import cartoFullLogo from '../../../icons/carto-full-logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   cartoLogo: {
@@ -105,7 +106,7 @@ function ShareSidebar(props) {
   return (
     <div className='configuration-sidebar'>
       <Box m={2} ml={3} display='flex' justifyContent='space-between'>
-        <img className={classes.cartoLogo} src='/icons/carto-full-logo.svg' alt='CARTO' />
+        <img className={classes.cartoLogo} src={cartoFullLogo} alt='CARTO' />
         <Typography className={classes.appName} variant='caption' color='textPrimary'>
           Map Viewer
         </Typography>
@@ -185,7 +186,10 @@ function ShareSidebar(props) {
               title='Copy and paste this HTML code into documents to embed this map on web pages.'
               arrow
             >
-              <QuestionIcon />
+              <div>
+                {/* Parent div required to prevent errors */}
+                <QuestionIcon />
+              </div>
             </Tooltip>
           </Box>
         </Box>

@@ -17,6 +17,8 @@ import {
   GOOGLE_SATELLITE,
 } from '@carto/react/basemaps';
 
+import cartoWatermarkLogo from '../../icons/carto-watermark-logo.svg';
+
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
   bigquery: 'TYPE A TILESET NAME',
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     '&::after': {
       content: '""',
       position: 'absolute',
-      backgroundImage: 'url("/icons/carto-watermark-logo.svg")',
+      backgroundImage: `url(${cartoWatermarkLogo})`,
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundSize: 'contain',

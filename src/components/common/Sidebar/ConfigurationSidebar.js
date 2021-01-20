@@ -3,6 +3,7 @@ import JSONEditor from '../JsonEditor';
 import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
 
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
+import cartoFullLogo from '../../../icons/carto-full-logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   cartoLogo: {
@@ -54,7 +55,7 @@ function ConfigurationSidebar(props) {
   return (
     <div className='configuration-sidebar'>
       <Box m={2} ml={3} display='flex' justifyContent='space-between'>
-        <img className={classes.cartoLogo} src='/icons/carto-full-logo.svg' alt='CARTO' />
+        <img className={classes.cartoLogo} src={cartoFullLogo} alt='CARTO' />
         <Typography
           className={`${classes.appName} ${classes.textColor}`}
           variant='caption'
