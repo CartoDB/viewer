@@ -18,6 +18,8 @@ import {
 } from '@carto/react/basemaps';
 
 import cartoWatermarkLogo from '../../icons/carto-watermark-logo.svg';
+import cartoHeart from '../../icons/carto-heart.png';
+import cartoFullLogo from '../../icons/carto-full-logo.svg';
 
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
@@ -27,6 +29,14 @@ const configuration = new JSONConfiguration(JSON_CONVERTER_CONFIGURATION);
 const jsonConverter = new JSONConverter({ configuration });
 
 const useStyles = makeStyles((theme) => ({
+  home: {
+    display: 'flex',
+    width: '100vw',
+    height: '100vh',
+  },
+  'home--embed': {
+    'flex-direction': 'column',
+  },
   map: {
     position: 'relative',
     overflow: 'hidden',
@@ -46,6 +56,37 @@ const useStyles = makeStyles((theme) => ({
       width: '100px',
       transform: 'translateX(-50%)',
       pointerEvents: 'none',
+    },
+    '& #deckgl-wrapper': {
+      overflow: 'hidden',
+      'border-radius': '4px',
+    },
+  },
+  footer: {
+    display: 'flex',
+    'align-items': 'center',
+    'background-color': 'rgba(44, 48, 50, 0.05)',
+    height: '22px',
+    padding: '0 8px 8px',
+  },
+  footer__text: {
+    'font-size': '12px',
+    'line-height': '16px',
+    '& a': {
+      color: '#1785fb',
+    },
+    '& img': {
+      height: '16px',
+      width: '16px',
+      'margin-right': '8px',
+      'vertical-align': 'middle',
+    },
+  },
+  footer__logo: {
+    'margin-left': 'auto',
+    '& img': {
+      display: 'block',
+      height: '18px',
     },
   },
 }));
@@ -237,7 +278,7 @@ function Viewer(props) {
   };
 
   return (
-    <div className={`home ${embedMode ? 'home--embed' : ''}`}>
+    <div className={`${classes.home} ${embedMode ? classes['home--embed'] : ''}`}>
       {!embedMode && (
         <Sidebar
           onStyleChange={onStyleChange}
@@ -258,21 +299,21 @@ function Viewer(props) {
         )}
       </div>
       {embedMode && (
-        <div className='footer'>
-          <p class='footer__text'>
-            <img src='/icons/carto-heart.png' alt='' />
+        <div className={classes.footer}>
+          <p className={classes['footer__text']}>
+            <img src={cartoHeart} alt='' />
             Created with{' '}
             <a href='https://carto.com' target='_blank' rel='noopener noreferrer'>
               CARTO
             </a>
           </p>
           <a
-            class='footer__logo'
+            className={classes['footer__logo']}
             href='https://carto.com'
             target='_blank'
             rel='noopener noreferrer'
           >
-            <img src='/icons/carto-full-logo.svg' alt='CARTO' />
+            <img src={cartoFullLogo} alt='CARTO' />
           </a>
         </div>
       )}
