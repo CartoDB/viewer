@@ -48,11 +48,12 @@ const useStyles = makeStyles(() => ({
 function App(props) {
   const classes = useStyles();
   const routing = useRoutes(routes);
+  const propsSsupplied = Object.keys(props).length !== 0;
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      {!propsSsupplied && <CssBaseline />}
       <Grid container direction='column' className={classes.root}>
-        {Object.keys(props).length === 0 ? routing : <Viewer {...props} />}
+        {!propsSsupplied ? routing : <Viewer {...props} />}
       </Grid>
     </ThemeProvider>
   );
