@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setBaseMap } from '@carto/react/redux';
+import { setBasemap } from '@carto/react/redux';
 import { JSONConverter, JSONConfiguration } from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../../json/configuration';
 import { makeStyles } from '@material-ui/core';
@@ -109,16 +109,16 @@ function Home() {
 
   const initBasemap = useCallback(
     (mapJson) => {
-      if (mapJson['google']) dispatch(setBaseMap(GOOGLE_ROADMAP));
+      if (mapJson['google']) dispatch(setBasemap(GOOGLE_ROADMAP));
       else {
         for (var i in mapJson['views']) {
           if (mapJson['views'][i]['@@type'] === 'MapView') {
             const style = mapJson['views'][i]['mapStyle'].toUpperCase();
-            if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
+            if (style.includes('positron'.toUpperCase())) dispatch(setBasemap(POSITRON));
             else if (style.includes('dark_matter'.toUpperCase()))
-              dispatch(setBaseMap(DARK_MATTER));
+              dispatch(setBasemap(DARK_MATTER));
             else if (style.includes('voyager'.toUpperCase()))
-              dispatch(setBaseMap(VOYAGER));
+              dispatch(setBasemap(VOYAGER));
             break;
           }
         }

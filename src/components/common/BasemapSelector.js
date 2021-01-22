@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBaseMap } from '@carto/react/redux';
+import { setBasemap } from '@carto/react/redux';
 
 import {
   POSITRON,
@@ -89,12 +89,12 @@ const useStyles = makeStyles((theme) => ({
 
 function BasemapSelector(props) {
   const [selectorsOpen, setSelectorsOpen] = useState(false);
-  const basemap = useSelector((state) => state.carto.baseMap);
+  const basemap = useSelector((state) => state.carto.basemap);
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const changeBasemap = (newBasemap) => {
-    dispatch(setBaseMap(newBasemap));
+    dispatch(setBasemap(newBasemap));
     props.onBasemapChange(newBasemap);
   };
 
