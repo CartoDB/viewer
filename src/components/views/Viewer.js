@@ -144,7 +144,7 @@ function Viewer(props) {
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const [embedMode, setEmbedMode] = useState(false);
-  const { username, type, query } = props;
+  const { username, type, query, shareOptions } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -286,6 +286,10 @@ function Viewer(props) {
           onJsonUpdated={onEditorChange}
           json={json}
           jsonMap={jsonMap}
+          backRoute={props.backRoute}
+          username={username}
+          type={type}
+          shareOptions={shareOptions}
         />
       )}
       <div className={classes.map}>

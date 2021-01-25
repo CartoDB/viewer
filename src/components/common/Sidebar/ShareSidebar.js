@@ -6,12 +6,15 @@ import {
   FormControlLabel,
   IconButton,
   Switch,
+  Checkbox,
   TextField,
   Tooltip,
   Typography,
   Box,
+  Button,
 } from '@material-ui/core';
 
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { ReactComponent as CopyIcon } from '../../../icons/copyIcon.svg';
 import { ReactComponent as QuestionIcon } from '../../../icons/questionIcon.svg';
 import { ReactComponent as LinkIcon } from '../../../icons/linkIcon.svg';
@@ -33,10 +36,19 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0,
     pointerEvents: 'none',
   },
+  regular: {
+    'font-weight': theme.typography.fontWeightRegular,
+  },
+  infoIcon: {
+    color: theme.palette.info.main,
+  },
 }));
 
 function ShareSidebar(props) {
+  const { username, type } = props;
   const [sharingMenu, setSharingMenu] = useState(false);
+  const [showPrivacyMoreInfo, setShowPrivacyMoreInfo] = useState(false);
+  const [isPublic, setisPublic] = useState(false);
 
   const classes = useStyles();
 
@@ -45,11 +57,12 @@ function ShareSidebar(props) {
   const viewState = useSelector((state) => state.carto.viewState);
 
   const baseUrl = (json) => {
-    const { origin, pathname } = window.location;
+    // const { origin, pathname } = window.location;
 
     if (viewState) json.initialViewState = { ...viewState };
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
-    return `${origin + pathname}?config=${config}`;
+    // return `${origin + pathname}?config=${config}`;
+    return `${process.env.REACT_APP_PRODUCTION_DOMAIN}/user/${username}/${type}?config=${config}`;
   };
 
   const shareUrl = (json, showMenu) => {
@@ -103,6 +116,14 @@ function ShareSidebar(props) {
     setSharingMenu(e.target.checked);
   };
 
+  const togglePrivacyMoreInfo = () => {
+    setShowPrivacyMoreInfo(!showPrivacyMoreInfo);
+  };
+
+  const togglePrivacy = (e) => {
+    setisPublic(e.target.checked);
+  };
+
   return (
     <div className='configuration-sidebar'>
       <Box m={2} ml={3} display='flex' justifyContent='space-between'>
@@ -115,99 +136,166 @@ function ShareSidebar(props) {
 
       <Box m={2} ml={3} display='flex' justifyContent='space-between'>
         <Typography variant='h6' color='textPrimary'>
-          Share map
+          Privacy
         </Typography>
       </Box>
-      <Box m={2} ml={3} mt={1}>
-        <Box mb={2}>
-          <Typography variant='subtitle1' color='textPrimary'>
-            Link
+      <Box m={2} ml={3} mt={0} display='flex' justifyContent='space-between'>
+        <FormControlLabel
+          control={<Switch />}
+          label='Publish this map'
+          onChange={togglePrivacy}
+        />
+        <Button
+          variant='text'
+          color='primary'
+          size='small'
+          onClick={togglePrivacyMoreInfo}
+        >
+          More info
+        </Button>
+      </Box>
+      {showPrivacyMoreInfo && (
+        <Box
+          m={2}
+          ml={3}
+          mt={0}
+          mb={3}
+          p={2}
+          bgcolor='background.default'
+          borderRadius='4px'
+        >
+          <Typography
+            mt={1}
+            variant='caption'
+            color='textSecondary'
+            className={classes.regular}
+          >
+            By publishing this tileset, we'll grant <strong>BigQuery Data Viewer</strong>{' '}
+            permission to the <strong>CARTO Maps API Service Account.</strong> This action
+            will enable the public sharing links and allow visualizations from
+            unauthenticated users. By unpublishing the tileset, we'll revoke the
+            permission mentioned above and disable the sharing links.
           </Typography>
-          <Box mt={2} display='flex' alignItems='center'>
-            <Box>
-              <Tooltip placement='top' title='Copy link' arrow>
-                <IconButton onClick={(e) => copyTextarea(e, urlShareRef)}>
-                  <LinkIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <Box ml={1}>
-              <Tooltip placement='top' title='Share on Twitter' arrow>
-                <a href={twitterUrl()} target='_blank' rel='noopener noreferrer'>
-                  <IconButton>
-                    <TwitterIcon />
-                  </IconButton>
-                </a>
-              </Tooltip>
-            </Box>
-            <Box ml={1}>
-              <Tooltip placement='top' title='Share on Facebook' arrow>
-                <a href={facebookUrl()} target='_blank' rel='noopener noreferrer'>
-                  <IconButton>
-                    <FbIcon />
-                  </IconButton>
-                </a>
-              </Tooltip>
-            </Box>
-            <Box ml={1}>
-              <Tooltip placement='top' title='Share on Linkedin' arrow>
-                <a href={linkedinUrl()} target='_blank' rel='noopener noreferrer'>
-                  <IconButton>
-                    <LinkedinIcon />
-                  </IconButton>
-                </a>
-              </Tooltip>
-            </Box>
+        </Box>
+      )}
+      <Divider />
+
+      <Box m={2} ml={3} display='flex' justifyContent='space-between'>
+        <Typography variant='h6' color='textPrimary'>
+          Sharing options
+        </Typography>
+      </Box>
+      {!isPublic && (
+        <Box
+          m={2}
+          pl='18px'
+          pt='13px'
+          pb='13px'
+          bgcolor='info.relatedLight'
+          borderRadius='4px'
+          display='flex'
+          alignItems='center'
+        >
+          <Box mr={1} display='flex' alignItems='center'>
+            <InfoOutlinedIcon className={classes.infoIcon} />
           </Box>
-          <Box mt={1} ml={1}>
-            <FormControlLabel
-              control={<Switch />}
-              label='Include menu and editor'
-              onChange={toggleShowMenu}
+          <Typography variant='caption' className={classes.regular}>
+            Publish the map to activate sharing options
+          </Typography>
+        </Box>
+      )}
+      {isPublic && (
+        <Box m={2} ml={3} mt={1}>
+          <Box mb={2}>
+            <Typography variant='subtitle1' color='textPrimary'>
+              Link
+            </Typography>
+            <Box mt={2} display='flex' alignItems='center'>
+              <Box>
+                <Tooltip placement='top' title='Copy link' arrow>
+                  <IconButton onClick={(e) => copyTextarea(e, urlShareRef)}>
+                    <LinkIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+              <Box ml={1}>
+                <Tooltip placement='top' title='Share on Twitter' arrow>
+                  <a href={twitterUrl()} target='_blank' rel='noopener noreferrer'>
+                    <IconButton>
+                      <TwitterIcon />
+                    </IconButton>
+                  </a>
+                </Tooltip>
+              </Box>
+              <Box ml={1}>
+                <Tooltip placement='top' title='Share on Facebook' arrow>
+                  <a href={facebookUrl()} target='_blank' rel='noopener noreferrer'>
+                    <IconButton>
+                      <FbIcon />
+                    </IconButton>
+                  </a>
+                </Tooltip>
+              </Box>
+              <Box ml={1}>
+                <Tooltip placement='top' title='Share on Linkedin' arrow>
+                  <a href={linkedinUrl()} target='_blank' rel='noopener noreferrer'>
+                    <IconButton>
+                      <LinkedinIcon />
+                    </IconButton>
+                  </a>
+                </Tooltip>
+              </Box>
+            </Box>
+            <Box mt={1} ml={1}>
+              <FormControlLabel
+                control={<Checkbox />}
+                label='Include menu and editor'
+                onChange={toggleShowMenu}
+              />
+            </Box>
+            <TextField
+              className={classes.hiddenElement}
+              variant='outlined'
+              size='small'
+              inputRef={urlShareRef}
+              value={shareUrl(props.json, sharingMenu)}
             />
           </Box>
-          <TextField
-            className={classes.hiddenElement}
-            variant='outlined'
-            size='small'
-            inputRef={urlShareRef}
-            value={shareUrl(props.json, sharingMenu)}
-          />
-        </Box>
-        <Divider />
+          <Divider />
 
-        <Box display='flex' mt={3}>
-          <Typography variant='subtitle1' color='textPrimary'>
-            Embed this map
-          </Typography>
-          <Box ml={1}>
-            <Tooltip
-              placement='top'
-              title='Copy and paste this HTML code into documents to embed this map on web pages.'
-              arrow
-            >
-              <div>
-                {/* Parent div required to prevent errors */}
-                <QuestionIcon />
-              </div>
-            </Tooltip>
+          <Box display='flex' mt={3}>
+            <Typography variant='subtitle1' color='textPrimary'>
+              Embed this map
+            </Typography>
+            <Box ml={1}>
+              <Tooltip
+                placement='top'
+                title='Copy and paste this HTML code into documents to embed this map on web pages.'
+                arrow
+              >
+                <div>
+                  {/* Parent div required to prevent errors */}
+                  <QuestionIcon />
+                </div>
+              </Tooltip>
+            </Box>
+          </Box>
+          <Box display='flex' mt={2}>
+            <TextField
+              variant='outlined'
+              size='small'
+              inputRef={embedCodeRef}
+              InputProps={{ readOnly: true }}
+              value={iframeCode(props.json)}
+            />
+            <Box ml={1}>
+              <IconButton onClick={(e) => copyTextarea(e, embedCodeRef)}>
+                <CopyIcon />
+              </IconButton>
+            </Box>
           </Box>
         </Box>
-        <Box display='flex' mt={2}>
-          <TextField
-            variant='outlined'
-            size='small'
-            inputRef={embedCodeRef}
-            InputProps={{ readOnly: true }}
-            value={iframeCode(props.json)}
-          />
-          <Box ml={1}>
-            <IconButton onClick={(e) => copyTextarea(e, embedCodeRef)}>
-              <CopyIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </Box>
+      )}
     </div>
   );
 }

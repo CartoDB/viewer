@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, IconButton } from '@material-ui/core';
+import { makeStyles, IconButton, Tooltip } from '@material-ui/core';
 import ConfigurationSidebar from './ConfigurationSidebar';
 import ShareSidebar from './ShareSidebar';
 
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Sidebar(props) {
+  const { username, type, shareOptions } = props;
   const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
   const classes = useStyles();
@@ -76,6 +77,16 @@ function Sidebar(props) {
     closeShareSidebar();
   };
 
+  const backButton = props.backRoute ? (
+    <Tooltip placement='right' title='Back to your tilesets' arrow>
+      <a href={props.backRoute}>
+        <CartoMarker />
+      </a>
+    </Tooltip>
+  ) : (
+    <CartoMarker />
+  );
+
   return (
     <div className={classes.sidebarContainer}>
       <div className={classes.sidebar}>
@@ -85,7 +96,7 @@ function Sidebar(props) {
               <CloseIcon />
             </IconButton>
           ) : (
-            <CartoMarker />
+            backButton
           )}
         </div>
         <div
@@ -96,12 +107,16 @@ function Sidebar(props) {
         >
           <SettingsIcon />
         </div>
-        <div
-          className={`${classes.sidebarElement} ${shareSidebarOpen ? 'is-selected' : ''}`}
-          onClick={openShareSidebar}
-        >
-          <ShareIcon />
-        </div>
+        {shareOptions && (
+          <div
+            className={`${classes.sidebarElement} ${
+              shareSidebarOpen ? 'is-selected' : ''
+            }`}
+            onClick={openShareSidebar}
+          >
+            <ShareIcon />
+          </div>
+        )}
       </div>
       {configurationSidebarOpen && (
         <ConfigurationSidebar
@@ -114,7 +129,12 @@ function Sidebar(props) {
         />
       )}
       {shareSidebarOpen && (
-        <ShareSidebar json={props.jsonMap} onClose={closeShareSidebar} />
+        <ShareSidebar
+          json={props.jsonMap}
+          username={username}
+          type={type}
+          onClose={closeShareSidebar}
+        />
       )}
     </div>
   );
