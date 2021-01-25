@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ShareSidebar(props) {
-  const { username, type } = props;
+  const { username, type, shareOptions } = props;
   const [sharingMenu, setSharingMenu] = useState(false);
   const [showPrivacyMoreInfo, setShowPrivacyMoreInfo] = useState(false);
   const [isPublic, setisPublic] = useState(false);
@@ -58,11 +58,10 @@ function ShareSidebar(props) {
 
   const baseUrl = (json) => {
     // const { origin, pathname } = window.location;
-
     if (viewState) json.initialViewState = { ...viewState };
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
     // return `${origin + pathname}?config=${config}`;
-    return `${process.env.REACT_APP_PRODUCTION_DOMAIN}/user/${username}/${type}?config=${config}`;
+    return `${shareOptions.baseUrl}/user/${username}/${type}?config=${config}`;
   };
 
   const shareUrl = (json, showMenu) => {

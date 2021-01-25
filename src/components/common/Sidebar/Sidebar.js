@@ -128,11 +128,12 @@ function Sidebar(props) {
           currentJson={props.jsonMap}
         />
       )}
-      {shareSidebarOpen && (
+      {shareOptions && shareSidebarOpen && (
         <ShareSidebar
           json={props.jsonMap}
           username={username}
           type={type}
+          shareOptions={shareOptions}
           onClose={closeShareSidebar}
         />
       )}
