@@ -41,11 +41,11 @@ function ConfigurationSidebar(props) {
       const region = credentials['region'] ? credentials['region'] : 'us';
       const data = json.layers[0].data;
       if (json.layers[0]['@@type'] === 'CartoBQTilerLayer')
-        tileJson = `https://maps-api-v2.${region}.carto.com/user/${username}/tilejson/tileset/bigquery/${data}?api_key=${apiKey}`;
+        tileJson = `https://maps-api-v2.${region}.carto.com/user/${username}/bigquery/tileset?source=${data}&format=tilejson&api_key=${apiKey}`;
       else if (json.layers[0]['@@type'] === 'CartoSQLLayer') {
-        tileJson = `https://maps-api-v2.${region}.carto.com/user/${username}/tilejson/sql/postgres/${encodeURIComponent(
+        tileJson = `https://maps-api-v2.${region}.carto.com/user/${username}/carto/sql?source=${encodeURIComponent(
           data
-        )}?api_key=${apiKey}`;
+        )}&format=tilejson&api_key=${apiKey}`;
       }
     }
     return tileJson;
