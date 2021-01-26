@@ -8,7 +8,7 @@ const element = document.getElementById('root');
 //   type: 'bigquery',
 //   query: new URLSearchParams(`?data=cartobq.maps.osm_buildings&api_key=${api_key}`),
 //   shareOptions: {
-//     baseUrl: 'https://viewer.carto.com/'
+//     baseUrl: 'https://viewer.carto.com'
 //   }
 // };
 

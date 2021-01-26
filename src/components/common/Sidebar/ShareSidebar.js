@@ -63,7 +63,13 @@ function ShareSidebar(props) {
   const embedCodeRef = useRef();
   const viewState = useSelector((state) => state.carto.viewState);
 
-  const baseUrl = (json) => {
+  const json = JSON.parse(JSON.stringify(props.json));
+  json.layers.map((l) => {
+    l.credentials.apiKey = 'default_public';
+    return l;
+  });
+
+  const baseUrl = () => {
     // const { origin, pathname } = window.location;
     if (viewState) json.initialViewState = { ...viewState };
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
@@ -71,16 +77,16 @@ function ShareSidebar(props) {
     return `${shareOptions.baseUrl}/user/${username}/${type}?config=${config}`;
   };
 
-  const shareUrl = (json, showMenu) => {
-    let url = baseUrl(json);
+  const shareUrl = (showMenu) => {
+    let url = baseUrl();
     if (!showMenu) {
       url = url + '&embed=true';
     }
     return url;
   };
 
-  const iframeCode = (json) => {
-    var url = baseUrl(json);
+  const iframeCode = () => {
+    var url = baseUrl();
     var iframeUrl = `<iframe src="${url}&embed=true" title="Deck.gl Playground"/>`;
     return iframeUrl;
   };
@@ -93,27 +99,21 @@ function ShareSidebar(props) {
 
   const twitterUrl = () => {
     const url = 'https://twitter.com/intent/tweet';
-    const mapUrl = shareUrl(props.json, sharingMenu).replace(
-      'localhost:3001',
-      'viewer.carto.com'
-    );
+    const mapUrl = shareUrl(sharingMenu).replace('localhost:3001', 'viewer.carto.com');
     const tweetUrl = `${url}?url=${encodeURIComponent(mapUrl)}`;
     return tweetUrl;
   };
 
   const facebookUrl = () => {
     const url = 'https://www.facebook.com/sharer/sharer.php';
-    const mapUrl = shareUrl(props.json, sharingMenu);
+    const mapUrl = shareUrl(sharingMenu);
     const fbUrl = `${url}?u=${encodeURIComponent(mapUrl)}`;
     return fbUrl;
   };
 
   const linkedinUrl = () => {
     const url = 'http://www.linkedin.com/shareArticle?mini=true';
-    const mapUrl = shareUrl(props.json, sharingMenu).replace(
-      'localhost:3001',
-      'viewer.carto.com'
-    );
+    const mapUrl = shareUrl(sharingMenu).replace('localhost:3001', 'viewer.carto.com');
     const linkedinUrl = `${url}&url=${encodeURIComponent(mapUrl)}`;
     return linkedinUrl;
   };
@@ -295,7 +295,7 @@ function ShareSidebar(props) {
               variant='outlined'
               size='small'
               inputRef={urlShareRef}
-              value={shareUrl(props.json, sharingMenu)}
+              value={shareUrl(sharingMenu)}
             />
           </Box>
           <Divider />
@@ -323,7 +323,7 @@ function ShareSidebar(props) {
               size='small'
               inputRef={embedCodeRef}
               InputProps={{ readOnly: true }}
-              value={iframeCode(props.json)}
+              value={iframeCode()}
             />
             <Box ml={1}>
               <IconButton onClick={(e) => copyTextarea(e, embedCodeRef)}>
