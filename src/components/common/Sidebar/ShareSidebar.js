@@ -38,9 +38,15 @@ const useStyles = makeStyles((theme) => ({
   },
   regular: {
     'font-weight': theme.typography.fontWeightRegular,
+    '& strong': {
+      'font-weight': theme.typography.fontWeightBold,
+    },
   },
   infoIcon: {
     color: theme.palette.info.main,
+  },
+  txtError: {
+    color: theme.palette.error.relatedDark,
   },
 }));
 
@@ -48,6 +54,7 @@ function ShareSidebar(props) {
   const { username, type, shareOptions } = props;
   const [sharingMenu, setSharingMenu] = useState(false);
   const [showPrivacyMoreInfo, setShowPrivacyMoreInfo] = useState(false);
+  const [showPrivacyError /*, setShowPrivacyError*/] = useState(false);
   const [isPublic, setisPublic] = useState(false);
 
   const classes = useStyles();
@@ -164,6 +171,7 @@ function ShareSidebar(props) {
           borderRadius='4px'
         >
           <Typography
+            component='p'
             mt={1}
             variant='caption'
             color='textSecondary'
@@ -172,14 +180,44 @@ function ShareSidebar(props) {
             By publishing this tileset, we'll grant <strong>BigQuery Data Viewer</strong>{' '}
             permission to the <strong>CARTO Maps API Service Account.</strong> This action
             will enable the public sharing links and allow visualizations from
-            unauthenticated users. By unpublishing the tileset, we'll revoke the
-            permission mentioned above and disable the sharing links.
+            unauthenticated users.<br></br>
+            <br></br>By unpublishing the tileset, we'll revoke the permission mentioned
+            above and disable the sharing links.
           </Typography>
         </Box>
       )}
+      {showPrivacyError && (
+        <Box
+          m={2}
+          ml={3}
+          mt={0}
+          mb={3}
+          p={2}
+          bgcolor='error.relatedLight'
+          borderRadius='4px'
+          display='flex'
+        >
+          <InfoOutlinedIcon color='error' />
+          <Box ml={1}>
+            <Typography mt={1} variant='subtitle2' className={classes.txtError}>
+              Error
+            </Typography>
+            <Typography
+              component='p'
+              mt={1}
+              variant='caption'
+              className={`${classes.txtError} ${classes.regular}`}
+            >
+              We couldn't change this tileset's permission in BigQuery. You will need
+              BigQuery Data Owner or BigQuery Admin role to perform this change.
+            </Typography>
+          </Box>
+        </Box>
+      )}
+
       <Divider />
 
-      <Box m={2} ml={3} display='flex' justifyContent='space-between'>
+      <Box mt={3} ml={3} display='flex' justifyContent='space-between'>
         <Typography variant='h6' color='textPrimary'>
           Sharing options
         </Typography>

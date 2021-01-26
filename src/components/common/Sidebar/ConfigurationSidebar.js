@@ -21,9 +21,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '8px 16px',
     backgroundColor: theme.palette.text.primary,
   },
-  regular: {
-    'font-weight': theme.typography.fontWeightRegular,
-  },
 }));
 
 function ConfigurationSidebar(props) {
@@ -77,14 +74,9 @@ function ConfigurationSidebar(props) {
         {showMoreInfo && (
           <Box m={2} ml={3} p={2} bgcolor='background.default' borderRadius='4px'>
             <Box mb={1}>
-              <Typography variant='subtitle1'>deck.gl styling</Typography>
+              <Typography variant='subtitle2'>deck.gl styling</Typography>
             </Box>
-            <Typography
-              mt={1}
-              variant='caption'
-              color='textSecondary'
-              className={classes.regular}
-            >
+            <Typography component='p' mt={1} variant='caption' color='textSecondary'>
               You can customize how the visualization looks like by modifying the deck.gl
               declarative language.
               <br />
