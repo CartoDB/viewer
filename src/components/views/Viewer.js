@@ -118,6 +118,7 @@ function parseConfig(query, username, type) {
     let data = query.get('data') || DEFAULT_DATA[type];
     const apiKey = query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
+    const initialViewState = query.get('initialViewState');
 
     ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
 
@@ -130,6 +131,12 @@ function parseConfig(query, username, type) {
         attr: colorByValue,
         domain: [10, 100, 1000, 10000, 100000, 1000000],
         colors: 'Temps',
+      };
+    }
+    if (initialViewState) {
+      json.initialViewState = {
+        ...json.initialViewState,
+        ...JSON.parse(initialViewState),
       };
     }
   } else {
