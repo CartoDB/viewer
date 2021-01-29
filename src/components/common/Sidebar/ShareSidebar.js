@@ -54,8 +54,11 @@ function ShareSidebar(props) {
   const { username, type, shareOptions } = props;
   const [sharingMenu, setSharingMenu] = useState(false);
   const [showPrivacyMoreInfo, setShowPrivacyMoreInfo] = useState(false);
-  const [showPrivacyError /*, setShowPrivacyError*/] = useState(false);
-  const [isPublic, setisPublic] = useState(false);
+  const [showPrivacyError, setShowPrivacyError] = useState(false);
+  const [isPublic, setisPublic] = useState(
+    props.shareOptions && props.shareOptions.privacy === 'public'
+  );
+  const [privacySwithValue, setPrivacySwithValue] = useState(isPublic);
 
   const classes = useStyles();
 
@@ -126,8 +129,18 @@ function ShareSidebar(props) {
     setShowPrivacyMoreInfo(!showPrivacyMoreInfo);
   };
 
-  const togglePrivacy = (e) => {
-    setisPublic(e.target.checked);
+  const togglePrivacy = async (e) => {
+    const checked = e.target.checked;
+    const privacy = checked ? 'public' : 'private';
+    setPrivacySwithValue(checked);
+    if (props.shareOptions && props.shareOptions.setPrivacy) {
+      try {
+        await props.shareOptions.setPrivacy(privacy);
+        setisPublic(checked);
+      } catch (e) {
+        setShowPrivacyError(true);
+      }
+    }
   };
 
   return (
@@ -150,6 +163,7 @@ function ShareSidebar(props) {
           control={<Switch />}
           label='Publish this map'
           onChange={togglePrivacy}
+          checked={privacySwithValue}
         />
         <Button
           variant='text'
