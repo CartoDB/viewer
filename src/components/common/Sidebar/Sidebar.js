@@ -79,7 +79,9 @@ function Sidebar(props) {
 
   const backButton = props.goBackFunction ? (
     <Tooltip placement='right' title='Back to your tilesets' arrow>
-      <CartoMarker onClick={props.goBackFunction} style={{ cursor: 'pointer' }} />
+      <div onClick={props.goBackFunction} style={{ cursor: 'pointer' }}>
+        <CartoMarker />
+      </div>
     </Tooltip>
   ) : (
     <CartoMarker />
