@@ -77,11 +77,9 @@ function Sidebar(props) {
     closeShareSidebar();
   };
 
-  const backButton = props.backRoute ? (
+  const backButton = props.goBackFunction ? (
     <Tooltip placement='right' title='Back to your tilesets' arrow>
-      <a href={props.backRoute}>
-        <CartoMarker />
-      </a>
+      <CartoMarker onClick={props.goBackFunction} style={{ cursor: 'pointer' }} />
     </Tooltip>
   ) : (
     <CartoMarker />

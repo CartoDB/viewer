@@ -21,6 +21,9 @@ const element = document.getElementById('root');
 //     baseUrl: 'https://viewer.carto.com',
 //     privacy: 'public',
 //     setPrivacy: setPrivacy
+//   },
+//   goBackFunction: () => {
+//     console.log('Navigate back');
 //   }
 // };
 

@@ -293,7 +293,7 @@ function Viewer(props) {
           onJsonUpdated={onEditorChange}
           json={json}
           jsonMap={jsonMap}
-          backRoute={props.backRoute}
+          goBackFunction={props.goBackFunction}
           username={username}
           type={type}
           shareOptions={shareOptions}
