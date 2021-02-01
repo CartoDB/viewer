@@ -16,6 +16,12 @@ import * as serviceWorker from './serviceWorker';
 
 import { createCartoSlice, createOauthCartoSlice } from '@carto/react/redux';
 
+import { setDefaultCredentials } from '@deck.gl/carto';
+
+setDefaultCredentials({
+  mapsUrl: 'https://maps-api-v2.carto-staging.com//user/{user}',
+});
+
 export default function (element, props = {}) {
   const store = configureAppStore();
   store.reducerManager.add('carto', createCartoSlice(initialState));
