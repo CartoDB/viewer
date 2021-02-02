@@ -97,7 +97,10 @@ function addUpdateTriggersForAccesors(json) {
   for (const layer of json.layers) {
     const updateTriggers = {};
     for (const [key, value] of Object.entries(layer)) {
-      if (key.startsWith('get') && typeof value === 'string') {
+      if (
+        key.startsWith('get') &&
+        (typeof value === 'string' || typeof value === 'object')
+      ) {
         // it's an accesor and it's a string
         // we add the value of the accesor to update trigger to refresh when it changes
         updateTriggers[key] = value;
