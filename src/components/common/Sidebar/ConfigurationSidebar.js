@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import JSONEditor from '../JsonEditor';
 import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
 
@@ -25,11 +25,18 @@ const useStyles = makeStyles((theme) => ({
 
 function ConfigurationSidebar(props) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
+  const [jsonEditor, setJsonEditor] = useState(null);
   const classes = useStyles();
 
   const toggleMoreInfo = () => {
     setShowMoreInfo(!showMoreInfo);
   };
+
+  useEffect(() => {
+    if (jsonEditor) {
+      jsonEditor.resize();
+    }
+  }, [jsonEditor, showMoreInfo]);
 
   const tileJsonUrl = () => {
     const json = props.currentJson;
@@ -50,6 +57,10 @@ function ConfigurationSidebar(props) {
       }
     }
     return tileJson;
+  };
+
+  const onJsonEditorLoaded = (editor) => {
+    setJsonEditor(editor);
   };
 
   return (
@@ -106,7 +117,11 @@ function ConfigurationSidebar(props) {
       >
         <div className='section-content no-side-padding'>
           {props.json && (
-            <JSONEditor onJsonUpdated={props.onJsonUpdated} json={props.json} />
+            <JSONEditor
+              onJsonUpdated={props.onJsonUpdated}
+              json={props.json}
+              onLoad={onJsonEditorLoaded}
+            />
           )}
           {tileJsonUrl() && (
             <div className={classes.tilsetFooter}>

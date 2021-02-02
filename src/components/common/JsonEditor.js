@@ -23,6 +23,10 @@ export default function JSONEditor(props) {
     setText(JSON.stringify(props.json, null, 2));
   }, [props.json]);
 
+  const onLoad = (editor) => {
+    props.onLoad(editor);
+  };
+
   return (
     <div className='json-form'>
       <AceEditor
@@ -35,6 +39,7 @@ export default function JSONEditor(props) {
         editorProps={{ $blockScrolling: true }}
         wrapEnabled={true}
         value={text}
+        onLoad={onLoad}
       />
     </div>
   );
