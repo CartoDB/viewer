@@ -68,10 +68,13 @@ function ShareSidebar(props) {
   const viewState = useSelector((state) => state.carto.viewState);
 
   const json = JSON.parse(JSON.stringify(props.json));
-  json.layers.map((l) => {
-    l.credentials.apiKey = 'default_public';
-    return l;
-  });
+
+  if (embeddedMode) {
+    json.layers.map((l) => {
+      l.credentials.apiKey = 'default_public';
+      return l;
+    });
+  }
 
   const baseUrl = () => {
     if (viewState) json.initialViewState = { ...viewState };
