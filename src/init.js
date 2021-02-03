@@ -18,8 +18,10 @@ import { createCartoSlice, createOauthCartoSlice } from '@carto/react/redux';
 
 import { setDefaultCredentials } from '@deck.gl/carto';
 
+const mapsUrl = process.env.REACT_APP_MAPS_URL;
+
 setDefaultCredentials({
-  mapsUrl: 'https://maps-api-v2.carto-staging.com//user/{user}',
+  mapsUrl,
 });
 
 export default function (element, props = {}) {
