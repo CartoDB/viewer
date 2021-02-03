@@ -107,16 +107,12 @@ function Sidebar(props) {
         >
           <SettingsIcon />
         </div>
-        {shareOptions && (
-          <div
-            className={`${classes.sidebarElement} ${
-              shareSidebarOpen ? 'is-selected' : ''
-            }`}
-            onClick={openShareSidebar}
-          >
-            <ShareIcon />
-          </div>
-        )}
+        <div
+          className={`${classes.sidebarElement} ${shareSidebarOpen ? 'is-selected' : ''}`}
+          onClick={openShareSidebar}
+        >
+          <ShareIcon />
+        </div>
       </div>
       {configurationSidebarOpen && (
         <ConfigurationSidebar
@@ -128,7 +124,7 @@ function Sidebar(props) {
           currentJson={props.jsonMap}
         />
       )}
-      {shareOptions && shareSidebarOpen && (
+      {shareSidebarOpen && (
         <ShareSidebar
           json={props.jsonMap}
           username={username}

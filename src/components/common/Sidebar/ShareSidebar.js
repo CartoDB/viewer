@@ -59,6 +59,7 @@ function ShareSidebar(props) {
     props.shareOptions && props.shareOptions.privacy === 'public'
   );
   const [privacySwithValue, setPrivacySwithValue] = useState(isPublic);
+  const embeddedMode = props.shareOptions !== undefined;
 
   const classes = useStyles();
 
@@ -73,11 +74,15 @@ function ShareSidebar(props) {
   });
 
   const baseUrl = () => {
-    // const { origin, pathname } = window.location;
     if (viewState) json.initialViewState = { ...viewState };
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
-    // return `${origin + pathname}?config=${config}`;
-    return `${shareOptions.baseUrl}/user/${username}/${type}?config=${config}`;
+
+    if (embeddedMode) {
+      return `${shareOptions.baseUrl}/user/${username}/${type}?config=${config}`;
+    } else {
+      const { origin, pathname } = window.location;
+      return `${origin + pathname}?config=${config}`;
+    }
   };
 
   const shareUrl = (showMenu) => {
@@ -153,27 +158,31 @@ function ShareSidebar(props) {
       </Box>
       <Divider />
 
-      <Box m={2} ml={3} display='flex' justifyContent='space-between'>
-        <Typography variant='h6' color='textPrimary'>
-          Privacy
-        </Typography>
-      </Box>
-      <Box m={2} ml={3} mt={0} display='flex' justifyContent='space-between'>
-        <FormControlLabel
-          control={<Switch />}
-          label='Publish this map'
-          onChange={togglePrivacy}
-          checked={privacySwithValue}
-        />
-        <Button
-          variant='text'
-          color='primary'
-          size='small'
-          onClick={togglePrivacyMoreInfo}
-        >
-          More info
-        </Button>
-      </Box>
+      {embeddedMode && (
+        <div>
+          <Box m={2} ml={3} display='flex' justifyContent='space-between'>
+            <Typography variant='h6' color='textPrimary'>
+              Privacy
+            </Typography>
+          </Box>
+          <Box m={2} ml={3} mt={0} display='flex' justifyContent='space-between'>
+            <FormControlLabel
+              control={<Switch />}
+              label='Publish this map'
+              onChange={togglePrivacy}
+              checked={privacySwithValue}
+            />
+            <Button
+              variant='text'
+              color='primary'
+              size='small'
+              onClick={togglePrivacyMoreInfo}
+            >
+              More info
+            </Button>
+          </Box>
+        </div>
+      )}
       {showPrivacyMoreInfo && (
         <Box
           m={2}
@@ -229,14 +238,14 @@ function ShareSidebar(props) {
         </Box>
       )}
 
-      <Divider />
+      {embeddedMode && <Divider />}
 
       <Box mt={3} ml={3} display='flex' justifyContent='space-between'>
         <Typography variant='h6' color='textPrimary'>
           Sharing options
         </Typography>
       </Box>
-      {!isPublic && (
+      {!isPublic && embeddedMode && (
         <Box
           m={2}
           pl='18px'
@@ -255,8 +264,8 @@ function ShareSidebar(props) {
           </Typography>
         </Box>
       )}
-      {isPublic && (
-        <Box m={2} ml={3} mt={1}>
+      {(isPublic || !embeddedMode) && (
+        <Box m={2} ml={3} mt={3}>
           <Box mb={2}>
             <Typography variant='subtitle1' color='textPrimary'>
               Link
@@ -300,7 +309,7 @@ function ShareSidebar(props) {
             <Box mt={1} ml={1}>
               <FormControlLabel
                 control={<Checkbox />}
-                label='Include menu and editor'
+                label='Enable menu and editor'
                 onChange={toggleShowMenu}
               />
             </Box>

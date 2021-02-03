@@ -18,13 +18,14 @@ import { createCartoSlice, createOauthCartoSlice } from '@carto/react/redux';
 
 import { setDefaultCredentials } from '@deck.gl/carto';
 
-const mapsUrl = process.env.REACT_APP_MAPS_URL;
-
-setDefaultCredentials({
-  mapsUrl,
-});
-
 export default function (element, props = {}) {
+  const mapsUrl = props.mapsUrl || process.env.REACT_APP_MAPS_URL;
+  const region = props.region;
+  setDefaultCredentials({
+    mapsUrl,
+    ...(region && { region }),
+  });
+
   const store = configureAppStore();
   store.reducerManager.add('carto', createCartoSlice(initialState));
   store.reducerManager.add('oauth', createOauthCartoSlice(oauthInitialState));
