@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "carto-viewer"
+    "staging": "cartodb-fb-carto-viewer-stag",
+    "prod": "cartodb-fb-carto-viewer"
   }
 }
