@@ -1,36 +1,35 @@
-/**
- * Setup the global elements of the react app:
- *  - redux store
- *  - react router
- *  - main component: App
- */
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+import init from './init';
 
-import { initialState, oauthInitialState } from 'config/initialStateSlice';
-import configureAppStore from './config/store';
-import * as serviceWorker from './serviceWorker';
+const element = document.getElementById('root');
 
-import { createCartoSlice, createOauthCartoSlice } from '@carto/react/redux';
+// const api_key = 'default_public';
+// const setPrivacy = (privacy) => {
+//   return new Promise((resolve, reject) => {
+//     props.shareOptions.privacy = privacy;
+//     setTimeout(() => {
+//       resolve(true);
+//       // reject();
+//     }, 1000);
+//   });
+// };
+// const props = {
+//   username: 'alasarr',
+//   // mapsUrl: 'https://maps-api-v2.carto-staging.com/user/{user}',
+//   type: 'bigquery',
+//   query: new URLSearchParams(`?data=cartobq.maps.osm_buildings&api_key=${api_key}`),
+//   // query: new URLSearchParams(
+//   //   '?data=cartodb-on-gcp-pm-team.demo.beijing_data_tileset&color_by_value=aggregated_total&initialViewState={"longitude":116.17963425398031,"latitude":39.84976654170883,"zoom":4}'
+//   // ),
+//   shareOptions: {
+//     baseUrl: 'https://viewer.carto.com',
+//     privacy: 'public',
+//     setPrivacy: setPrivacy,
+//   },
+//   goBackFunction: () => {
+//     console.log('Navigate back');
+//   },
+// };
 
-const store = configureAppStore();
+// init(element, props);
 
-store.reducerManager.add('carto', createCartoSlice(initialState));
-store.reducerManager.add('oauth', createOauthCartoSlice(oauthInitialState));
-
-ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById('root')
-);
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+init(element);

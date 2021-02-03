@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles, IconButton } from '@material-ui/core';
+import { makeStyles, IconButton, Tooltip } from '@material-ui/core';
 import ConfigurationSidebar from './ConfigurationSidebar';
 import ShareSidebar from './ShareSidebar';
 
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Sidebar(props) {
+  const { username, type, shareOptions } = props;
   const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
   const classes = useStyles();
@@ -76,6 +77,16 @@ function Sidebar(props) {
     closeShareSidebar();
   };
 
+  const backButton = props.goBackFunction ? (
+    <Tooltip placement='right' title='Back to your tilesets' arrow>
+      <div onClick={props.goBackFunction} style={{ cursor: 'pointer' }}>
+        <CartoMarker />
+      </div>
+    </Tooltip>
+  ) : (
+    <CartoMarker />
+  );
+
   return (
     <div className={classes.sidebarContainer}>
       <div className={classes.sidebar}>
@@ -85,7 +96,7 @@ function Sidebar(props) {
               <CloseIcon />
             </IconButton>
           ) : (
-            <CartoMarker />
+            backButton
           )}
         </div>
         <div
@@ -114,7 +125,13 @@ function Sidebar(props) {
         />
       )}
       {shareSidebarOpen && (
-        <ShareSidebar json={props.jsonMap} onClose={closeShareSidebar} />
+        <ShareSidebar
+          json={props.jsonMap}
+          username={username}
+          type={type}
+          shareOptions={shareOptions}
+          onClose={closeShareSidebar}
+        />
       )}
     </div>
   );

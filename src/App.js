@@ -14,6 +14,7 @@ import { cartoThemeOptions } from '@carto/react/ui';
 
 import routes from './routes';
 import './App.css';
+import Viewer from './components/views/Viewer';
 
 let theme = createMuiTheme(cartoThemeOptions);
 theme = responsiveFontSizes(theme, {
@@ -44,14 +45,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function App() {
+function App(props) {
   const classes = useStyles();
   const routing = useRoutes(routes);
+  const propsSsupplied = Object.keys(props).length !== 0;
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      {!propsSsupplied && <CssBaseline />}
       <Grid container direction='column' className={classes.root}>
-        {routing}
+        {!propsSsupplied ? routing : <Viewer {...props} />}
       </Grid>
     </ThemeProvider>
   );
