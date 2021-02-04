@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Container, Grid, Link, Typography } from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
+import { Button, Container, Grid, Typography } from '@material-ui/core';
 import background404 from '../../assets/img/404.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,11 +51,11 @@ export default function NotFound() {
           </Typography>
         </Grid>
         <Grid item className={classes.actionWrapper}>
-          <Link to='/' component={NavLink} underline='none'>
+          <a href='https://carto.com/login'>
             <Button variant='contained' color='primary' size='large'>
               Take me home
             </Button>
-          </Link>
+          </a>
         </Grid>
       </Grid>
     </Container>
