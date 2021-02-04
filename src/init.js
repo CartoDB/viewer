@@ -22,7 +22,7 @@ export default function (element, props = {}) {
   const mapsUrl = props.mapsUrl || process.env.REACT_APP_MAPS_URL;
   const region = props.region;
   setDefaultCredentials({
-    mapsUrl,
+    ...(mapsUrl && { mapsUrl }),
     ...(region && { region }),
   });
 
