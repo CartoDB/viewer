@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import JSONEditor from '../JsonEditor';
 import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
+import { getDefaultCredentials } from '@deck.gl/carto';
 
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
 import cartoFullLogo from '../../../icons/carto-full-logo.svg';
@@ -46,12 +47,16 @@ function ConfigurationSidebar(props) {
       if (!credentials) return '';
       const username = credentials['username'];
       const apiKey = credentials['apiKey'];
-      const region = credentials['region'] ? credentials['region'] : 'us';
       const data = json.layers[0].data;
+      const { region, mapsUrl } = getDefaultCredentials();
+      const tileJsonBaseUrl = mapsUrl
+        .replace('{region}', region)
+        .replace('{user}', username);
+
       if (json.layers[0]['@@type'] === 'CartoBQTilerLayer')
-        tileJson = `https://maps-api-v2.${region}.carto.com/user/${username}/bigquery/tileset?source=${data}&format=tilejson&api_key=${apiKey}`;
+        tileJson = `${tileJsonBaseUrl}/bigquery/tileset?source=${data}&format=tilejson&api_key=${apiKey}`;
       else if (json.layers[0]['@@type'] === 'CartoSQLLayer') {
-        tileJson = `https://maps-api-v2.${region}.carto.com/user/${username}/carto/sql?source=${encodeURIComponent(
+        tileJson = `${tileJsonBaseUrl}/carto/sql?source=${encodeURIComponent(
           data
         )}&format=tilejson&api_key=${apiKey}`;
       }

@@ -25,6 +25,8 @@
       "getFillColor": [232, 133, 113],
       "pointRadiusMinPixels": 2,
       "stroked": false,
+      "lineWidthMinPixels": 1,
+      "getLineColor": [232, 133, 113],
       "pickable": true
     }
   ]

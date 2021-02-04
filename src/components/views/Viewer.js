@@ -20,6 +20,7 @@ import {
 import cartoWatermarkLogo from '../../icons/carto-watermark-logo.svg';
 import cartoHeart from '../../icons/carto-heart.png';
 import cartoFullLogo from '../../icons/carto-full-logo.svg';
+import NotFound from './NotFound';
 
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
@@ -146,17 +147,33 @@ function parseConfig(query, username, type) {
     json = JSON.parse(atob(decodeURIComponent(config)));
     ready = true;
   }
+
+  if (json.layers && json.layers[0]) {
+    json.layers[0].onDataError = {
+      '@@function': 'onDataError',
+    };
+  }
+
   return { json, ready };
 }
 
 function Viewer(props) {
   const [json, setJSON] = useState();
+  const [showNotFoundScreen, setShowNotFoundScreen] = useState(false);
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const [embedMode, setEmbedMode] = useState(false);
   const { username, type, query, shareOptions } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  jsonConverter.configuration.functions.onDataError = () => {
+    return (error) => {
+      if (error.message.includes('Unauthorized')) {
+        setShowNotFoundScreen(true);
+      }
+    };
+  };
 
   const initBasemap = useCallback(
     (mapJson) => {
@@ -287,48 +304,64 @@ function Viewer(props) {
     setJSONMap(newJson);
   };
 
+  const cleanJson = (json) => {
+    const result = json && JSON.parse(JSON.stringify(json));
+    if (result && result.layers && result.layers[0]) {
+      delete result.layers[0].onDataError;
+    }
+    return result;
+  };
+
   return (
-    <div className={`${classes.home} ${embedMode ? classes['home--embed'] : ''}`}>
-      {!embedMode && (
-        <Sidebar
-          onStyleChange={onStyleChange}
-          onMenuCloses={onMenuCloses}
-          onJsonUpdated={onEditorChange}
-          json={json}
-          jsonMap={jsonMap}
-          goBackFunction={props.goBackFunction}
-          username={username}
-          type={type}
-          shareOptions={shareOptions}
-        />
-      )}
-      <div className={classes.map}>
-        {jsonProps && <Map {...jsonProps} />}
-        {json && (
-          <BasemapSelector
-            onBasemapChange={onBasemapChange}
-            onStyleChange={onStyleChange}
-            json={json}
-          />
-        )}
-      </div>
-      {embedMode && (
-        <div className={classes.footer}>
-          <p className={classes['footer__text']}>
-            <img src={cartoHeart} alt='' />
-            Created with{' '}
-            <a href='https://carto.com' target='_blank' rel='noopener noreferrer'>
-              CARTO
-            </a>
-          </p>
-          <a
-            className={classes['footer__logo']}
-            href='https://carto.com'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <img src={cartoFullLogo} alt='CARTO' />
-          </a>
+    <div>
+      {showNotFoundScreen ? (
+        <div className={classes.home}>
+          <NotFound />
+        </div>
+      ) : (
+        <div className={`${classes.home} ${embedMode ? classes['home--embed'] : ''}`}>
+          {!embedMode && (
+            <Sidebar
+              onStyleChange={onStyleChange}
+              onMenuCloses={onMenuCloses}
+              onJsonUpdated={onEditorChange}
+              json={cleanJson(json)}
+              jsonMap={jsonMap}
+              goBackFunction={props.goBackFunction}
+              username={username}
+              type={type}
+              shareOptions={shareOptions}
+            />
+          )}
+          <div className={classes.map}>
+            {jsonProps && <Map {...jsonProps} />}
+            {json && (
+              <BasemapSelector
+                onBasemapChange={onBasemapChange}
+                onStyleChange={onStyleChange}
+                json={json}
+              />
+            )}
+          </div>
+          {embedMode && (
+            <div className={classes.footer}>
+              <p className={classes['footer__text']}>
+                <img src={cartoHeart} alt='' />
+                Created with{' '}
+                <a href='https://carto.com' target='_blank' rel='noopener noreferrer'>
+                  CARTO
+                </a>
+              </p>
+              <a
+                className={classes['footer__logo']}
+                href='https://carto.com'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <img src={cartoFullLogo} alt='CARTO' />
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>
