@@ -280,8 +280,14 @@ function ShareSidebar(props) {
                 className={`${classes.txtError} ${classes.regular}`}
               >
                 There has been an error while connecting to BigQuery. Try again later and{' '}
-                <a href='mailto:support@carto.com'>contact support</a> if the error
-                persists.
+                <a
+                  href='mailto:support@carto.com'
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  contact support
+                </a>{' '}
+                if the error persists.
               </Typography>
             )}
             <Box mt={2}>
