@@ -22,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
     padding: '8px 16px',
     backgroundColor: theme.palette.text.primary,
   },
+  regular: {
+    'font-weight': theme.typography.fontWeightRegular,
+    '& strong': {
+      'font-weight': theme.typography.fontWeightBold,
+    },
+  },
 }));
 
 function ConfigurationSidebar(props) {
@@ -92,27 +98,23 @@ function ConfigurationSidebar(props) {
             <Box mb={1}>
               <Typography variant='subtitle2'>deck.gl styling</Typography>
             </Box>
-            <Typography component='p' mt={1} variant='caption' color='textSecondary'>
-              You can customize how the visualization looks like by modifying the deck.gl
-              declarative language.
-              <br />
-              Check out our{' '}
+            <Typography
+              component='p'
+              mt={1}
+              variant='caption'
+              color='textSecondary'
+              className={classes.regular}
+            >
+              You can customize the cartographic style using deck.gl declarative language.
+              Review our{' '}
               <a
-                href='https://carto.com/developers/'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                examples
-              </a>{' '}
-              and{' '}
-              <a
-                href='https://carto.com/developers/'
+                href=' https://docs.carto.com/deck-gl/guides/declarative'
                 target='_blank'
                 rel='noopener noreferrer'
               >
                 documentation
               </a>{' '}
-              to learn about it.
+              to explore its capabilities and get examples.
             </Typography>
           </Box>
         )}
