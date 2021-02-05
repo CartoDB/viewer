@@ -6,6 +6,14 @@ body.viewer {
   overflow: hidden;
 }
 
+#deckgl-wrapper #deckgl-overlay {
+  z-index: 1;
+}
+
+#deckgl-wrapper #view-default-view > div {
+  z-index: auto !important;
+}
+
 /* h1,
 h2,
 h3,
