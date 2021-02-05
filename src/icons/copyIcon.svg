@@ -1,17 +1,22 @@
-<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="a">
-      <feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/>
-    </filter>
-  </defs>
-  <g fill="none" fill-rule="evenodd">
-    <g filter="url(#a)" fill-opacity="0" transform="translate(-6 -6)">
-      <rect fill="none" width="36" height="36" rx="4"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <filter id="2gghp8h10a">
+            <feColorMatrix in="SourceGraphic" values="0 0 0 0 0.011765 0 0 0 0 0.435294 0 0 0 0 0.886275 0 0 0 1.000000 0"/>
+        </filter>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g>
+                <g>
+                    <g>
+                        <g transform="translate(-482 -461) translate(80 246) translate(0 169) translate(396 40) translate(6 6)">
+                            <g>
+                                <path fill="#036FE2" d="M2 4v16h12v2H2C.93 22 .055 21.157.002 20.1L0 20V4h2zm11.414-4L18 4.586V16c0 1.07-.843 1.945-1.9 1.998L16 18H6c-1.07 0-1.945-.843-1.998-1.9L4 16V2C4 .931 4.843.055 5.9.002L6 0h7.414zM12 2H6v14h10.001L16 6h-4V2z" transform="translate(3 1)"/>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
     </g>
-    <g fill="#036FE2">
-      <path d="M9 5H7V2h2v3zm4 3V6c0-.552-.447-1-1-1h-1V4h3l-.001 4H16V4c0-1.103-.896-2-2-2h-3V1c0-.552-.447-1-1-1H6c-.552 0-1 .448-1 1v1H2C.897 2 0 2.897 0 4v14c0 1.103.897 2 2 2h8v-2H2V4h3v1H4c-.552 0-1 .448-1 1v10c0 .552.448 1 1 1h6v-2H5V7h6v1h2z"/>
-      <path d="M22 22h-8V12h8v10zm1-12H13c-.552 0-1 .448-1 1v12c0 .552.448 1 1 1h10c.553 0 1-.448 1-1V11c0-.552-.447-1-1-1z"/>
-      <path d="M21 16h-6v2h6zM21 13h-4v2h4zM21 19h-6v2h6z"/>
-    </g>
-  </g>
 </svg>

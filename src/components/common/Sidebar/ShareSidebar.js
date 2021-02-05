@@ -16,6 +16,7 @@ import {
 
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { ReactComponent as CopyIcon } from '../../../icons/copyIcon.svg';
+import { ReactComponent as CopyIconRed } from '../../../icons/copyIconRed.svg';
 import { ReactComponent as QuestionIcon } from '../../../icons/questionIcon.svg';
 import { ReactComponent as LinkIcon } from '../../../icons/linkIcon.svg';
 import { ReactComponent as TwitterIcon } from '../../../icons/twitterIcon.svg';
@@ -47,6 +48,22 @@ const useStyles = makeStyles((theme) => ({
   },
   txtError: {
     color: theme.palette.error.relatedDark,
+    '& a': {
+      color: theme.palette.error.relatedDark,
+      'font-weight': theme.typography.fontWeightBold,
+    },
+  },
+  textFieldError: {
+    'border-radius': '4px',
+    'background-color': 'rgba(255, 255, 255, 0.4)',
+    '& fieldset': {
+      border: 'none',
+    },
+    '& input': {
+      color: theme.palette.error.dark,
+      'font-family': 'Overpass Mono',
+      'font-size': '12px',
+    },
   },
 }));
 
@@ -55,6 +72,8 @@ function ShareSidebar(props) {
   const [sharingMenu, setSharingMenu] = useState(false);
   const [showPrivacyMoreInfo, setShowPrivacyMoreInfo] = useState(false);
   const [showPrivacyError, setShowPrivacyError] = useState(false);
+  const [privacyErrorStatus, setPrivacyErrorStatus] = useState();
+  const [privacyErrorServerText, setPrivacyErrorServerText] = useState();
   const [isPublic, setisPublic] = useState(
     props.shareOptions && props.shareOptions.privacy === 'public'
   );
@@ -65,6 +84,7 @@ function ShareSidebar(props) {
 
   const urlShareRef = useRef();
   const embedCodeRef = useRef();
+  const serverErrorRef = useRef();
   const viewState = useSelector((state) => state.carto.viewState);
 
   const json = JSON.parse(JSON.stringify(props.json));
@@ -78,6 +98,13 @@ function ShareSidebar(props) {
 
   const baseUrl = () => {
     if (viewState) json.initialViewState = { ...viewState };
+
+    Object.keys(json.initialViewState).forEach((k) => {
+      const type = typeof viewState[k];
+      if (type === 'object' || type === 'function') {
+        delete json.initialViewState[k];
+      }
+    });
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
 
     if (embeddedMode) {
@@ -145,7 +172,10 @@ function ShareSidebar(props) {
       try {
         await props.shareOptions.setPrivacy(privacy);
         setisPublic(checked);
-      } catch (e) {
+      } catch (error) {
+        const { status, errors } = JSON.parse(error.message);
+        setPrivacyErrorStatus(status);
+        setPrivacyErrorServerText(errors);
         setShowPrivacyError(true);
       }
     }
@@ -225,18 +255,55 @@ function ShareSidebar(props) {
         >
           <InfoOutlinedIcon color='error' />
           <Box ml={1}>
-            <Typography mt={1} variant='subtitle2' className={classes.txtError}>
-              Error
-            </Typography>
-            <Typography
-              component='p'
-              mt={1}
-              variant='caption'
-              className={`${classes.txtError} ${classes.regular}`}
-            >
-              We couldn't change this tileset's permission in BigQuery. You will need
-              BigQuery Data Owner or BigQuery Admin role to perform this change.
-            </Typography>
+            {privacyErrorStatus === 401 || privacyErrorStatus === 403 ? (
+              <Typography
+                component='p'
+                variant='caption'
+                className={`${classes.txtError} ${classes.regular}`}
+              >
+                There seems to be a problem with the service account provided. It might be
+                missing required permissions. Please check the{' '}
+                <a
+                  href='https://docs.carto.com/spatial-extension-bq/overview/#usage-limits'
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  documentation
+                </a>{' '}
+                to ensure you have provided them. If you keep getting this error, please
+                contact us and provide the error info below.
+              </Typography>
+            ) : (
+              <Typography
+                component='p'
+                variant='caption'
+                className={`${classes.txtError} ${classes.regular}`}
+              >
+                There has been an error while connecting to BigQuery. Try again later and{' '}
+                <a href='mailto:support@carto.com'>contact support</a> if the error
+                persists.
+              </Typography>
+            )}
+            <Box mt={2}>
+              <Typography variant='caption' component='p' className={classes.txtError}>
+                Error info
+              </Typography>
+              <Box display='flex' mt={1}>
+                <TextField
+                  className={classes.textFieldError}
+                  variant='outlined'
+                  size='small'
+                  inputRef={serverErrorRef}
+                  InputProps={{ readOnly: true }}
+                  value={privacyErrorServerText}
+                />
+                <Box ml={1}>
+                  <IconButton onClick={(e) => copyTextarea(e, serverErrorRef)}>
+                    <CopyIconRed />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Box>
           </Box>
         </Box>
       )}
