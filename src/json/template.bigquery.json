@@ -1,11 +1,8 @@
 {
-  "description": "CartoBQTilerLayer declarative example",
   "initialViewState": {
     "latitude": 0,
     "longitude": 0,
-    "zoom": 2,
-    "pitch": 0,
-    "bearing": 0
+    "zoom": 2
   },
   "views": [
     {
@@ -22,11 +19,8 @@
         "username": "public",
         "apiKey": "default_public"
       },
-      "getFillColor": [232, 133, 113],
-      "pointRadiusMinPixels": 2,
+      "getFillColor": [0,0,117,255],
       "stroked": false,
-      "lineWidthMinPixels": 1,
-      "getLineColor": [232, 133, 113],
       "pickable": true
     }
   ]
