@@ -51,7 +51,7 @@ export default function NotFound() {
           </Typography>
         </Grid>
         <Grid item className={classes.actionWrapper}>
-          <Link href='https://carto.com/login' underline='none'>
+          <Link href='https://carto.com/login' style={{ textDecoration: 'none' }}>
             <Button variant='contained' color='primary' size='large'>
               Take me home
             </Button>
