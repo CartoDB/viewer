@@ -101,8 +101,8 @@ function BasemapSelector(props) {
   const dispatch = useDispatch();
 
   const changeBasemap = (newBasemap) => {
-    dispatch(setBaseMap(newBasemap));
     props.onBasemapChange(newBasemap);
+    dispatch(setBaseMap(newBasemap));
   };
 
   const toggleBasemapSelector = () => {

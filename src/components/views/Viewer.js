@@ -157,6 +157,14 @@ function parseConfig(query, username, type) {
   return { json, ready };
 }
 
+function cleanJson(json) {
+  const result = json && JSON.parse(JSON.stringify(json));
+  if (result && result.layers && result.layers[0]) {
+    delete result.layers[0].onDataError;
+  }
+  return result;
+}
+
 function Viewer(props) {
   const [json, setJSON] = useState();
   const [showNotFoundScreen, setShowNotFoundScreen] = useState(false);
@@ -195,6 +203,23 @@ function Viewer(props) {
     [dispatch]
   );
 
+  const onJSONMapChanged = useCallback(
+    (mapJson) => {
+      if (jsonMap) {
+        try {
+          const tempJson = JSON.parse(JSON.stringify(jsonMap));
+          addUpdateTriggersForAccesors(tempJson);
+          let jsonProps = jsonConverter.convert(tempJson);
+          jsonProps = checkJsonProps(jsonProps);
+          setJSONPros(jsonProps);
+        } catch (e) {
+          console.log('ERROR: ', e);
+        }
+      }
+    },
+    [jsonMap]
+  );
+
   useEffect(() => {
     if (!username) {
       throw Error(`Unknowm type ${type}`);
@@ -215,18 +240,8 @@ function Viewer(props) {
   }, [query, username, type, initBasemap]);
 
   useEffect(() => {
-    if (jsonMap) {
-      try {
-        const tempJson = JSON.parse(JSON.stringify(jsonMap));
-        addUpdateTriggersForAccesors(tempJson);
-        let jsonProps = jsonConverter.convert(tempJson);
-        jsonProps = checkJsonProps(jsonProps);
-        setJSONPros(jsonProps);
-      } catch (e) {
-        console.log('ERROR: ', e);
-      }
-    }
-  }, [jsonMap]);
+    onJSONMapChanged();
+  }, [onJSONMapChanged]);
 
   useEffect(() => {
     if (jsonProps) {
@@ -264,6 +279,7 @@ function Viewer(props) {
     }
     setJSON(currentJson);
     setJSONMap(currentJson);
+    onJSONMapChanged();
   };
 
   const onMenuCloses = (e) => {
@@ -302,14 +318,6 @@ function Viewer(props) {
     }
     setJSON(newJson);
     setJSONMap(newJson);
-  };
-
-  const cleanJson = (json) => {
-    const result = json && JSON.parse(JSON.stringify(json));
-    if (result && result.layers && result.layers[0]) {
-      delete result.layers[0].onDataError;
-    }
-    return result;
   };
 
   return (

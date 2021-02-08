@@ -19,9 +19,9 @@ export default function JSONEditor(props) {
     }
   }
 
-  useEffect(() => {
-    setText(JSON.stringify(props.json, null, 2));
-  }, [props.json]);
+  // useEffect(() => {
+  //   setText(JSON.stringify(props.json, null, 2));
+  // }, [props.json]);
 
   const onLoad = (editor) => {
     props.onLoad(editor);
