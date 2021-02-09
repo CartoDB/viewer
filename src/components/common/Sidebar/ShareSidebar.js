@@ -233,12 +233,12 @@ function ShareSidebar(props) {
             color='textSecondary'
             className={classes.regular}
           >
-            By publishing this tileset, we'll grant <strong>BigQuery Data Viewer</strong>{' '}
-            permission to the <strong>CARTO Maps API Service Account.</strong> This action
-            will enable the public sharing links and allow visualizations from
-            unauthenticated users.<br></br>
-            <br></br>By unpublishing the tileset, we'll revoke the permission mentioned
-            above and disable the sharing links.
+            When publishing this map, we grant <strong>CARTO BigQuery Data Viewer</strong>{' '}
+            permissions to the associated tileset. Doing so, this map becomes public on
+            the web and anybody with the URL will be able to see it.<br></br>
+            <br></br>By unpublishing the tileset, we will revoke the permission mentioned
+            above and disable the sharing links. It can take up to 5 minutes to remove the
+            map from the CDN cache.
           </Typography>
         </Box>
       )}
