@@ -126,7 +126,7 @@ function parseConfig(query, username, type) {
 
     ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
 
-    json = require(`../../json/template.${type}.json`);
+    json = JSON.parse(JSON.stringify(require(`../../json/template.${type}.json`)));
     json.layers[0].data = data;
     json.layers[0].credentials = { username, apiKey };
     if (colorByValue) {
