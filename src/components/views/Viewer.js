@@ -185,18 +185,18 @@ function Viewer(props) {
 
   const initBasemap = useCallback(
     (mapJson) => {
-      if (mapJson['google']) dispatch(setBaseMap(GOOGLE_ROADMAP));
-      else {
-        for (var i in mapJson['views']) {
-          if (mapJson['views'][i]['@@type'] === 'MapView') {
-            const style = mapJson['views'][i]['mapStyle'].toUpperCase();
-            if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
-            else if (style.includes('dark_matter'.toUpperCase()))
-              dispatch(setBaseMap(DARK_MATTER));
-            else if (style.includes('voyager'.toUpperCase()))
-              dispatch(setBaseMap(VOYAGER));
-            break;
-          }
+      for (var i in mapJson['views']) {
+        if (mapJson['views'][i]['@@type'] === 'MapView') {
+          const style = mapJson['views'][i]['mapStyle'].toUpperCase();
+          if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
+          else if (style.includes('dark_matter'.toUpperCase()))
+            dispatch(setBaseMap(DARK_MATTER));
+          else if (style.includes('voyager'.toUpperCase())) dispatch(setBaseMap(VOYAGER));
+          else if (style.includes('roadmap'.toUpperCase()))
+            dispatch(setBaseMap(GOOGLE_ROADMAP));
+          else if (style.includes('satellite'.toUpperCase()))
+            dispatch(setBaseMap(GOOGLE_SATELLITE));
+          break;
         }
       }
     },
@@ -271,12 +271,7 @@ function Viewer(props) {
 
   const onBasemapChange = (newBasemap) => {
     var currentJson = { ...jsonMap };
-    if (newBasemap === GOOGLE_ROADMAP || newBasemap === GOOGLE_SATELLITE)
-      currentJson['google'] = true;
-    else {
-      delete currentJson['google'];
-      onStyleChange(newBasemap);
-    }
+    onStyleChange(newBasemap);
     setJSON(currentJson);
     setJSONMap(currentJson);
     onJSONMapChanged();
@@ -294,6 +289,12 @@ function Viewer(props) {
         break;
       case DARK_MATTER:
         newStyle = '@@#CARTO_BASEMAP.DARK_MATTER';
+        break;
+      case GOOGLE_ROADMAP:
+        newStyle = '@@#CARTO_BASEMAP.GOOGLE_ROADMAP';
+        break;
+      case GOOGLE_SATELLITE:
+        newStyle = '@@#CARTO_BASEMAP.GOOGLE_SATELLITE';
         break;
       default:
         newStyle = '@@#CARTO_BASEMAP.POSITRON';
