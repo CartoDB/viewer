@@ -177,7 +177,7 @@ function Viewer(props) {
 
   jsonConverter.configuration.functions.onDataError = () => {
     return (error) => {
-      if (error.message.includes('Unauthorized')) {
+      if (error.message.includes('Unauthorized') || error.message.includes('Not Found')) {
         setShowNotFoundScreen(true);
       }
     };
