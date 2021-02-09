@@ -170,7 +170,7 @@ function Viewer(props) {
   const [showNotFoundScreen, setShowNotFoundScreen] = useState(false);
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
-  const [embedMode, setEmbedMode] = useState(false);
+  const [embedMode, setEmbedMode] = useState(true);
   const { username, type, query, shareOptions } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
