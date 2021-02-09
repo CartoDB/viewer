@@ -105,10 +105,10 @@ function ConfigurationSidebar(props) {
               color='textSecondary'
               className={classes.regular}
             >
-              You can customize the cartographic style using deck.gl declarative language.
+              You can customize the cartography using deck.gl’s style language.<br></br>
               Review our{' '}
               <a
-                href=' https://docs.carto.com/deck-gl/guides/declarative'
+                href=' https://docs.carto.com/deck-gl/guides/style-language'
                 target='_blank'
                 rel='noopener noreferrer'
               >
