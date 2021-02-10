@@ -46,7 +46,7 @@
     "hygen": "hygen",
     "predeploy": "npm run build",
     "deploy:staging": "cp .env.staging .env && react-scripts build && firebase use staging && firebase deploy",
-    "deploy:prod": "cp .env.prod .env && react-scripts build && firebase use staging && firebase deploy"
+    "deploy:prod": "cp .env.prod .env && react-scripts build && firebase use prod && firebase deploy"
   },
   "eslintConfig": {
     "extends": "react-app"
