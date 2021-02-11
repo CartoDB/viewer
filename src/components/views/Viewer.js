@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { setBaseMap } from '@carto/react/redux';
+import { setBasemap } from '@carto/react/redux';
 import { JSONConverter, JSONConfiguration } from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../../json/configuration';
 import { makeStyles } from '@material-ui/core';
@@ -188,14 +188,14 @@ function Viewer(props) {
       for (var i in mapJson['views']) {
         if (mapJson['views'][i]['@@type'] === 'MapView') {
           const style = mapJson['views'][i]['mapStyle'].toUpperCase();
-          if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
+          if (style.includes('positron'.toUpperCase())) dispatch(setBasemap(POSITRON));
           else if (style.includes('dark_matter'.toUpperCase()))
-            dispatch(setBaseMap(DARK_MATTER));
-          else if (style.includes('voyager'.toUpperCase())) dispatch(setBaseMap(VOYAGER));
+            dispatch(setBasemap(DARK_MATTER));
+          else if (style.includes('voyager'.toUpperCase())) dispatch(setBasemap(VOYAGER));
           else if (style.includes('roadmap'.toUpperCase()))
-            dispatch(setBaseMap(GOOGLE_ROADMAP));
+            dispatch(setBasemap(GOOGLE_ROADMAP));
           else if (style.includes('satellite'.toUpperCase()))
-            dispatch(setBaseMap(GOOGLE_SATELLITE));
+            dispatch(setBasemap(GOOGLE_SATELLITE));
           break;
         }
       }

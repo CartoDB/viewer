@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Map(props) {
   const viewState = useSelector((state) => state.carto.viewState);
-  const basemap = useSelector((state) => BASEMAPS[state.carto.baseMap]);
+  const basemap = useSelector((state) => BASEMAPS[state.carto.basemap]);
   const googleApiKey = useSelector((state) => state.carto.googleApiKey);
   const dispatch = useDispatch();
   const classes = useStyles();
