@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import JSONEditor from '../JsonEditor';
-import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
+import {
+  makeStyles,
+  Button,
+  Divider,
+  Typography,
+  Box,
+  TextField,
+} from '@material-ui/core';
 import { getDefaultCredentials } from '@deck.gl/carto';
 
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
+import { ReactComponent as CopyIcon } from '../../../icons/copyIconGreen.svg';
 import cartoFullLogo from '../../../icons/carto-full-logo.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
 function ConfigurationSidebar(props) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [jsonEditor, setJsonEditor] = useState(null);
+  const [xyzUrl, setXyzUrl] = useState('');
   const classes = useStyles();
+  const xyzUrlRef = useRef();
 
   const toggleMoreInfo = () => {
     setShowMoreInfo(!showMoreInfo);
@@ -45,7 +55,7 @@ function ConfigurationSidebar(props) {
     }
   }, [jsonEditor, showMoreInfo]);
 
-  const tileJsonUrl = () => {
+  const tileJsonUrl = useCallback(() => {
     const json = props.currentJson;
     let tileJson = '';
     if (json && json.layers && json.layers.length === 1) {
@@ -68,10 +78,33 @@ function ConfigurationSidebar(props) {
       }
     }
     return tileJson;
-  };
+  }, [props.currentJson]);
+
+  useEffect(() => {
+    async function fetchTileJson() {
+      const tileJson = await (await fetch(tileJsonUrl())).json();
+      setXyzUrl(tileJson && tileJson.tiles && tileJson.tiles[0]);
+    }
+    fetchTileJson();
+  }, [tileJsonUrl]);
 
   const onJsonEditorLoaded = (editor) => {
     setJsonEditor(editor);
+  };
+
+  const copyXyzUrl = (e, reference) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = xyzUrl;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      document.execCommand('copy');
+    } catch {
+    } finally {
+      document.body.removeChild(textArea);
+    }
   };
 
   return (
@@ -131,7 +164,7 @@ function ConfigurationSidebar(props) {
             />
           )}
           {tileJsonUrl() && (
-            <div className={classes.tilsetFooter}>
+            <Box className={classes.tilsetFooter} display='flex' alignItems='center'>
               <Button
                 href={tileJsonUrl()}
                 target='_blank'
@@ -142,7 +175,19 @@ function ConfigurationSidebar(props) {
               >
                 Open TileJSON
               </Button>
-            </div>
+              <Box ml={4}>
+                <Button
+                  target='_blank'
+                  startIcon={<CopyIcon />}
+                  color='secondary'
+                  size='medium'
+                  rel='noopener noreferrer'
+                  onClick={(e) => copyXyzUrl(e, xyzUrlRef)}
+                >
+                  Copy XYZ Tile URL
+                </Button>
+              </Box>
+            </Box>
           )}
         </div>
       </div>
