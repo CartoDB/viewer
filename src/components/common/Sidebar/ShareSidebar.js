@@ -74,7 +74,7 @@ function ShareSidebar(props) {
   const [showPrivacyError, setShowPrivacyError] = useState(false);
   const [privacyErrorStatus, setPrivacyErrorStatus] = useState();
   const [privacyErrorServerText, setPrivacyErrorServerText] = useState();
-  const [isPublic, setisPublic] = useState(
+  const [isPublic, setIsPublic] = useState(
     props.shareOptions && props.shareOptions.privacy === 'public'
   );
   const [privacySwithValue, setPrivacySwithValue] = useState(isPublic);
@@ -171,7 +171,8 @@ function ShareSidebar(props) {
     if (props.shareOptions && props.shareOptions.setPrivacy) {
       try {
         await props.shareOptions.setPrivacy(privacy);
-        setisPublic(checked);
+        setIsPublic(checked);
+        setShowPrivacyError(false);
       } catch (error) {
         const { status, errors } = JSON.parse(error.message);
         setPrivacyErrorStatus(status);
