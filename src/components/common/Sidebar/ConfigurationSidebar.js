@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import JSONEditor from '../JsonEditor';
-import {
-  makeStyles,
-  Button,
-  Divider,
-  Typography,
-  Box,
-  TextField,
-} from '@material-ui/core';
+import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
 import { getDefaultCredentials } from '@deck.gl/carto';
 
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
