@@ -165,6 +165,9 @@ function cleanJson(json) {
   const result = json && JSON.parse(JSON.stringify(json));
   if (result && result.layers && result.layers[0]) {
     delete result.layers[0].onDataError;
+
+    // Avoid that binary prop appears in editor
+    delete result.layers[0].binary;
   }
   return result;
 }
