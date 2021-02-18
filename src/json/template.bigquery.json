@@ -19,7 +19,6 @@
         "username": "public",
         "apiKey": "default_public"
       },
-      "binary": true,
       "getFillColor": [0, 0, 117, 255],
       "pointRadiusMinPixels": 2,
       "stroked": false,

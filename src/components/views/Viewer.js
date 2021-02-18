@@ -137,6 +137,10 @@ function parseConfig(query, username, type) {
         colors: 'Temps',
       };
     }
+
+    // Set binary property
+    json.layers[0].binary = true;
+
     if (initialViewState) {
       json.initialViewState = {
         ...json.initialViewState,
