@@ -47,7 +47,12 @@ export function Map(props) {
   let isHovering = false;
 
   const handleViewStateChange = ({ viewState }) => {
-    dispatch(setViewState(viewState));
+    const {
+      transitionEasing,
+      transitionInterpolator,
+      ...viewStateSerializable
+    } = viewState;
+    dispatch(setViewState(viewStateSerializable));
   };
 
   const handleSizeChange = ({ width, height }) => {

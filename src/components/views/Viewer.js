@@ -137,6 +137,10 @@ function parseConfig(query, username, type) {
         colors: 'Temps',
       };
     }
+
+    // Set binary property
+    json.layers[0].binary = true;
+
     if (initialViewState) {
       json.initialViewState = {
         ...json.initialViewState,
@@ -161,6 +165,9 @@ function cleanJson(json) {
   const result = json && JSON.parse(JSON.stringify(json));
   if (result && result.layers && result.layers[0]) {
     delete result.layers[0].onDataError;
+
+    // Avoid that binary prop appears in editor
+    delete result.layers[0].binary;
   }
   return result;
 }
