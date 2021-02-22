@@ -121,6 +121,7 @@ function Sidebar(props) {
           json={props.json}
           onJsonUpdated={props.onJsonUpdated}
           onClose={closeConfigurationSidebar}
+          type={type}
           currentJson={props.jsonMap}
         />
       )}

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setBaseMap } from '@carto/react/redux';
 import { JSONConverter, JSONConfiguration } from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../../json/configuration';
+import { getTileJsonURL, getTileJson } from '../../utils/tileJsonURL';
 import { makeStyles } from '@material-ui/core';
 
 import { Map } from '../common/Map';
@@ -21,6 +22,7 @@ import cartoWatermarkLogo from '../../icons/carto-watermark-logo.svg';
 import cartoHeart from '../../icons/carto-heart.png';
 import cartoFullLogo from '../../icons/carto-full-logo.svg';
 import NotFound from './NotFound';
+import { TYPES } from 'utils/layerTypes';
 
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
@@ -113,7 +115,7 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
-function parseConfig(query, username, type) {
+async function parseConfig(query, username, type) {
   const config = query.get('config');
   let json;
   let ready;
@@ -121,7 +123,7 @@ function parseConfig(query, username, type) {
   if (!config) {
     let data = query.get('data') || DEFAULT_DATA[type];
     const apiKey = query.get('api_key') || 'default_public';
-    const colorByValue = query.get('color_by_value');
+    let colorByValue = query.get('color_by_value');
     const initialViewState = query.get('initialViewState');
 
     ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
@@ -129,6 +131,16 @@ function parseConfig(query, username, type) {
     json = JSON.parse(JSON.stringify(require(`../../json/template.${type}.json`)));
     json.layers[0].data = data;
     json.layers[0].credentials = { username, apiKey };
+    
+    if (type === TYPES.BIGQUERY) {
+      const tileJsonURL = getTileJsonURL(username, apiKey, data, type)
+      const tileJson = await getTileJson(tileJsonURL)
+      if (tileJson.vector_layers && tileJson.vector_layers[0] && tileJson.vector_layers[0].fields) {
+        const fields = tileJson.vector_layers[0].fields;
+        colorByValue = !colorByValue && fields.hasOwnProperty('aggregated_total') ? 'aggregated_total' : colorByValue;
+      }
+    }
+
     if (colorByValue) {
       json.layers[0].getFillColor = {
         '@@function': 'colorBins',
@@ -228,22 +240,25 @@ function Viewer(props) {
   );
 
   useEffect(() => {
-    if (!username) {
-      throw Error(`Unknowm type ${type}`);
+    async function initializeMap () {
+      if (!username) {
+        throw Error(`Unknowm type ${type}`);
+      }
+  
+      if (type !== TYPES.SQL && type !== TYPES.BIGQUERY) {
+        throw Error(`Unknowm type ${type}`);
+      }
+  
+      setEmbedMode(query.get('embed'));
+      const { json, ready } = await parseConfig(query, username, type);
+      if (!ready) {
+        setEmbedMode(false);
+      }
+      initBasemap(json);
+      setJSON(json);
+      setJSONMap(json);
     }
-
-    if (type !== 'sql' && type !== 'bigquery') {
-      throw Error(`Unknowm type ${type}`);
-    }
-
-    setEmbedMode(query.get('embed'));
-    const { json, ready } = parseConfig(query, username, type);
-    if (!ready) {
-      setEmbedMode(false);
-    }
-    initBasemap(json);
-    setJSON(json);
-    setJSONMap(json);
+    initializeMap();
   }, [query, username, type, initBasemap]);
 
   useEffect(() => {
