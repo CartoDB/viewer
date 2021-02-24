@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { TYPES } from 'utils/layerTypes';
 import Viewer from './Viewer';
 
 function Home() {
@@ -9,7 +10,7 @@ function Home() {
     throw Error(`Unknowm type ${type}`);
   }
 
-  if (type !== 'sql' && type !== 'bigquery') {
+  if (type !== TYPES.SQL && type !== TYPES.BIGQUERY) {
     throw Error(`Unknowm type ${type}`);
   }
 

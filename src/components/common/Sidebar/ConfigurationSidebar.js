@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import JSONEditor from '../JsonEditor';
 import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
-import { getDefaultCredentials } from '@deck.gl/carto';
 
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
 import { ReactComponent as CopyIcon } from '../../../icons/copyIconGreen.svg';
 import cartoFullLogo from '../../../icons/carto-full-logo.svg';
+import { getTileJsonURL } from 'utils/tileJsonURL';
 
 const useStyles = makeStyles((theme) => ({
   cartoLogo: {
@@ -57,21 +57,10 @@ function ConfigurationSidebar(props) {
       const username = credentials['username'];
       const apiKey = credentials['apiKey'];
       const data = json.layers[0].data;
-      const { region, mapsUrl } = getDefaultCredentials();
-      const tileJsonBaseUrl = mapsUrl
-        .replace('{region}', region)
-        .replace('{user}', username);
-
-      if (json.layers[0]['@@type'] === 'CartoBQTilerLayer')
-        tileJson = `${tileJsonBaseUrl}/bigquery/tileset?source=${data}&format=tilejson&api_key=${apiKey}`;
-      else if (json.layers[0]['@@type'] === 'CartoSQLLayer') {
-        tileJson = `${tileJsonBaseUrl}/carto/sql?source=${encodeURIComponent(
-          data
-        )}&format=tilejson&api_key=${apiKey}`;
-      }
+      tileJson = getTileJsonURL(username, apiKey, data, props.type);
     }
     return tileJson;
-  }, [props.currentJson]);
+  }, [props.currentJson, props.type]);
 
   useEffect(() => {
     async function fetchTileJson() {
