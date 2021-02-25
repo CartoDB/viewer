@@ -4,7 +4,7 @@ CARTO viewer
 
 https://viewer.carto.com/user/:username/:connection/:type?source=...
 
-## Pparameters
+## Parameters
 
 Path parameters:
 
