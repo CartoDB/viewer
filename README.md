@@ -2,36 +2,82 @@
 
 CARTO viewer
 
-https://viewer.carto.com/user/:username/:type?data=...
+https://viewer.carto.com/user/:username/:connection/:type?source=...
 
 ## Pparameters
 
 Path parameters:
 
-- **type**: (mandatory) type of the map to visualize. Posible values are `bigquery` and `sql`.
-
 - **username**: (mandatory) CARTO username.
+
+- **connection**: (mandatory) connection to use. Posible values are `bigquery`, `redshift` or `snowflake`.
+
+- **type**: (mandatory) type of the map to visualize. Posible values are `tileset`, `table` or `sql`.
 
 Query parameters:
 
-- **data**: (mandatory) data we want to apply.
+- **source**: (mandatory) data we want to apply. Tileset name if type is tileset, table name if type is table or sql query if type is sql.
 
-- **api_key**: (optional) CARTO API KEY. Default to `default_public`
+- **access_token**: (optional) token to use.
+
+- **api_key**: (optional) CARTO API KEY to guarantee backwards compatibility. Default to `default_public`.
 
 - **color_by_value**: (optional) create a default ramp on the selected attribute. Example: `color_by_value=aggregated_total`
 
 ### URL examples
 
-**SQL**:
+**BigQuery tileset**:
 
 ```url
-https://viewer.carto.com/user/alasarr/sql?api_key=4tGaTWC1TVzv9EfYCyDfYg&data=SELECT%20the_geom_webmercator%20FROM%20tesla_geocoded
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/tileset?source=cartodb-gcp-backend-data-team.alasarr.usa_county_2015_tileset&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
 ```
 
-**BigQuery tiler**
+**BigQuery table**:
 
 ```url
-https://viewer.carto.com/user/alasarr/bigquery?data=cartobq.maps.osm_buildings&color_by_value=aggregated_total
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/table?source=carto-do-public-data.carto.geography_usa_county_2015&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+```
+
+**BigQuery SQL**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/sql?source=select * from carto-do-public-data.carto.geography_usa_county_2015 limit 100&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+```
+
+**CARTO table**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/carto/table?source=mcdonalds_stores&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+```
+
+**CARTO SQL**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/carto/sql?source=select * from mcdonalds_stores where state='FL'&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+```
+
+**Snowflake table**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/snowflake/table?source=GEOGRAPHY_USA_STATE_2019&access_token=XXX
+```
+
+**Snowflake query**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/snowflake/table?source=select * from GEOGRAPHY_USA_STATE_2019 limit 10&access_token=XXX
+```
+
+**Redshift table**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/redshift/table?source=airports&access_token=XXX
+```
+
+**Redshift query**:
+
+```url
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/redshift/sql?source=select* from airports&access_token=XXX
 ```
 
 ## Basemaps

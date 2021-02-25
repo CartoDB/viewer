@@ -1461,6 +1461,14 @@
     "@math.gl/geospatial" "^3.3.0"
     "@probe.gl/stats" "^3.3.0"
 
+"@loaders.gl/core@2.3.11":
+  version "2.3.11"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-2.3.11.tgz#231c335f4123f645d4ae369a225f2cddf061135e"
+  integrity sha512-3lmoLy/JiSZQV7oTFcfNrYYonXghEBeEJFK0DHa/AinWVw7Ikz/MK2r3Z4MXElE/tnXPYN/AeLqkfDdwG8Nk1g==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    "@loaders.gl/loader-utils" "2.3.11"
+
 "@loaders.gl/core@2.3.7", "@loaders.gl/core@^2.3.0":
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-2.3.7.tgz#1671dd4e924c6d033218d09b45b6a937dec57408"
@@ -1551,6 +1559,14 @@
   version "2.3.10"
   resolved "https://registry.yarnpkg.com/@loaders.gl/loader-utils/-/loader-utils-2.3.10.tgz#41aac61fed66ef10a3efa6c9148dbcd8f638b8f2"
   integrity sha512-sl05//PRqSPNmrMHsounJGAYSNpTtWjVSkNAXOJuqegkUfQTHIOn6r1oxJKzT10td5+e9iOs+BuXjGbkOmZ+Aw==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    "@probe.gl/stats" "^3.3.0"
+
+"@loaders.gl/loader-utils@2.3.11":
+  version "2.3.11"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/loader-utils/-/loader-utils-2.3.11.tgz#1f7e8db6f464daacfdc39c0ed6872f232da67423"
+  integrity sha512-PE9dhBdw/GuH7ZHrVkhy9wdCTXJ7/nvMhMjL91E0bJ206TvPO+vGDMtIu9QFqt254PE5oU35MJS5bbB/Bgs5kQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
     "@probe.gl/stats" "^3.3.0"

@@ -1,6 +1,7 @@
 {
   "projects": {
     "staging": "cartodb-fb-carto-viewer-stag",
-    "prod": "cartodb-fb-carto-viewer"
+    "prod": "cartodb-fb-carto-viewer",
+    "dev": "cartodb-on-gcp-frontend-team"
   }
 }

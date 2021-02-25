@@ -5,6 +5,7 @@
   "homepage": "https://viewer.carto.com",
   "dependencies": {
     "@carto/react": "^1.0.0-beta5",
+    "@loaders.gl/core": "2.3.11",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -46,7 +47,8 @@
     "hygen": "hygen",
     "predeploy": "npm run build",
     "deploy:staging": "cp .env.staging .env && react-scripts build && firebase use staging && firebase deploy",
-    "deploy:prod": "cp .env.prod .env && react-scripts build && firebase use prod && firebase deploy"
+    "deploy:prod": "cp .env.prod .env && react-scripts build && firebase use prod && firebase deploy",
+    "deploy:dev": "react-scripts build && firebase use dev && firebase deploy"
   },
   "eslintConfig": {
     "extends": "react-app"

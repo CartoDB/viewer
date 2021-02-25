@@ -6,7 +6,7 @@ import NotFound from './components/views/NotFound';
 // Auto import
 const routes = [
   {
-    path: '/user/:username/:type',
+    path: '/user/:username/:connection/:type',
     element: <Home />,
     children: [
       // Auto import routes

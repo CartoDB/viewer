@@ -4,6 +4,7 @@ import { setBaseMap } from '@carto/react/redux';
 import { JSONConverter, JSONConfiguration } from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../../json/configuration';
 import { makeStyles } from '@material-ui/core';
+import { CONNECTIONS, TYPES } from '../common/constants';
 
 import { Map } from '../common/Map';
 import Sidebar from '../common/Sidebar/Sidebar';
@@ -90,6 +91,28 @@ const useStyles = makeStyles((theme) => ({
       height: '18px',
     },
   },
+  loading: {
+    position: 'absolute',
+    top: '10px',
+    left: '50%',
+    background: '#fff',
+    zIndex: 2,
+    padding: '10px',
+    fontWeight: 'bold',
+    fontSize: '20px',
+    color: '#555',
+  },
+  error: {
+    position: 'absolute',
+    top: '10px',
+    left: '50%',
+    background: '#fc0',
+    zIndex: 2,
+    padding: '10px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+    color: '#666',
+  },
 }));
 
 function addUpdateTriggersForAccesors(json) {
@@ -113,24 +136,34 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
-function parseConfig(query, username, type) {
+function parseConfig(query, username, connection, type) {
   const config = query.get('config');
   let json;
   let ready;
 
   if (!config) {
-    let data = query.get('data') || DEFAULT_DATA[type];
+    let data = query.get('source') || DEFAULT_DATA[type];
+    const accessToken = query.get('access_token');
     const apiKey = query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
     const initialViewState = query.get('initialViewState');
 
-    ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
+    ready = true;
 
-    json = JSON.parse(JSON.stringify(require(`../../json/template.${type}.json`)));
-    json.layers[0].data = data;
-    json.layers[0].credentials = { username, apiKey };
+    json = JSON.parse(JSON.stringify(require(`../../json/template.cloud.json`)));
+    const layer = json.layers[0];
+    layer.data = data;
+    layer.connection = connection;
+    layer.type = type;
+
+    if (accessToken) {
+      layer.credentials = { username, accessToken };
+    } else if (apiKey) {
+      layer.credentials = { username, apiKey };
+    }
+
     if (colorByValue) {
-      json.layers[0].getFillColor = {
+      layer.getFillColor = {
         '@@function': 'colorBins',
         attr: colorByValue,
         domain: [10, 100, 1000, 10000, 100000, 1000000],
@@ -139,7 +172,7 @@ function parseConfig(query, username, type) {
     }
 
     // Set binary property
-    json.layers[0].binary = true;
+    layer.binary = false;
 
     if (initialViewState) {
       json.initialViewState = {
@@ -156,6 +189,10 @@ function parseConfig(query, username, type) {
     json.layers[0].onDataError = {
       '@@function': 'onDataError',
     };
+
+    json.layers[0].onDataLoad = {
+      '@@function': 'onDataLoad',
+    };
   }
 
   return { json, ready };
@@ -164,10 +201,11 @@ function parseConfig(query, username, type) {
 function cleanJson(json) {
   const result = json && JSON.parse(JSON.stringify(json));
   if (result && result.layers && result.layers[0]) {
-    delete result.layers[0].onDataError;
-
+    // It removes onDataError for the second request
+    // delete result.layers[0].onDataError;
     // Avoid that binary prop appears in editor
-    delete result.layers[0].binary;
+    // It removes the binary in the second request. Removing to make sure it works
+    // delete result.layers[0].binary;
   }
   return result;
 }
@@ -178,15 +216,27 @@ function Viewer(props) {
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const [embedMode, setEmbedMode] = useState(true);
-  const { username, type, query, shareOptions } = props;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { username, connection, type, query, shareOptions } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
   jsonConverter.configuration.functions.onDataError = () => {
     return (error) => {
-      if (error.message.includes('Unauthorized') || error.message.includes('Not Found')) {
-        setShowNotFoundScreen(true);
-      }
+      setLoading(false);
+      setError(error);
+      // if (error.message.includes('Unauthorized') || error.message.includes('Not Found')) {
+      //   setShowNotFoundScreen(true);
+      // } else {
+      //   setError(error);
+      // }
+    };
+  };
+
+  jsonConverter.configuration.functions.onDataLoad = () => {
+    return () => {
+      setLoading(false);
     };
   };
 
@@ -229,22 +279,26 @@ function Viewer(props) {
 
   useEffect(() => {
     if (!username) {
+      throw Error(`Unknowm username ${username}`);
+    }
+
+    if (TYPES.indexOf(type) === -1) {
       throw Error(`Unknowm type ${type}`);
     }
 
-    if (type !== 'sql' && type !== 'bigquery') {
-      throw Error(`Unknowm type ${type}`);
+    if (CONNECTIONS.indexOf(connection) === -1) {
+      throw Error(`Unknowm type ${connection}`);
     }
 
     setEmbedMode(query.get('embed'));
-    const { json, ready } = parseConfig(query, username, type);
+    const { json, ready } = parseConfig(query, username, connection, type);
     if (!ready) {
       setEmbedMode(false);
     }
     initBasemap(json);
     setJSON(json);
     setJSONMap(json);
-  }, [query, username, type, initBasemap]);
+  }, [query, username, connection, type, initBasemap]);
 
   useEffect(() => {
     onJSONMapChanged();
@@ -274,6 +328,8 @@ function Viewer(props) {
   const onEditorChange = (jsonText) => {
     const tempJson = JSON.parse(jsonText);
     setJSONMap(tempJson);
+    setLoading(true);
+    setError(null);
   };
 
   const onBasemapChange = (newBasemap) => {
@@ -349,6 +405,8 @@ function Viewer(props) {
               shareOptions={shareOptions}
             />
           )}
+          {loading && <div className={classes.loading}>Loading </div>}
+          {error && <div className={classes.error}>{error.message} </div>}
           <div className={classes.map}>
             {jsonProps && <Map {...jsonProps} />}
             {json && (

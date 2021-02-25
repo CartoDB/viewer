@@ -1,5 +1,5 @@
 {
-  "description": "CartoSQLLayer declarative example",
+  "description": "CartoLayer declarative example",
   "initialViewState": {
     "latitude": 0,
     "longitude": 0,
@@ -16,8 +16,10 @@
   ],
   "layers": [
     {
-      "@@type": "CartoSQLLayer",
+      "@@type": "CartoLayer",
       "data": "TYPE A SQL QUERY OR A DATASET NAME",
+      "type": "TYPE placeholder",
+      "connection": "CONNECTION placeholder",
       "getLineColor": [255, 255, 255, 100],
       "getFillColor": [232, 133, 113],
       "pointRadiusMinPixels": 5,

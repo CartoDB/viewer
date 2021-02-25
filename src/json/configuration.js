@@ -3,6 +3,7 @@
 import { MapView } from '@deck.gl/core';
 
 import {
+  CartoLayer,
   CartoSQLLayer,
   CartoBQTilerLayer,
   colorBins,
@@ -13,7 +14,7 @@ import {
 
 const config = {
   // Classes that should be instantiatable by JSON converter
-  classes: Object.assign({ MapView }, { CartoBQTilerLayer, CartoSQLLayer }),
+  classes: Object.assign({ MapView }, { CartoBQTilerLayer, CartoSQLLayer, CartoLayer }),
 
   functions: { colorBins, colorCategories, colorContinuous },
 

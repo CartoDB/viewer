@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+// import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import JSONEditor from '../JsonEditor';
 import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
-import { getDefaultCredentials } from '@deck.gl/carto';
+// import { getDefaultCredentials } from '@deck.gl/carto';
 
-import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
-import { ReactComponent as CopyIcon } from '../../../icons/copyIconGreen.svg';
+// import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
+// import { ReactComponent as CopyIcon } from '../../../icons/copyIconGreen.svg';
 import cartoFullLogo from '../../../icons/carto-full-logo.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,9 +35,10 @@ const useStyles = makeStyles((theme) => ({
 function ConfigurationSidebar(props) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [jsonEditor, setJsonEditor] = useState(null);
-  const [xyzUrl, setXyzUrl] = useState('');
+  const [jsonText, setJsonText] = useState(props.json);
+  // const [xyzUrl, setXyzUrl] = useState('');
   const classes = useStyles();
-  const xyzUrlRef = useRef();
+  // const xyzUrlRef = useRef();
 
   const toggleMoreInfo = () => {
     setShowMoreInfo(!showMoreInfo);
@@ -48,56 +50,64 @@ function ConfigurationSidebar(props) {
     }
   }, [jsonEditor, showMoreInfo]);
 
-  const tileJsonUrl = useCallback(() => {
-    const json = props.currentJson;
-    let tileJson = '';
-    if (json && json.layers && json.layers.length === 1) {
-      const credentials = json.layers[0].credentials;
-      if (!credentials) return '';
-      const username = credentials['username'];
-      const apiKey = credentials['apiKey'];
-      const data = json.layers[0].data;
-      const { region, mapsUrl } = getDefaultCredentials();
-      const tileJsonBaseUrl = mapsUrl
-        .replace('{region}', region)
-        .replace('{user}', username);
+  // const tileJsonUrl = useCallback(() => {
+  //   const json = props.currentJson;
+  //   let tileJson = '';
+  //   if (json && json.layers && json.layers.length === 1) {
+  //     const credentials = json.layers[0].credentials;
+  //     if (!credentials) return '';
+  //     const username = credentials['username'];
+  //     const apiKey = credentials['apiKey'];
+  //     const data = json.layers[0].data;
+  //     const { region, mapsUrl } = getDefaultCredentials();
+  //     const tileJsonBaseUrl = mapsUrl
+  //       .replace('{region}', region)
+  //       .replace('{user}', username);
 
-      if (json.layers[0]['@@type'] === 'CartoBQTilerLayer')
-        tileJson = `${tileJsonBaseUrl}/bigquery/tileset?source=${data}&format=tilejson&api_key=${apiKey}`;
-      else if (json.layers[0]['@@type'] === 'CartoSQLLayer') {
-        tileJson = `${tileJsonBaseUrl}/carto/sql?source=${encodeURIComponent(
-          data
-        )}&format=tilejson&api_key=${apiKey}`;
-      }
-    }
-    return tileJson;
-  }, [props.currentJson]);
+  //     if (json.layers[0]['@@type'] === 'CartoBQTilerLayer')
+  //       tileJson = `${tileJsonBaseUrl}/bigquery/tileset?source=${data}&format=tilejson&api_key=${apiKey}`;
+  //     else if (json.layers[0]['@@type'] === 'CartoSQLLayer') {
+  //       tileJson = `${tileJsonBaseUrl}/carto/sql?source=${encodeURIComponent(
+  //         data
+  //       )}&format=tilejson&api_key=${apiKey}`;
+  //     }
+  //   }
+  //   return tileJson;
+  // }, [props.currentJson]);
 
-  useEffect(() => {
-    async function fetchTileJson() {
-      const tileJson = await (await fetch(tileJsonUrl())).json();
-      setXyzUrl(tileJson && tileJson.tiles && tileJson.tiles[0]);
-    }
-    fetchTileJson();
-  }, [tileJsonUrl]);
+  // useEffect(() => {
+  //   async function fetchTileJson() {
+  //     const tileJson = await (await fetch(tileJsonUrl())).json();
+  //     setXyzUrl(tileJson && tileJson.tiles && tileJson.tiles[0]);
+  //   }
+  //   fetchTileJson();
+  // }, [tileJsonUrl]);
 
   const onJsonEditorLoaded = (editor) => {
     setJsonEditor(editor);
   };
 
-  const copyXyzUrl = (e, reference) => {
-    const textArea = document.createElement('textarea');
-    textArea.value = xyzUrl;
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
+  // const copyXyzUrl = (e, reference) => {
+  //   const textArea = document.createElement('textarea');
+  //   textArea.value = xyzUrl;
+  //   document.body.appendChild(textArea);
+  //   textArea.focus();
+  //   textArea.select();
 
-    try {
-      document.execCommand('copy');
-    } catch {
-    } finally {
-      document.body.removeChild(textArea);
-    }
+  //   try {
+  //     document.execCommand('copy');
+  //   } catch {
+  //   } finally {
+  //     document.body.removeChild(textArea);
+  //   }
+  // };
+
+  const onJsonUpdated = (text) => {
+    setJsonText(text);
+  };
+
+  const apply = () => {
+    props.onJsonUpdated(jsonText);
   };
 
   return (
@@ -115,6 +125,7 @@ function ConfigurationSidebar(props) {
       <div className='section-title'>
         <Box m={2} ml={3} display='flex' justifyContent='space-between'>
           <Typography variant='h6'>Map Style</Typography>
+          <Button onClick={apply}>Apply</Button>
           <Button variant='text' color='primary' size='small' onClick={toggleMoreInfo}>
             More info
           </Button>
@@ -151,12 +162,12 @@ function ConfigurationSidebar(props) {
         <div className='section-content no-side-padding'>
           {props.json && (
             <JSONEditor
-              onJsonUpdated={props.onJsonUpdated}
+              onJsonUpdated={onJsonUpdated}
               json={props.json}
               onLoad={onJsonEditorLoaded}
             />
           )}
-          {tileJsonUrl() && (
+          {/* {tileJsonUrl() && (
             <Box className={classes.tilsetFooter} display='flex' alignItems='center'>
               <Button
                 href={tileJsonUrl()}
@@ -181,7 +192,7 @@ function ConfigurationSidebar(props) {
                 </Button>
               </Box>
             </Box>
-          )}
+          )} */}
         </div>
       </div>
     </div>
