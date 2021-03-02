@@ -196,7 +196,8 @@ function Viewer(props) {
 
   jsonConverter.configuration.functions.onDataError = () => {
     return (error) => {
-      if (error.message.includes('Unauthorized') || error.message.includes('Not Found')) {
+      debugger
+      if (error.message.includes('Unauthorized') || error.message.includes('Not Found') || error.message.includes('Unexpected token')) {
         setShowNotFoundScreen(true);
       }
     };
