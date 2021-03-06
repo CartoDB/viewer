@@ -29,43 +29,43 @@ Query parameters:
 **BigQuery tileset**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/tileset?source=cartodb-gcp-backend-data-team.alasarr.usa_county_2015_tileset&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/tileset?source=cartodb-gcp-backend-data-team.alasarr.usa_county_2015_tileset&api_key=XXX
 ```
 
 **BigQuery table**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/table?source=carto-do-public-data.carto.geography_usa_county_2015&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/table?source=cartodb-gcp-backend-data-team.alasarr.airports&api_key=XXX
 ```
 
 **BigQuery SQL**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/sql?source=select * from carto-do-public-data.carto.geography_usa_county_2015 limit 100&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/bigquery/sql?source=select * from cartodb-gcp-backend-data-team.alasarr.airports&api_key=XXX
 ```
 
 **CARTO table**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/carto/table?source=mcdonalds_stores&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/carto/table?source=airports&api_key=caa6158db8ba3550a16ea2b3505da92374ec92ec
 ```
 
 **CARTO SQL**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/carto/sql?source=select * from mcdonalds_stores where state='FL'&api_key=9278ea5cbdae7027c2f35c9aa7e468d6e086c4a2
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/carto/sql?source=select * from airports&api_key=caa6158db8ba3550a16ea2b3505da92374ec92ec
 ```
 
 **Snowflake table**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/snowflake/table?source=GEOGRAPHY_USA_STATE_2019&access_token=XXX
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/snowflake/table?source=alasarr.airports&access_token=XXX
 ```
 
 **Snowflake query**:
 
 ```url
-https://cartodb-on-gcp-frontend-team.web.app/user/carto/snowflake/table?source=select * from GEOGRAPHY_USA_STATE_2019 limit 10&access_token=XXX
+https://cartodb-on-gcp-frontend-team.web.app/user/carto/snowflake/sql?source=select * from alasarr.airports limit 10&access_token=XXX
 ```
 
 **Redshift table**:
