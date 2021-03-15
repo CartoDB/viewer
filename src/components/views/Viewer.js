@@ -203,7 +203,6 @@ function Viewer(props) {
 
   jsonConverter.configuration.functions.onDataError = () => {
     return (error) => {
-      debugger;
       if (
         error.message.includes('Unauthorized') ||
         error.message.includes('Not Found') ||
