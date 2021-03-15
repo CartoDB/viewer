@@ -29,6 +29,7 @@ export default function JSONEditor(props) {
 
   return (
     <div className='json-form'>
+      test
       <AceEditor
         width='100%'
         height='100%'
