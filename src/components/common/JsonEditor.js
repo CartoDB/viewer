@@ -40,6 +40,9 @@ export default function JSONEditor(props) {
         wrapEnabled={true}
         value={text}
         onLoad={onLoad}
+        setOptions={{
+          useWorker: false,
+        }}
       />
     </div>
   );
