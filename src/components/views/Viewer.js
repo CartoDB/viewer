@@ -22,7 +22,7 @@ import cartoWatermarkLogo from '../../icons/carto-watermark-logo.svg';
 import cartoHeart from '../../icons/carto-heart.png';
 import cartoFullLogo from '../../icons/carto-full-logo.svg';
 import NotFound from './NotFound';
-import { TYPES } from 'utils/layerTypes';
+import { TYPES } from '../../utils/layerTypes';
 
 const DEFAULT_DATA = {
   sql: 'TYPE A SQL QUERY OR A DATASET NAME',
@@ -131,13 +131,20 @@ async function parseConfig(query, username, type) {
     json = JSON.parse(JSON.stringify(require(`../../json/template.${type}.json`)));
     json.layers[0].data = data;
     json.layers[0].credentials = { username, apiKey };
-    
+
     if (type === TYPES.BIGQUERY) {
-      const tileJsonURL = getTileJsonURL(username, apiKey, data, type)
-      const tileJson = await getTileJson(tileJsonURL)
-      if (tileJson.vector_layers && tileJson.vector_layers[0] && tileJson.vector_layers[0].fields) {
+      const tileJsonURL = getTileJsonURL(username, apiKey, data, type);
+      const tileJson = await getTileJson(tileJsonURL);
+      if (
+        tileJson.vector_layers &&
+        tileJson.vector_layers[0] &&
+        tileJson.vector_layers[0].fields
+      ) {
         const fields = tileJson.vector_layers[0].fields;
-        colorByValue = !colorByValue && fields.hasOwnProperty('aggregated_total') ? 'aggregated_total' : colorByValue;
+        colorByValue =
+          !colorByValue && fields.hasOwnProperty('aggregated_total')
+            ? 'aggregated_total'
+            : colorByValue;
       }
     }
 
@@ -196,8 +203,12 @@ function Viewer(props) {
 
   jsonConverter.configuration.functions.onDataError = () => {
     return (error) => {
-      debugger
-      if (error.message.includes('Unauthorized') || error.message.includes('Not Found') || error.message.includes('Unexpected token')) {
+      debugger;
+      if (
+        error.message.includes('Unauthorized') ||
+        error.message.includes('Not Found') ||
+        error.message.includes('Unexpected token')
+      ) {
         setShowNotFoundScreen(true);
       }
     };
@@ -241,15 +252,15 @@ function Viewer(props) {
   );
 
   useEffect(() => {
-    async function initializeMap () {
+    async function initializeMap() {
       if (!username) {
         throw Error(`Unknowm type ${type}`);
       }
-  
+
       if (type !== TYPES.SQL && type !== TYPES.BIGQUERY) {
         throw Error(`Unknowm type ${type}`);
       }
-  
+
       setEmbedMode(query.get('embed'));
       const { json, ready } = await parseConfig(query, username, type);
       if (!ready) {
