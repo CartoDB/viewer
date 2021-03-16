@@ -5,7 +5,7 @@ import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core'
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
 import { ReactComponent as CopyIcon } from '../../../icons/copyIconGreen.svg';
 import cartoFullLogo from '../../../icons/carto-full-logo.svg';
-import { getTileJsonURL } from 'utils/tileJsonURL';
+import { getTileJsonURL } from '../../../utils/tileJsonURL';
 
 const useStyles = makeStyles((theme) => ({
   cartoLogo: {
