@@ -83,7 +83,7 @@ function ConfigurationSidebar(props) {
 
     try {
       document.execCommand('copy');
-    } catch {
+    } catch (e) {
     } finally {
       document.body.removeChild(textArea);
     }
