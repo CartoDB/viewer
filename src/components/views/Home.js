@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { TYPES } from 'utils/layerTypes';
+import { TYPES } from '../../utils/layerTypes';
 import Viewer from './Viewer';
 
 function Home() {
