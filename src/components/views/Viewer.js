@@ -193,7 +193,7 @@ function cleanJson(json) {
     delete result.layers[0].binary;
 
     // Avoid that views property appears in editor
-    delete result.views;
+    delete result.views[0].mapStyle;
   }
   return result;
 }
