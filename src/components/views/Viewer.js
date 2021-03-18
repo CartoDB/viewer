@@ -157,9 +157,6 @@ async function parseConfig(query, username, type) {
       };
     }
 
-    // Set binary property
-    json.layers[0].binary = true;
-
     if (initialViewState) {
       json.initialViewState = {
         ...json.initialViewState,
@@ -177,7 +174,14 @@ async function parseConfig(query, username, type) {
     };
   }
 
+  addMandatoryProperties(json);
   return { json, ready };
+}
+
+function addMandatoryProperties(json) {
+  // Set binary property
+  json.layers[0].binary = true;
+  return json;
 }
 
 function cleanJson(json) {
@@ -187,6 +191,9 @@ function cleanJson(json) {
 
     // Avoid that binary prop appears in editor
     delete result.layers[0].binary;
+
+    // Avoid that views property appears in editor
+    delete result.views;
   }
   return result;
 }
@@ -299,6 +306,7 @@ function Viewer(props) {
 
   const onEditorChange = (jsonText) => {
     const tempJson = JSON.parse(jsonText);
+    addMandatoryProperties(tempJson);
     setJSONMap(tempJson);
   };
 
