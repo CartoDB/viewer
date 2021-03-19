@@ -14,6 +14,7 @@ import {
   Button,
 } from '@material-ui/core';
 
+import HeaderSidebar from './HeaderSidebar';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { ReactComponent as CopyIcon } from '../../../icons/copyIcon.svg';
 import { ReactComponent as CopyIconRed } from '../../../icons/copyIconRed.svg';
@@ -22,16 +23,8 @@ import { ReactComponent as LinkIcon } from '../../../icons/linkIcon.svg';
 import { ReactComponent as TwitterIcon } from '../../../icons/twitterIcon.svg';
 import { ReactComponent as LinkedinIcon } from '../../../icons/linkedinIcon.svg';
 import { ReactComponent as FbIcon } from '../../../icons/fbIcon.svg';
-import cartoFullLogo from '../../../icons/carto-full-logo.svg';
 
 const useStyles = makeStyles((theme) => ({
-  cartoLogo: {
-    height: '24px',
-  },
-  appName: {
-    textTransform: 'uppercase',
-    opacity: '0.6',
-  },
   hiddenElement: {
     position: 'absolute',
     opacity: 0,
@@ -184,13 +177,7 @@ function ShareSidebar(props) {
 
   return (
     <div className='configuration-sidebar'>
-      <Box m={2} ml={3} display='flex' justifyContent='space-between'>
-        <img className={classes.cartoLogo} src={cartoFullLogo} alt='CARTO' />
-        <Typography className={classes.appName} variant='caption' color='textPrimary'>
-          Map Viewer
-        </Typography>
-      </Box>
-      <Divider />
+      <HeaderSidebar></HeaderSidebar>
 
       {embeddedMode && (
         <div>

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { makeStyles, IconButton, Tooltip } from '@material-ui/core';
 import ConfigurationSidebar from './ConfigurationSidebar';
 import ShareSidebar from './ShareSidebar';
+import InformationSidebar from './InformationSidebar';
 
 import { ReactComponent as CartoMarker } from '../../../icons/carto-marker.svg';
 import { ReactComponent as CloseIcon } from '../../../icons/close-icon.svg';
 import { ReactComponent as SettingsIcon } from '../../../icons/settings-icon.svg';
 import { ReactComponent as ShareIcon } from '../../../icons/share-icon.svg';
+import { ReactComponent as InfoIcon } from '../../../icons/info-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
   sidebarContainer: {
@@ -50,6 +52,7 @@ function Sidebar(props) {
   const { username, type, shareOptions } = props;
   const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
+  const [infoSidebarOpen, setInfoSidebarOpen] = useState(false);
   const classes = useStyles();
 
   const closeConfigurationSidebar = () => {
@@ -58,7 +61,7 @@ function Sidebar(props) {
   };
 
   const openConfigurationSidebar = () => {
-    closeShareSidebar();
+    closeAllMenus();
     setConfigurationSidebarOpen(true);
   };
 
@@ -68,13 +71,24 @@ function Sidebar(props) {
   };
 
   const openShareSidebar = () => {
-    closeConfigurationSidebar();
+    closeAllMenus();
     setShareSidebarOpen(true);
+  };
+
+  const closeInfoSidebar = () => {
+    props.onMenuCloses();
+    setInfoSidebarOpen(false);
+  };
+
+  const openInfoSidebar = () => {
+    closeAllMenus();
+    setInfoSidebarOpen(true);
   };
 
   const closeAllMenus = () => {
     closeConfigurationSidebar();
     closeShareSidebar();
+    closeInfoSidebar();
   };
 
   const backButton = props.goBackFunction ? (
@@ -91,7 +105,7 @@ function Sidebar(props) {
     <div className={classes.sidebarContainer}>
       <div className={classes.sidebar}>
         <div className={`${classes.sidebarElement} ${classes.sidebarElementLogo}`}>
-          {configurationSidebarOpen || shareSidebarOpen ? (
+          {configurationSidebarOpen || shareSidebarOpen || infoSidebarOpen ? (
             <IconButton onClick={closeAllMenus}>
               <CloseIcon />
             </IconButton>
@@ -113,6 +127,12 @@ function Sidebar(props) {
         >
           <ShareIcon />
         </div>
+        <div
+          className={`${classes.sidebarElement} ${infoSidebarOpen ? 'is-selected' : ''}`}
+          onClick={openInfoSidebar}
+        >
+          <InfoIcon />
+        </div>
       </div>
       {configurationSidebarOpen && (
         <ConfigurationSidebar
@@ -133,6 +153,9 @@ function Sidebar(props) {
           shareOptions={shareOptions}
           onClose={closeShareSidebar}
         />
+      )}
+      {infoSidebarOpen && props.tileJson && (
+        <InformationSidebar tileJson={props.tileJson} onClose={closeShareSidebar} />
       )}
     </div>
   );

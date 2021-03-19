@@ -119,6 +119,7 @@ async function parseConfig(query, username, type) {
   const config = query.get('config');
   let json;
   let ready;
+  let tileJson;
 
   if (!config) {
     let data = query.get('data') || DEFAULT_DATA[type];
@@ -134,7 +135,7 @@ async function parseConfig(query, username, type) {
 
     if (type === TYPES.BIGQUERY) {
       const tileJsonURL = getTileJsonURL(username, apiKey, data, type);
-      const tileJson = await getTileJson(tileJsonURL);
+      tileJson = await getTileJson(tileJsonURL);
       if (
         tileJson.vector_layers &&
         tileJson.vector_layers[0] &&
@@ -175,7 +176,7 @@ async function parseConfig(query, username, type) {
   }
 
   addMandatoryProperties(json);
-  return { json, ready };
+  return { json, ready, tileJson };
 }
 
 function addMandatoryProperties(json) {
@@ -203,6 +204,7 @@ function Viewer(props) {
   const [showNotFoundScreen, setShowNotFoundScreen] = useState(false);
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
+  const [tileJson, setTileJson] = useState(null);
   const [embedMode, setEmbedMode] = useState(true);
   const { username, type, query, shareOptions } = props;
   const classes = useStyles();
@@ -268,9 +270,13 @@ function Viewer(props) {
       }
 
       setEmbedMode(query.get('embed'));
-      const { json, ready } = await parseConfig(query, username, type);
+      const { json, ready, tileJson } = await parseConfig(query, username, type);
       if (!ready) {
         setEmbedMode(false);
+      }
+
+      if (tileJson) {
+        setTileJson(tileJson);
       }
       initBasemap(json);
       setJSON(json);
@@ -375,6 +381,7 @@ function Viewer(props) {
               onStyleChange={onStyleChange}
               onMenuCloses={onMenuCloses}
               onJsonUpdated={onEditorChange}
+              tileJson={tileJson}
               json={cleanJson(json)}
               jsonMap={jsonMap}
               goBackFunction={props.goBackFunction}
