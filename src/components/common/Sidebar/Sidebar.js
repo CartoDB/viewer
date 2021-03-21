@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Sidebar(props) {
-  const { username, type, shareOptions } = props;
+  const { type, shareOptions } = props;
   const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
   const classes = useStyles();
@@ -127,7 +127,6 @@ function Sidebar(props) {
       {shareSidebarOpen && (
         <ShareSidebar
           json={props.jsonMap}
-          username={username}
           type={type}
           shareOptions={shareOptions}
           onClose={closeShareSidebar}

@@ -4,7 +4,7 @@ import { setBaseMap } from '@carto/react/redux';
 import { JSONConverter, JSONConfiguration } from '@deck.gl/json';
 import JSON_CONVERTER_CONFIGURATION from '../../json/configuration';
 import { makeStyles } from '@material-ui/core';
-import { CONNECTIONS, TYPES } from '../common/constants';
+import { PROVIDERS, TYPES } from '../common/constants';
 
 import { Map } from '../common/Map';
 import Sidebar from '../common/Sidebar/Sidebar';
@@ -136,7 +136,7 @@ function addUpdateTriggersForAccesors(json) {
   }
 }
 
-function parseConfig(query, username, connection, type) {
+function parseConfig(query, provider, type) {
   const config = query.get('config');
   let json;
   let ready;
@@ -147,19 +147,21 @@ function parseConfig(query, username, connection, type) {
     const apiKey = query.get('api_key') || 'default_public';
     const colorByValue = query.get('color_by_value');
     const initialViewState = query.get('initialViewState');
+    const connection = query.get('connection');
 
     ready = true;
 
     json = JSON.parse(JSON.stringify(require(`../../json/template.cloud.json`)));
     const layer = json.layers[0];
     layer.data = data;
-    layer.connection = connection;
+    layer.provider = provider;
     layer.type = type;
+    layer.connection = connection;
 
     if (accessToken) {
-      layer.credentials = { username, accessToken };
+      layer.credentials = { accessToken };
     } else if (apiKey) {
-      layer.credentials = { username, apiKey };
+      layer.credentials = { apiKey };
     }
 
     if (colorByValue) {
@@ -212,13 +214,13 @@ function cleanJson(json) {
 
 function Viewer(props) {
   const [json, setJSON] = useState();
-  const [showNotFoundScreen, setShowNotFoundScreen] = useState(false);
+  const [showNotFoundScreen /*, setShowNotFoundScreen*/] = useState(false);
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
   const [embedMode, setEmbedMode] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { username, connection, type, query, shareOptions } = props;
+  const { provider, type, query, shareOptions } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -278,27 +280,23 @@ function Viewer(props) {
   );
 
   useEffect(() => {
-    if (!username) {
-      throw Error(`Unknowm username ${username}`);
-    }
-
     if (TYPES.indexOf(type) === -1) {
-      throw Error(`Unknowm type ${type}`);
+      throw Error(`Unknown type ${type}`);
     }
 
-    if (CONNECTIONS.indexOf(connection) === -1) {
-      throw Error(`Unknowm type ${connection}`);
+    if (PROVIDERS.indexOf(provider) === -1) {
+      throw Error(`Unknown type ${provider}`);
     }
 
     setEmbedMode(query.get('embed'));
-    const { json, ready } = parseConfig(query, username, connection, type);
+    const { json, ready } = parseConfig(query, provider, type);
     if (!ready) {
       setEmbedMode(false);
     }
     initBasemap(json);
     setJSON(json);
     setJSONMap(json);
-  }, [query, username, connection, type, initBasemap]);
+  }, [query, provider, type, initBasemap]);
 
   useEffect(() => {
     onJSONMapChanged();
@@ -400,7 +398,6 @@ function Viewer(props) {
               json={cleanJson(json)}
               jsonMap={jsonMap}
               goBackFunction={props.goBackFunction}
-              username={username}
               type={type}
               shareOptions={shareOptions}
             />

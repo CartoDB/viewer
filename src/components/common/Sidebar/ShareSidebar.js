@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ShareSidebar(props) {
-  const { username, type, shareOptions } = props;
+  const { type, shareOptions } = props;
   const [sharingMenu, setSharingMenu] = useState(false);
   const [showPrivacyMoreInfo, setShowPrivacyMoreInfo] = useState(false);
   const [showPrivacyError, setShowPrivacyError] = useState(false);
@@ -108,7 +108,7 @@ function ShareSidebar(props) {
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
 
     if (embeddedMode) {
-      return `${shareOptions.baseUrl}/user/${username}/${type}?config=${config}`;
+      return `${shareOptions.baseUrl}/${type}?config=${config}`;
     } else {
       const { origin, pathname } = window.location;
       return `${origin + pathname}?config=${config}`;

@@ -1,17 +1,13 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import Viewer from './Viewer';
-import { CONNECTIONS, TYPES } from '../common/constants';
+import { PROVIDERS, TYPES } from '../common/constants';
 
 function Home() {
-  const { username, connection, type } = useParams();
+  const { provider, type } = useParams();
 
-  if (!username) {
-    throw Error(`Unknowm type ${type}`);
-  }
-
-  if (CONNECTIONS.indexOf(connection) === -1) {
-    throw Error(`Unknowm connection ${connection}`);
+  if (PROVIDERS.indexOf(provider) === -1) {
+    throw Error(`Unknowm provider ${provider}`);
   }
 
   if (TYPES.indexOf(type) === -1) {
@@ -21,7 +17,7 @@ function Home() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
 
-  return <Viewer username={username} connection={connection} type={type} query={query} />;
+  return <Viewer provider={provider} type={type} query={query} />;
 }
 
 export default Home;
