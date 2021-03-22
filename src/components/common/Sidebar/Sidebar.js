@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { makeStyles, IconButton, Tooltip } from '@material-ui/core';
 import ConfigurationSidebar from './ConfigurationSidebar';
 import ShareSidebar from './ShareSidebar';
@@ -49,11 +49,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Sidebar(props) {
-  const { username, type, shareOptions } = props;
+  const { username, type, shareOptions, tileJson } = props;
   const [configurationSidebarOpen, setConfigurationSidebarOpen] = useState(false);
   const [shareSidebarOpen, setShareSidebarOpen] = useState(false);
   const [infoSidebarOpen, setInfoSidebarOpen] = useState(false);
   const classes = useStyles();
+
+  const hasAdditionalInfoToShow = useMemo(() => {
+    return tileJson;
+    // TODO: tileJson && tileJson.name && tileJson.description;
+  }, [tileJson]);
 
   const closeConfigurationSidebar = () => {
     props.onMenuCloses();
@@ -127,12 +132,16 @@ function Sidebar(props) {
         >
           <ShareIcon />
         </div>
-        <div
-          className={`${classes.sidebarElement} ${infoSidebarOpen ? 'is-selected' : ''}`}
-          onClick={openInfoSidebar}
-        >
-          <InfoIcon />
-        </div>
+        {hasAdditionalInfoToShow && (
+          <div
+            className={`${classes.sidebarElement} ${
+              infoSidebarOpen ? 'is-selected' : ''
+            }`}
+            onClick={openInfoSidebar}
+          >
+            <InfoIcon />
+          </div>
+        )}
       </div>
       {configurationSidebarOpen && (
         <ConfigurationSidebar
@@ -154,8 +163,8 @@ function Sidebar(props) {
           onClose={closeShareSidebar}
         />
       )}
-      {infoSidebarOpen && props.tileJson && (
-        <InformationSidebar tileJson={props.tileJson} onClose={closeShareSidebar} />
+      {infoSidebarOpen && (
+        <InformationSidebar tileJson={tileJson} onClose={closeShareSidebar} />
       )}
     </div>
   );

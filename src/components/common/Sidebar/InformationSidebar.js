@@ -47,20 +47,26 @@ function InformationSidebar(props) {
           </Typography>
         </Box>
         <Box mt={2}>
-          {isDOTileset && (
+          {isDOTileset ? (
+            <div>
+              <Typography className={classes.link} variant='body2'>
+                <Link to={'#'}>Access this dataset in the Data Observatory</Link>
+              </Typography>
+              <Typography className={classes.link} variant='body2'>
+                <Link to={'#'}>Learn more about Data Observatory for Developers</Link>
+              </Typography>
+            </div>
+          ) : (
             <Typography className={classes.link} variant='body2'>
-              <Link to={'#'}>Access this dataset in the Data Observatory</Link>
+              <a
+                href='https://docs.carto.com/spatial-extension-bq/tilesets/overview/'
+                rel='noreferrer noopener'
+                target='_blank'
+              >
+                Learn more about tilesets
+              </a>
             </Typography>
           )}
-          <Typography className={classes.link} variant='body2'>
-            <a
-              href='https://docs.carto.com/spatial-extension-bq/tilesets/overview/'
-              rel='noreferrer'
-              target='_blank'
-            >
-              Learn more about tilesets
-            </a>
-          </Typography>
         </Box>
       </Box>
     </div>
