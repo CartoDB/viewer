@@ -56,8 +56,7 @@ function Sidebar(props) {
   const classes = useStyles();
 
   const hasAdditionalInfoToShow = useMemo(() => {
-    return tileJson;
-    // TODO: tileJson && tileJson.name && tileJson.description;
+    return tileJson && tileJson.name && tileJson.description;
   }, [tileJson]);
 
   const closeConfigurationSidebar = () => {

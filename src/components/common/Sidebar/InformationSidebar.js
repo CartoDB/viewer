@@ -41,9 +41,7 @@ function InformationSidebar(props) {
         </Box>
         <Box mt={1}>
           <Typography variant='body2' color='textSecondary'>
-            This dataset provides estimates for a set of risk factors (age, number of
-            household residents, smoking habits, etc.) and COVID-19 infection rates at a
-            range of local geographies.
+            {json.description}
           </Typography>
         </Box>
         <Box mt={2}>

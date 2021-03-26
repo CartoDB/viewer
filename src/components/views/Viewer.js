@@ -125,7 +125,7 @@ async function parseConfig(query, username, type) {
     let data = query.get('data') || DEFAULT_DATA[type];
     const apiKey = query.get('api_key') || 'default_public';
     let colorByValue = query.get('color_by_value');
-    const initialViewState = query.get('initialViewState');
+    let initialViewState = query.get('initialViewState');
 
     ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
 
@@ -147,6 +147,14 @@ async function parseConfig(query, username, type) {
             ? 'aggregated_total'
             : colorByValue;
       }
+    }
+    debugger;
+    if (!initialViewState) {
+      initialViewState = JSON.stringify({
+        latitude: tileJson.center[1],
+        longitude: tileJson.center[0],
+        zoom: tileJson.center[2],
+      });
     }
 
     if (colorByValue) {
