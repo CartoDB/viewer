@@ -148,7 +148,7 @@ async function parseConfig(query, username, type) {
             : colorByValue;
       }
     }
-    debugger;
+
     if (!initialViewState) {
       initialViewState = JSON.stringify({
         latitude: tileJson.center[1],

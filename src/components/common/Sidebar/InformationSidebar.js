@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 function InformationSidebar(props) {
   const json = props.tileJson;
   const isDOTileset = useMemo(() => {
-    return !!json; // TODO: !!json.do_metadata;
+    return !!json.extra_metadata && !!json.extra_metadata['data-observatory']; // TODO: !!json.do_metadata;
   }, [json]);
   console.log(json);
 
@@ -48,7 +48,11 @@ function InformationSidebar(props) {
           {isDOTileset ? (
             <div>
               <Typography className={classes.link} variant='body2'>
-                <Link to={'#'}>Access this dataset in the Data Observatory</Link>
+                <a
+                  href={`https://carto.com/spatial-data-catalog/browser/${json.extra_metadata['data-observatory'].type}/${json.extra_metadata['data-observatory'].id}`}
+                >
+                  Access this dataset in the Data Observatory
+                </a>
               </Typography>
               <Typography className={classes.link} variant='body2'>
                 <Link to={'#'}>Learn more about Data Observatory for Developers</Link>
