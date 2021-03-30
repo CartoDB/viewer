@@ -174,6 +174,17 @@ async function parseConfig(query, username, type) {
     }
   } else {
     json = JSON.parse(atob(decodeURIComponent(config)));
+    const layerData = json.layers[0];
+
+    if (layerData['@@type'] === 'CartoBQTilerLayer') {
+      const tileJsonURL = getTileJsonURL(
+        layerData.credentials.username,
+        layerData.credentials.apiKey,
+        layerData.data,
+        TYPES.BIGQUERY
+      );
+      tileJson = await getTileJson(tileJsonURL);
+    }
     ready = true;
   }
 

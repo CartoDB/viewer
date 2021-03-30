@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 function InformationSidebar(props) {
   const json = props.tileJson;
   const isDOTileset = useMemo(() => {
-    return !!json.extra_metadata && !!json.extra_metadata['data-observatory']; // TODO: !!json.do_metadata;
+    return !!json.extra_metadata && !!json.extra_metadata['data-observatory'];
   }, [json]);
   console.log(json);
 
