@@ -50,22 +50,30 @@ function InformationSidebar(props) {
               <Typography className={classes.link} variant='body2'>
                 <a
                   href={`https://carto.com/spatial-data-catalog/browser/${json.extra_metadata['data-observatory'].type}/${json.extra_metadata['data-observatory'].id}`}
+                  rel='noreferrer noopener'
+                  target='_blank'
                 >
                   Access this dataset in the Data Observatory
                 </a>
               </Typography>
               <Typography className={classes.link} variant='body2'>
-                <Link to={'#'}>Learn more about Data Observatory for Developers</Link>
+                <a
+                  href='https://docs.carto.com/spatial-extension-bq/overview/tilesets/'
+                  rel='noreferrer noopener'
+                  target='_blank'
+                >
+                  Learn how to create tilesets using CARTO's Spatial Extension
+                </a>
               </Typography>
             </div>
           ) : (
             <Typography className={classes.link} variant='body2'>
               <a
-                href='https://docs.carto.com/spatial-extension-bq/tilesets/overview/'
+                href='https://docs.carto.com/spatial-extension-bq/overview/tilesets/'
                 rel='noreferrer noopener'
                 target='_blank'
               >
-                Learn more about tilesets
+                Learn how to create tilesets using CARTO's Spatial Extension
               </a>
             </Typography>
           )}

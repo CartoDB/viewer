@@ -14,7 +14,7 @@ export const numberFormatter = (value) => {
   if (!Number.isFinite(value)) return value;
 
   return Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 3,
+    maximumFractionDigits: 6,
     minimumFractionDigits: 0,
     notation: 'compact',
     compactDisplay: 'short',
