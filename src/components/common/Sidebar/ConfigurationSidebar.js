@@ -1,22 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import JSONEditor from '../JsonEditor';
-import { makeStyles, Button, Divider, Typography, Box } from '@material-ui/core';
+import { makeStyles, Button, Typography, Box } from '@material-ui/core';
 
+import HeaderSidebar from './HeaderSidebar';
 import { ReactComponent as NewTabIcon } from '../../../icons/new-tab.svg';
 import { ReactComponent as CopyIcon } from '../../../icons/copyIconGreen.svg';
-import cartoFullLogo from '../../../icons/carto-full-logo.svg';
 import { getTileJsonURL } from '../../../utils/tileJsonURL';
 
 const useStyles = makeStyles((theme) => ({
-  cartoLogo: {
-    height: '24px',
-  },
   textColor: {
     color: theme.palette.text.primary,
-  },
-  appName: {
-    textTransform: 'uppercase',
-    opacity: '0.6',
   },
   tilsetFooter: {
     height: '52px',
@@ -91,16 +84,7 @@ function ConfigurationSidebar(props) {
 
   return (
     <div className='configuration-sidebar'>
-      <Box m={2} ml={3} display='flex' justifyContent='space-between'>
-        <img className={classes.cartoLogo} src={cartoFullLogo} alt='CARTO' />
-        <Typography
-          className={`${classes.appName} ${classes.textColor}`}
-          variant='caption'
-        >
-          Map Viewer
-        </Typography>
-      </Box>
-      <Divider />
+      <HeaderSidebar></HeaderSidebar>
       <div className='section-title'>
         <Box m={2} ml={3} display='flex' justifyContent='space-between'>
           <Typography variant='h6'>Map Style</Typography>

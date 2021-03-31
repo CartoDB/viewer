@@ -119,12 +119,13 @@ async function parseConfig(query, username, type) {
   const config = query.get('config');
   let json;
   let ready;
+  let tileJson;
 
   if (!config) {
     let data = query.get('data') || DEFAULT_DATA[type];
     const apiKey = query.get('api_key') || 'default_public';
     let colorByValue = query.get('color_by_value');
-    const initialViewState = query.get('initialViewState');
+    let initialViewState = query.get('initialViewState');
 
     ready = data !== DEFAULT_DATA['sql'] && data !== DEFAULT_DATA['tileset'];
 
@@ -134,7 +135,7 @@ async function parseConfig(query, username, type) {
 
     if (type === TYPES.BIGQUERY) {
       const tileJsonURL = getTileJsonURL(username, apiKey, data, type);
-      const tileJson = await getTileJson(tileJsonURL);
+      tileJson = await getTileJson(tileJsonURL);
       if (
         tileJson.vector_layers &&
         tileJson.vector_layers[0] &&
@@ -146,6 +147,14 @@ async function parseConfig(query, username, type) {
             ? 'aggregated_total'
             : colorByValue;
       }
+    }
+
+    if (!initialViewState) {
+      initialViewState = JSON.stringify({
+        latitude: tileJson.center[1],
+        longitude: tileJson.center[0],
+        zoom: tileJson.center[2],
+      });
     }
 
     if (colorByValue) {
@@ -165,6 +174,17 @@ async function parseConfig(query, username, type) {
     }
   } else {
     json = JSON.parse(atob(decodeURIComponent(config)));
+    const layerData = json.layers[0];
+
+    if (layerData['@@type'] === 'CartoBQTilerLayer') {
+      const tileJsonURL = getTileJsonURL(
+        layerData.credentials.username,
+        layerData.credentials.apiKey,
+        layerData.data,
+        TYPES.BIGQUERY
+      );
+      tileJson = await getTileJson(tileJsonURL);
+    }
     ready = true;
   }
 
@@ -175,7 +195,7 @@ async function parseConfig(query, username, type) {
   }
 
   addMandatoryProperties(json);
-  return { json, ready };
+  return { json, ready, tileJson };
 }
 
 function addMandatoryProperties(json) {
@@ -203,6 +223,7 @@ function Viewer(props) {
   const [showNotFoundScreen, setShowNotFoundScreen] = useState(false);
   const [jsonMap, setJSONMap] = useState();
   const [jsonProps, setJSONPros] = useState(null);
+  const [tileJson, setTileJson] = useState(null);
   const [embedMode, setEmbedMode] = useState(true);
   const { username, type, query, shareOptions } = props;
   const classes = useStyles();
@@ -268,9 +289,13 @@ function Viewer(props) {
       }
 
       setEmbedMode(query.get('embed'));
-      const { json, ready } = await parseConfig(query, username, type);
+      const { json, ready, tileJson } = await parseConfig(query, username, type);
       if (!ready) {
         setEmbedMode(false);
+      }
+
+      if (tileJson) {
+        setTileJson(tileJson);
       }
       initBasemap(json);
       setJSON(json);
@@ -375,6 +400,7 @@ function Viewer(props) {
               onStyleChange={onStyleChange}
               onMenuCloses={onMenuCloses}
               onJsonUpdated={onEditorChange}
+              tileJson={tileJson}
               json={cleanJson(json)}
               jsonMap={jsonMap}
               goBackFunction={props.goBackFunction}
