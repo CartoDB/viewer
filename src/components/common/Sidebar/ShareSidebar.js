@@ -100,7 +100,7 @@ function ShareSidebar(props) {
     });
     const config = encodeURIComponent(btoa(JSON.stringify(json, null, 0)));
 
-    if (embeddedMode) {
+    if (shareOptions && shareOptions.baseUrl) {
       return `${shareOptions.baseUrl}/user/${username}/${type}?config=${config}`;
     } else {
       const { origin, pathname } = window.location;
