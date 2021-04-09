@@ -245,7 +245,7 @@ function Viewer(props) {
     (mapJson) => {
       for (var i in mapJson['views']) {
         if (mapJson['views'][i]['@@type'] === 'MapView') {
-          const style = mapJson['views'][i]['mapStyle'].toUpperCase();
+          const style = (mapJson['views'][i]['mapStyle'] || 'positron').toUpperCase();
           if (style.includes('positron'.toUpperCase())) dispatch(setBaseMap(POSITRON));
           else if (style.includes('dark_matter'.toUpperCase()))
             dispatch(setBaseMap(DARK_MATTER));
