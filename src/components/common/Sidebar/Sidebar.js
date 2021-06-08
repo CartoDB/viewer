@@ -95,6 +95,8 @@ function Sidebar(props) {
     closeInfoSidebar();
   };
 
+  const hideShareOptions = shareOptions && shareOptions.hide;
+
   const backButton = props.goBackFunction ? (
     <Tooltip placement='right' title='Back to your tilesets' arrow>
       <div onClick={props.goBackFunction} style={{ cursor: 'pointer' }}>
@@ -125,12 +127,16 @@ function Sidebar(props) {
         >
           <SettingsIcon />
         </div>
-        <div
-          className={`${classes.sidebarElement} ${shareSidebarOpen ? 'is-selected' : ''}`}
-          onClick={openShareSidebar}
-        >
-          <ShareIcon />
-        </div>
+        {!hideShareOptions && (
+          <div
+            className={`${classes.sidebarElement} ${
+              shareSidebarOpen ? 'is-selected' : ''
+            }`}
+            onClick={openShareSidebar}
+          >
+            <ShareIcon />
+          </div>
+        )}
         {hasAdditionalInfoToShow && (
           <div
             className={`${classes.sidebarElement} ${
