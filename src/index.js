@@ -28,6 +28,7 @@ const element = document.getElementById('root');
 //   goBackFunction: () => {
 //     console.log('Navigate back');
 //   },
+//   hide: true
 // };
 
 // init(element, props);
