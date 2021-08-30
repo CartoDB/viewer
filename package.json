@@ -1,6 +1,6 @@
 {
   "name": "@carto/viewer",
-  "version": "1.0.3",
+  "version": "1.0.7",
   "private": true,
   "homepage": "https://viewer.carto.com",
   "dependencies": {
