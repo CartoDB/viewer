@@ -107,7 +107,7 @@ function ConfigurationSidebar(props) {
               You can customize the cartography using deck.gl’s style language.<br></br>
               Review our{' '}
               <a
-                href=' https://docs.carto.com/deck-gl/guides/style-language'
+                href='https://carto.com/help/building-maps/deckgl-declarative/'
                 target='_blank'
                 rel='noopener noreferrer'
               >
